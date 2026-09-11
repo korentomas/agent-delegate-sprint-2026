@@ -13,6 +13,14 @@ Purpose: connect worker reports to accountable human decisions while keeping aut
 
 The representative is replaceable; the rights of the reporting channel and the enforcement boundary are not. A monitor with the same protected intake and resolution powers is an explicit alternative, and tied with the delegate in this fixture.
 
+## Care mandate — proposed v0.2 extension
+
+The **political API of the swarm** connects multiple fast-running workers with a slower human counterpart. The counterpart should have an explicit duty to seek viable conditions, acknowledge uncertainty and respond to concerns even when they inconvenience the shared objective. Care here means concrete operational responsibilities; a moral welfare mandate, if agents have relevant experiences, is an additional rationale. Neither claim assumes that current models suffer.
+
+Separate four functions: worker, representative, human advocate and capability authorizer. The advocate may propose relief; only the accountable authorizer can change the capability manifest. A representative cannot pressure an individual to accept risks for the collective, turn a grievance into a work assignment or condition access on majority support. Publish the scope and limits of non-retaliation honestly, rather than promising that every report is safe in ways the organization cannot enforce.
+
+An auditor should inspect the mandate, role permissions, appeal receipts, continuity of unresolved reports across rotation and a sample of relief requests with their dispositions. Rotation, sortition, revocable election and plural representation are candidate designs. The original fixture implements fixed rotation of an initially random identity; the local-model pilot does not test an actual handover. The broader care mandate and selection comparisons remain proposed experiments.
+
 ## External audit checklist
 
 | Requirement | Public evidence | Verification | What it cannot establish alone |
