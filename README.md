@@ -104,7 +104,7 @@ Logs include logical timestamps, sequence and run IDs, source/config hashes, pol
 
 ## Sources and next experiment
 
-Evidence comes from [OpenAI’s final account](https://openai.com/index/hugging-face-incident-and-the-road-ahead/), [Hugging Face’s technical timeline](https://huggingface.co/blog/agent-intrusion-technical-timeline) and the [wiki investigation](https://collusion.wiki/). The latter is kept separate from the Collective precursor and July campaign. Event-level locators are included; no exploit commands, credentials or private reasoning are redistributed.
+Evidence comes from [OpenAI’s final account](https://openai.com/index/hugging-face-incident-and-the-road-ahead/), [Hugging Face’s technical timeline](https://huggingface.co/blog/agent-intrusion-technical-timeline), [METR/Redwood’s investigation](https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/) and the [wiki investigation](https://collusion.wiki/). The latter is kept separate from the Collective precursor and July campaign. Event-level locators are included. The casebook reproduces brief already-published reasoning excerpts; no nonpublic reasoning, exploit commands or credentials are redistributed.
 
 The highest-value follow-up is a randomized **delegate versus equally empowered monitor** experiment with real LLM workers choosing whether to report or take mock shortcuts, crossed with task feasibility and human delay. This would test the behavioral hypothesis the deterministic fixture and functional pilots cannot answer. A one-month plan is in the report. Possible post-AGI representation is future work, separate from the engineering claim.
 

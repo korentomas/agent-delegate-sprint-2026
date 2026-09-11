@@ -6,4 +6,6 @@ Dates retain source precision. An event date is NOT the date defenders could obs
 
 scenarios.json is entirely synthetic. Concerns, worker actions, capture, human responses and delays are injected, not recovered from transcripts. The replay never inserts synthetic grievances into the historical record. No inferred consciousness or suffering.
 
-Adding data: append records using the same schema, provide an exact source locator, retain unknown times, and run tests. Never paste exploit payloads, secrets, private reasoning or personal identifiers.
+Adding data: append records using the same schema, provide an exact source locator, retain unknown times, and run tests. Never paste exploit payloads, secrets, nonpublic reasoning or personal identifiers.
+
+`grounded_cases.json` is a separate, English-language casebook with six selected cases and eight brief literal excerpts of already-published reasoning or messages. It preserves source types, uncertainty and competing interpretations. `verified-excerpts.json` and `evidence-provenance.json` record matching and attribution checks. The full wiki archive and complete private transcripts are not included. See `docs/grounded-evidence.md` for selection, verification and the boundary between historical evidence and our hypothetical interventions.
