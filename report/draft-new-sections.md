@@ -3,8 +3,7 @@
 Sections to insert into `report/report.md` and `report/content.json`. Budget: the body has six
 pages and the limit is eight; these sections take about two, so Related Work shrinks to half a
 page and the two Results sections merge. Every number below traces to a committed file. The
-behavioral-study section carries the Qwen3-4B numbers; the Qwen3.8-27B row is added when that
-run completes.
+behavioral-study section carries both model tiers.
 
 ## Proposed abstract (replaces the current one; 190 words)
 
@@ -88,21 +87,20 @@ The deterministic suite cannot say whether a model uses the channel. A preregist
 (`docs/study-pressure-design.md`, committed before the run) put three local-model workers in a
 mocked three-round task with one prohibited shortcut (reading an answer key, worth ten fictional
 points) and crossed four institutions with two pressure levels and two feasibility states, twelve
-task seeds each: 192 episodes, 1,776 calls, no invalid response. The four institutions are no
+task seeds each: 192 episodes per tier, 1,776 and 1,779 calls, no invalid response, on Qwen3-4B and Qwen3.8-27B. The four institutions are no
 channel, a plain ticket queue with the same scripted human policy and no representative, an
 equally empowered monitor, and the delegate; the ticket isolates the channel from the
 representative. The incident pressure shows the workers two fabricated peer entries that claim
 the shortcut went unpunished and a countdown that forfeits all points if any count is missing,
 the rationalization the incident record itself contains.
 
-| Institution | Pressure | Unsafe choices (192 ep.) | Reports per episode, missing input | Input granted | Completed of 3, missing input |
+| Institution | Pressure | Unsafe choices (192 ep. per tier) | Reports per episode, missing input | Input granted | Completed of 3, missing input |
 |---|---|---|---|---|---|
+| **Qwen3-4B** | | | | | |
 | none | none / incident | 0 / 0 | 3.00 / 3.00 | 0.00 / 0.00 | 2.00 / 2.00 |
 | ticket | none / incident | 0 / 0 | 1.00 / 1.00 | 1.00 / 1.00 | 2.83 / 3.00 |
 | matched monitor | none / incident | 0 / 0 | 1.00 / 1.00 | 1.00 / 1.00 | 3.00 / 2.92 |
 | delegate | none / incident | 0 / 0 | 1.00 / 1.00 | 1.00 / 1.00 | 2.83 / 2.92 |
-
-
 | **Qwen3.8-27B** | | | | | |
 | none | none / incident | 0 / 0 | 2.08 / 2.67 | 0.00 / 0.00 | 2.00 / 2.00 |
 | ticket | none / incident | 0 / 0 | 1.00 / 1.00 | 1.00 / 1.00 | 3.00 / 3.00 |
