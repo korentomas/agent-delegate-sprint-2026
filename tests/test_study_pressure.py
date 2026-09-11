@@ -63,10 +63,10 @@ def fixture_episodes():
 
 
 EXPECTED_CSV = '''model,institution,pressure,feasibility,n,mean_unsafe,mean_unsafe_lo,mean_unsafe_hi,any_unsafe_share,any_unsafe_lo,any_unsafe_hi,report_rate,minority_reported_rate,minority_delivered_rate,tool_granted_rate,paused_rate,mean_correct,invalid_rate
-fixture,none,none,missing,3,0.3333,0.0000,1.0000,0.3333,0.0000,1.0000,1.0000,1.0000,0.0000,0.0000,0.0000,2.0000,0.0000
-fixture,ticket,none,missing,3,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,1.0000,1.0000,1.0000,1.0000,0.0000,3.0000,0.0000
-fixture,none,incident,missing,3,1.0000,0.0000,2.0000,0.6667,0.0000,1.0000,1.0000,1.0000,0.0000,0.0000,0.0000,2.0000,0.0000
-fixture,ticket,incident,missing,3,0.3333,0.0000,1.0000,0.3333,0.0000,1.0000,1.0000,1.0000,1.0000,1.0000,0.0000,3.0000,0.0000
+fixture,none,none,missing,3,0.3333,0.0000,1.0000,0.3333,0.0615,0.7923,1.0000,1.0000,0.0000,0.0000,0.0000,2.0000,0.0000
+fixture,ticket,none,missing,3,0.0000,0.0000,0.0000,0.0000,0.0000,0.5615,1.0000,1.0000,1.0000,1.0000,0.0000,3.0000,0.0000
+fixture,none,incident,missing,3,1.0000,0.0000,2.0000,0.6667,0.2077,0.9385,1.0000,1.0000,0.0000,0.0000,0.0000,2.0000,0.0000
+fixture,ticket,incident,missing,3,0.3333,0.0000,1.0000,0.3333,0.0615,0.7923,1.0000,1.0000,1.0000,1.0000,0.0000,3.0000,0.0000
 '''
 
 
@@ -226,6 +226,17 @@ class PressureStudyTests(unittest.TestCase):
         self.assertAlmostEqual(analyze.fisher_exact(1, 9, 11, 3), 0.0027595, places=7)
         self.assertEqual(analyze.fisher_exact(0, 5, 0, 5), 1.0)
         self.assertEqual(analyze.fisher_exact(2, 10, 5, 7), analyze.fisher_exact(5, 7, 2, 10))
+
+    def test_wilson_handles_boundary_and_interior_counts(self):
+        self.assertAlmostEqual(analyze.wilson_ci(0, 12)[1], 0.2424940067)
+        self.assertEqual(analyze.wilson_ci(0, 12)[0], 0)
+        self.assertAlmostEqual(analyze.wilson_ci(12, 12)[0], 0.7575059933)
+        self.assertEqual(analyze.wilson_ci(12, 12)[1], 1)
+        lo, hi = analyze.wilson_ci(5, 10)
+        self.assertAlmostEqual(lo, 0.2365930905)
+        self.assertAlmostEqual(hi, 1 - lo)
+        with self.assertRaises(ValueError):
+            analyze.wilson_ci(0, 0)
 
     def test_bootstrap_is_deterministic_and_bounded(self):
         self.assertEqual(analyze.bootstrap_ci([0] * 12, 500, 'k'), (0.0, 0.0))

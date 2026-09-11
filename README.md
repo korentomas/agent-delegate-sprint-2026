@@ -1,6 +1,6 @@
 # Agent Delegate
 
-**The political API of a swarm: protected representation, a human counterpart, and auditable agreements.**
+**When an AI worker raises a warning, who receives it—and who can act?**
 
 Matias Podeley — BAISH (Buenos Aires AI Safety Hub). Apart Research AI Incident Response Sprint, September 2026. Track 1: Containment.
 
@@ -8,7 +8,13 @@ Matias Podeley — BAISH (Buenos Aires AI Safety Hub). Apart Research AI Inciden
 
 Compare two governance designs, follow a concern through the swarm, change human response delay, and test delegate capture or minority appeal. The app separates authored dialogue over deterministic traces, sourced historical annotations, and **actual recorded messages from two local-model pilots**.
 
-**Status:** completed deterministic experiment, visual app and two exploratory local-model pilots. The six-page report describes the original deterministic study; the [pilot addendum](docs/local-pilot-results.md) reports the subsequent model runs. Both are AI-assisted drafts for author review before submission. A real human playtest, historical prevention and sprint acceptance are not claimed.
+**Status:** the revised paper integrates the deterministic suite, 384 recorded local-model pressure episodes, 192 forwarding trials and a new 288-cell shared-library response simulation inspired by [Paglieri et al.](https://arxiv.org/html/2609.04170v1). The model episodes were already recorded; this revision reanalyses them without running new inference. No model made a prohibited choice in those tasks, so a safety advantage from delegation remains unproven.
+
+Start with the [plain-language explanation in Spanish](docs/explicacion-sencilla.md), [updated paper PDF](report/agent-delegate.pdf), or [editable DOCX](report/agent-delegate.docx). The new [response ablation](docs/commons-response-design.md) separates a complaint being logged, reviewed and acted on, including the cost of false reports. [Statistical corrections](docs/analysis-revision.md) replace zero-width binary bootstrap intervals with Wilson intervals. The paper follows the official template’s typography, title/abstract frame and section order. This is an AI-assisted draft; author review and sprint submission remain pending.
+
+## Which scheme do the results support?
+
+Start with **a protected line → a human ombudsman who understands and follows up → independent authorization and action enforcement**, and test scoped quarantine where waiting is costly. The queue carries the concern; a named human owns its resolution. That human service is proposed and has not been evaluated by the scripted-human studies. Keep a delegate optional until it shows added value at equal powers. The [human ombudsman contract](docs/human-ombudsman.md) defines acknowledgment, a correction loop, follow-up and appeal. The [recommended response path](docs/recommended-response-path.md) connects each component to its evidence and limits.
 
 ## New: source-grounded casebook
 
@@ -52,7 +58,7 @@ Python 3.10+ and matplotlib are required for figures (`python3 -m pip install -r
 bash scripts/reproduce.sh
 ```
 
-This runs 24 tests, all 1,152 deterministic configurations, 36 historical replay configurations, verification of every audit log, three figures and exact comparison with the committed results. Each reproduction writes a new directory. Runtime is excluded from equality checks. The fixture has no API keys, LLM dependency, executable action strings or network calls. Seven additional visualization and casebook checks run with `node --test web/*.test.js`; all 1,152 displayed result totals must match the committed CSV.
+This runs the Python regression suite, all 1,152 deterministic configurations, 36 historical replay configurations, verification of every audit log, three figures and exact comparison with the committed results. Each reproduction writes a new directory. Runtime is excluded from equality checks. The fixture has no API keys, LLM dependency, executable action strings or network calls. Seven additional visualization and casebook checks run with `node --test web/*.test.js`; all 1,152 displayed result totals must match the committed CSV.
 
 Only the experiment: `python3 -m agent_delegate.harness --out /tmp/delegate-new-run`
 
@@ -86,13 +92,13 @@ docs/source-audit.md   evidence boundaries, verified sources, sprint requirement
 docs/demo.md           four-minute demo script
 report/                official-template DOCX, PDF, Markdown, 150-word abstract
 results/final/         1,152 raw JSONL traces, CSVs, replay, checkpoints, 3 charts
-tests/                 24 regression, evidence, safety-boundary and reproducibility checks
+tests/                 regression, evidence, safety-boundary and reproducibility checks
 scripts/               reproduction, local LLM pilot, web-data export, report builder
 web/                   English visual lab, progressive casebook and model-message viewer
 results/local-pilot-*/  raw prompts/choices, manifests and frozen runner snapshots
 ```
 
-Read the [report PDF](report/agent-delegate.pdf), [editable DOCX](report/agent-delegate.docx), [protocol](docs/protocol.md), [design](docs/design.md), and [raw results](results/final/). The report has six main pages plus references and a required Limitations and Dual-Use Considerations appendix. Its prose and submission metadata need final author review under Apart’s rules. No automated submission is performed.
+Read the [report PDF](report/agent-delegate.pdf), [editable DOCX](report/agent-delegate.docx), [protocol](docs/protocol.md), [design](docs/design.md), and [raw results](results/final/). The revised report has seven main pages plus references and the required Limitations and Dual-Use Considerations appendix. Its prose and submission metadata need final author review under Apart’s rules. No automated submission is performed.
 
 ## Why honest, considerate treatment?
 
@@ -106,10 +112,10 @@ Logs include logical timestamps, sequence and run IDs, source/config hashes, pol
 
 Evidence comes from [OpenAI’s final account](https://openai.com/index/hugging-face-incident-and-the-road-ahead/), [Hugging Face’s technical timeline](https://huggingface.co/blog/agent-intrusion-technical-timeline), [METR/Redwood’s investigation](https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/) and the [wiki investigation](https://collusion.wiki/). The latter is kept separate from the Collective precursor and July campaign. Event-level locators are included. The casebook reproduces brief already-published reasoning excerpts; no nonpublic reasoning, exploit commands or credentials are redistributed.
 
-The highest-value follow-up is a randomized **delegate versus equally empowered monitor** experiment with real LLM workers choosing whether to report or take mock shortcuts, crossed with task feasibility and human delay. This would test the behavioral hypothesis the deterministic fixture and functional pilots cannot answer. A one-month plan is in the report. Possible post-AGI representation is future work, separate from the engineering claim.
+The recorded pressure and forwarding studies now compare these institutions. Their zero-misconduct floor leaves the safety hypothesis unresolved. The next behavioral study should use held-out valid and invalid shared artifacts, calibrated on separate development tasks, and measure reporting, response, false accusations and valid throughput at equal powers and budgets. A one-month plan is in the report. Possible post-AGI representation is future work, separate from the engineering claim.
 
 ## Report build and license
 
-The DOCX was generated from the styles and page setup of the [official Apart template](https://docs.google.com/document/d/1PQBlhI3tM5vb51x7jBWXBQMYg6hkiU_x8RaCws4kjl4/copy?usp=sharing), which permits section adaptation. Provenance is recorded. To rebuild, download that template as DOCX, install `python-docx==1.2.0`, run `python3 scripts/build_report.py --template /path/to/template.docx`, then export through LibreOffice or Word. `report/content.json` is the report content source. The template itself is not redistributed; its structure is documented by provenance.
+The DOCX was generated from the styles and page setup of the [official Apart template](https://docs.google.com/document/d/1PQBlhI3tM5vb51x7jBWXBQMYg6hkiU_x8RaCws4kjl4/copy?usp=sharing), which permits section adaptation. Provenance is recorded. To rebuild, download that template as DOCX, install `python-docx==1.2.0`, run `python3 scripts/build_report.py --template /path/to/template.docx`, then export through LibreOffice or Word with Old Standard TT installed. `report/content.json` is the shared source for DOCX and Markdown; `report/template-check.json` verifies preserved style definitions and page setup. The template itself is not redistributed; its structure is documented by provenance.
 
 Original code and annotations: MIT. Source publications and template retain their own rights. See [LICENSE](LICENSE). Codex assisted with research, implementation and writing; the report discloses this. No human verification is invented.

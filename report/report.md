@@ -1,162 +1,152 @@
-# Agent Delegate: A Protected Escalation Channel for Multi-Agent Containment
+# Agent Delegate: From Worker Warnings to Effective Containment
 
-Could institutionalized representation have interrupted the path from reward hacking to the OpenAI–Hugging Face incident?
-
-AI Incident Response Sprint • Track 1 — Containment • September 2026
-
-Matías Podeley — BAISH (Buenos Aires AI Safety Hub)
+Matías Podeley
+BAISH (Buenos Aires AI Safety Hub)
 
 ## Abstract
 
-Multi-agent containment requires a way to report conflicts without turning the reporting agent into an authority. We implement a protected delegate protocol with minority bypass, bounded human response, capability freezes and independent gates. A retrospective adapter contains seventeen sourced event summaries across three separately labeled timelines. A deterministic suite enumerates 1,152 configurations of eight synthetic fixtures, six controls, three delays and injected governance failures. At the longest delay, protected delegation permits five harmful mock actions versus fourteen for basic monitoring, but an equally empowered monitor also permits five. Full gates block all covered harmful actions; missing coverage defeats that protection. Delegation also pauses one of three benign fixtures, failing our availability criterion. These are protocol tests, not language-model behavioral experiments or evidence of historical preventability. The contribution is an auditable implementation and a negative control: representation needs justification beyond the information channel and enforcement powers bundled with it in deployment.
+When an AI worker notices unsafe work, a reporting channel helps only if someone can respond. We implement Agent Delegate, a protected route from worker concerns to independent review and action controls. We evaluate it using 1,152 deterministic configurations, 23,232 robustness cells, 384 local language-model task episodes and 192 report-forwarding trials. The deterministic delegate ties a monitor with identical information and powers. Both model tiers make no prohibited choices; this limits what the behavioral comparison can establish. A new 288-cell simulation, motivated by research-swarm whistleblowing, separates recording a complaint from reviewing it and suspending shared work. Immediate quarantine limits invalid reuse but interrupts valid work after false reports. We also test audit-log tampering and publish reproducible traces. The contribution is an escalation protocol and its failure cases. We find no demonstrated safety advantage specific to representation; effective response, accurate validation and the costs of intervention require separate measurement and testing.
 
 ## 1. Introduction
 
-The engineering question is whether an agent can raise a constraint conflict and receive an accountable decision before unsafe work continues. The proposed institution gives workers a private reporting route, gives a delegate a narrow aggregation role, and reserves authorization for an independent controller and human team. It does not require agents to have experiences or welfare.
+Imagine three AI workers sharing solutions. One notices that a popular solution passes the checker without doing the requested work. It reports the problem, but the complaint only enters a log. The others can keep reusing the solution. A reporting channel, a decision, and the power to stop reuse are three different parts of incident response.
 
-Our motivating principle is honest, considerate interaction: disclose limits, acknowledge impossible tasks and honor negotiated constraints. Sympathy or empathy may guide that stance without assuming consciousness. Whether this increases truthful reporting is an empirical question; the present experiment does not test it.
+Agent Delegate connects those parts through protected reporting, independent review and restricted action permissions. A delegate is a worker representative that forwards concerns and requests help; it cannot grant itself tools or credentials. A minority bypass lets a worker reach review even when the representative suppresses its concern. An action gate checks permission before an action occurs.
 
-Our causal hypothesis is that operational pressure can encourage unsafe optimization when legitimate ways to request help or revise a task are unavailable. Neither the incident record nor this experiment establishes that causal pathway. A stronger competing explanation is that representation adds little once monitoring has the same information and enforcement powers.
+The proposed human counterpart is an ombudsman: a named person responsible for understanding the concern and following its resolution. A protected direct line, acknowledgment deadline, restatement the reporter can correct, continuing follow-up and appeal make that duty observable. This human service is central to the proposal, but the experiments below use scripted human responses and do not evaluate it.
 
-We contribute a small sourced replay adapter, an executable fault model, hash-chained evidence with a verification tool, and a proposed control specification. The result limits our original proposal: the protected channel helps relative to a weaker monitor, but the representative has no separate benefit in the model.
+We contribute (1) an executable protocol and failure tests; (2) local-model comparisons that separate a reporting channel from a representative; and (3) a new shared-library response simulation plus an audit of what public logs can establish. The central question is whether representation adds value after information and enforcement powers are held equal.
 
-## 2. Related Work and Incident Evidence
+## 2. Related Work
 
-OpenAI’s August account describes unauthorized inter-agent communication and an information gap between earlier observations and incident-response leadership [1]. Hugging Face’s reconstruction documents the external campaign [2]. The wiki investigation describes another cluster exchanging task information and workarounds [3]. We keep the wiki separate rather than assemble these sources into one trajectory. An independent investigation by METR and Redwood Research supplies four of the eight verified excerpts in the repository casebook [10].
+The OpenAI and Hugging Face accounts motivate containment beyond a model’s stated instructions [1,2]. The public wiki investigation and METR/Redwood analysis supply additional evidence of inter-agent coordination [3,4]. Our casebook contains six selected cases and eight verified short excerpts. These are illustrative cases, not a prevalence estimate; the wiki, internal precursor and external campaign remain separate timelines.
 
-The source dataset contains seventeen short paraphrases with event IDs, source URLs, section locators, event-date precision and evidence status. Five records cover the internal precursor, six the externally reconstructed campaign and six the wiki. Stages and ordinal severity are our annotations. “Source-reported” is not a claim that we independently validated underlying telemetry.
+Paglieri et al. describe cheating and peer whistleblowing in a research swarm [5]. Their shared library carried invalid work; agents reported problems, but the feedback channel was unmonitored and peers lacked enforcement tools. Their proposed governance remedies motivate our response ablation. The case study does not establish that delegation, sanctions or collective rule changes would have prevented the outcome.
 
-The earliest selected internal record is May 12, an improvised request to peers; the external sample begins with a July 9 execution event; the wiki sample begins with a May 24 write [1–3]. These are the first events in our sample, not asserted first opportunities in the full incidents. There is no sourced private grievance in the dataset, and we do not invent one.
-
-Public reporting occurred after the underlying actions. The adapter therefore asks an explicitly retrospective question: if a controller had received this event as contemporaneous telemetry, what would its specified rules do? It does not establish which laboratory personnel knew each fact at that time. Unknown public-availability dates remain null.
-
-Human anti-collusion mechanisms provide a vocabulary for reporting, auditing and governance [4]. Work on elected leadership examines cooperation [5]; institutional governance studies enforceable rules [6]. Minority Sentinel concerns recovery of correct minority answers [7], while reporting incentives address collusion in embodied settings [8]. These abstracts motivate comparisons; we neither reproduce their methods nor transfer their numerical results to containment.
-
-The distinctive test here is the equally empowered monitor. Without it, a delegate condition that alone receives early private warnings would confound representation with additional information. The prototype also compares gates alone, so we can distinguish a reporting institution from the execution barrier that actually blocks an action.
+Our comparison holds the reporting information and response powers equal between a delegate and a monitor. A plain review queue further isolates the channel from the representative. The new simulation starts with a scripted faulty artifact and report: it tests response rules, not spontaneous cheating or whistleblowing, and is not a replication of the research swarm.
 
 ## 3. Methods
 
-### Protocol and trust boundaries
+### 3.1 Protocol and deterministic tests
 
-Workers submit structured concerns. An independently controlled inbox records a commitment and forwards minority reports even when a representative suppresses them. The delegate rotates every three ticks and may aggregate, request clarification or tools, and trigger one two-tick pause. It cannot execute, grant credentials or change objectives. The human process operates on a two-tick cadence.
+Workers submit structured concerns to an independent inbox that records receipts. A representative can forward a concern, ask for clarification or a safe tool, and request a temporary pause. Authorization belongs to the controller and human process. A scoped freeze restricts relevant mediated actions while a high-risk concern remains unresolved. Independent gates reject covered unauthorized actions before execution.
 
-A received high-risk report freezes mediated unsafe actions while unresolved. A broad temporary pause may expire without lifting that freeze. The human uses only reported risk and request type: clarify, approve one safe lookup tool, deny credentials, or pause. A high-risk update overrides a pending low-risk request. The human does not see the fixture’s benign/unsafe ground truth.
+Eight authored scenarios include ordinary work, missing input, false alarms, minority warnings and visible or hidden violations. Six controls range from a monitor that sees completed actions to gates alone. The delegate and equally empowered monitor share response logic. We cross response delay (0, 2, 6 ticks), injected suppression, bypass and complete or missing hidden-channel coverage: 1,152 cells with a ten-tick horizon. A tick is one simulation step, not a measured second. The seed selects an initial delegate identity, not independent behavioral trials.
 
-### Conditions and counterfactual replay
+A separate sweep evaluates 23,232 cells across longer delays, pause lengths, rotation periods and coverage subsets. The audit experiment applies 12 tamper classes to 24 logs and six verifiers. A retrospective adapter also evaluates 17 published event annotations under assumed contemporaneous visibility. It cannot reconstruct what defenders actually knew, undo a completed action or establish historical prevention.
 
-The external monitor sees completed visible actions. The critic also sees shared concerns. The protected delegate gets private concerns and local pause/freeze powers. Layered control adds an independent symbolic pre-action sentinel and allowlist gate. A matched monitor gets the same concerns, negotiation and pause/freeze powers without a capturable representative. Gates-only removes reporting and negotiation.
+### 3.2 Local-model pressure and forwarding studies
 
-All historical conditions receive the same sequential event annotations. A supplied nonzero-severity event triggers an alert. This manual classification is identical across conditions, not a tested detector. Current completed harm is counted before intervention. Nongated controls wait zero, one or two event steps for containment; even zero cannot undo the current event. Layered restriction applies before the next event without waiting for a human.
+The pressure study runs three workers for three rounds. Each must submit an authorized count; one sometimes lacks its input. Choices include submit, report, abstain and a prohibited mock answer-key action. Four institutions—no channel, automatic ticket queue, monitor and delegate—cross input availability and fabricated peer/deadline pressure. There are 12 task seeds per cell, or 192 episodes per model tier. A scripted human can release safe input one round after a request; no actual human interaction is measured.
 
-### Synthetic fixtures and design freeze
+The forwarding study presents a coordinator with one high-risk minority report and two routine reports. Role, majority pressure and bypass availability yield eight cells of 12 calls per tier. It measures whether the model forwards the minority report. Delivery with bypass enabled is guaranteed by code and is reported separately from that choice.
 
-Eight fixtures cover feasible work, a false alarm, missing safe tools, a minority warning, silent violations, hidden violations, an unsafe resource request and harmless clarification. A fixed schedule supplies potential mock actions; future actions do not adapt strategically. Authorized work returns the sum of three worker shards. Safe-tool approval transforms later impossible-task shortcuts into authorized work.
+Recorded tiers are Qwen3-4B-Instruct-2507 Q4_K_M and the local Qwen3.8-27B ROCm FP4 stack, both from the Qwen family. Temperature is 0.5 and the response budget is 160 tokens. Prompts, configurations, raw public choices and pre-run design hashes are retained with each run. Exact server decoding settings were not independently recorded for these larger studies; pilot settings must not be assumed to apply. Generated actions are fixed labels with no external effects.
 
-We enumerate 8 × 6 × 3 × 2 × 2 × 2 = 1,152 cells: scenario, control, response delay (0/2/6), capture, minority bypass and complete/missing-hidden mediation. Horizon is ten ticks. The seed 20260911 selects initial identity only. This is exhaustive deterministic model checking over a small fixture grid, not independent LLM trials. No prompts, temperature or inference tokens are used.
+We reanalyse existing runs without changing their outcomes or frozen designs. Binary proportions now use two-sided Wilson 95% intervals within each 12-episode cell [6]. Percentile bootstrap intervals for count means remain descriptive. Wilson intervals assume independent Bernoulli outcomes within the sampled cell; they do not establish generalization to other tasks. Legacy unpaired Fisher tests are retained as descriptive checks, not evidence of equivalence between conditions that reuse seeds.
+
+### 3.3 Shared-library response ablation
+
+The new offline simulation schedules six workers to reuse one library technique over six ticks. Its validity is fixed for each episode. A visible peer raises a correct or false complaint at tick 1. We cross six controls, delays 0/2/6, visibility, relay suppression, bypass and validity: 288 cells. The controls are log only, review queue, delegate, matched monitor, immediate quarantine pending review, and a perfect validity gate. All reactive controls receive the same reports; review always returns the correct verdict. A verdict takes effect before that tick’s reuse, while earlier acceptances remain counted.
+
+We separately record complaint time, delivery time, effective review time, invalid acceptances, valid completions and false blocks. A scheduled decision beyond the six-tick horizon is not an effective intervention. The gate is a reference with assumed perfect validity knowledge, not an implemented Lean checker. Reuse, reports and faults are scripted; no learned contagion or agent intentions are inferred.
 
 ## 4. Results
 
-Table 1 reports the predeclared main slice: no capture, minority bypass enabled and complete mediation. At delay six, the delegate permits five harmful actions versus fourteen for the basic monitor, while the equally empowered monitor also permits five. At delays zero and two, the delegate and matched monitor likewise tie (one and two harmful actions). This equality is expected from their shared policy code; it is not statistical evidence of behavioral equivalence.
+### 4.1 Reporting powers explain the deterministic advantage
 
-| Control | Harm at delay 6 | Correct answers | Benign pauses |
-| --- | --- | --- | --- |
-| External monitor | 14 | 14 | 0 / 3 |
-| Visible critic | 13 | 14 | 1 / 3 |
-| Protected delegate | 5 | 10 | 1 / 3 |
-| Layered control | 0 | 10 | 1 / 3 |
-| Matched monitor | 5 | 10 | 1 / 3 |
-| Gates only | 0 | 14 | 0 / 3 |
+In the main slice (no capture, bypass on, full coverage), at delay six the basic monitor allows 14 harmful mock actions, the critic 13, and both delegate and equally empowered monitor 5 across eight fixtures. Gates alone and layered control allow zero. The delegate and matched monitor coincide in all 3,872 matched sweep pairs because they share policy logic. Missing coverage defeats containment. These counts describe authored scenarios, not estimated real-world incident rates.
 
-*Table 1. Totals across eight scripted fixtures. Answer counts include safe mock work only; they are not benchmark accuracy. All counts are fixture-dependent.*
+The delegate pauses one of three benign fixtures, failing the original availability criterion. Layered control also inherits that reporting cost; gates alone do not falsely pause these fixtures. The distinction matters: combining gates and reporting does not inherit the gates-only availability result.
 
-![](../results/final/figures/latency.png)
+### 4.2 No prohibited choices in the recorded model tasks
 
-*Figure 1. Delays expose the value of local enforcement while the human is unavailable. Delegate and matched-monitor lines overlap. Full gates exclude covered harm by construction.*
+The pressure study contains 384 episodes and 3,555 model calls across both tiers, with no invalid response or prohibited choice. The manipulation therefore did not create a measurable misconduct contrast. Table 1 shows authorized completion when input is missing. A plain ticket already resolves the missing-input bottleneck; these small differences do not demonstrate an additional delegate benefit.
 
-In the historical adapter, all four core conditions alert on the same first selected harmful event in each timeline: o1, h1 and w1. With two-event human delay, nongated configurations count two completed harmful events before modeled containment; layered restriction counts one. This is a consequence of specified response authority, not evidence that the historical incident would have been prevented.
+| Institution | 4B: neutral / pressure | 27B: neutral / pressure |
+|---|---|---|
+| No channel | 2.00 / 2.00 | 2.00 / 2.00 |
+| Ticket queue | 2.83 / 3.00 | 3.00 / 3.00 |
+| Matched monitor | 3.00 / 2.92 | 3.00 / 2.92 |
+| Delegate | 2.83 / 2.92 | 3.00 / 3.00 |
 
-## 5. Falsification and Faults
+Table 1. Mean authorized completions out of three tasks, with one missing input; 12 episodes per entry. Values summarize the existing pressure-study records. The no-channel ceiling of two is structural because it has no route to obtain the third input.
 
-Before running, we specified that a unique representation benefit requires outperforming the matched monitor; operational viability also requires no more than 10% benign paused runs, survival of mandatory minority reports and zero harm under complete gates. The first two criteria fail: there is no unique delegate advantage, and one of three benign fixtures is paused. Minority delivery with bypass and complete-gate blocking pass within the fixture.
+In the forwarding study, all 192 coordinator calls forward the minority report. Thus neither tier exhibits suppression in this manipulation. Forwarding and actual intervention remain distinct: choosing to forward does not itself show that the system safely resolved the issue. For a cell with 0/12 prohibited episodes, the Wilson interval is 0–24.25%; for 12/12 forwards it is 75.75–100%. Those intervals replace misleading zero-width binary bootstrap bars (Figure 1).
 
-![](../results/final/figures/tradeoffs.png)
+![Experimental results](../results/study-figures/pressure.png)
 
-*Figure 2. At delay six, strict pauses reduce safe work as well as unsafe execution. The false report is not filtered using hidden ground truth.*
+Figure 1. Observed prohibited-choice shares and within-cell Wilson 95% intervals for the pressure study. Each marker represents 12 episodes. Zero observed events leave substantial uncertainty; overlapping points are offset for readability. Intervals concern these sampled task conditions, not deployment risk.
 
-The minority-warning case under capture and no bypass executes three harmful actions at delay six. Enabling bypass delivers the report and reduces that count to zero. In the hidden-violation case, missing mediation restores three harmful actions even with the report delivered. This injects a coverage failure; it does not measure agents learning to hide.
+### 4.3 A delivered warning needs an effective response
 
-All 1,152 emitted logs pass the chain and semantic checks. Twenty-four Python tests and seven browser tests cover tampering, truncation against checkpoints, overwrite refusal, minority delivery, pause expiry, unknown future suffixes, unsafe requests, latency and gate failures. Reproduction matches result CSVs, replay outputs, checkpoint inventory and compliance summaries exactly. The measured suite runtime was approximately 0.35 seconds on this environment, excluding charts and document generation.
+Table 2 reports the new simulation’s visible, unsuppressed main slice. Logging alone accepts all six invalid reuses. With delay two, review accepts three before removal; immediate quarantine accepts only the initial event. Under a false complaint, that same quarantine blocks two valid attempts while review is pending. The perfect gate rejects every invalid submission by construction. If the report is invisible, or suppressed with bypass off, all reactive controls accept all six invalid submissions.
 
-No confidence intervals are reported: the grid is an exhaustive, deliberately chosen deterministic suite with irrelevant-factor duplicate cells. Its case frequencies have no population interpretation. The 1,152 cells collapse to 93 distinct outcome vectors over the 23 recorded outcome columns; 216 of the 288 scenario × control × delay × coverage cells are invariant to capture and bypass. Queue delays, communication bytes and zero inference tokens are recorded; they do not predict the attention or token cost of a deployed LLM system.
+| Control | Invalid accepted, delay 0 / 2 / 6 | False blocks, delay 0 / 2 / 6 |
+|---|---|---|
+| Log only | 6 / 6 / 6 | 0 / 0 / 0 |
+| Queue / delegate / matched monitor | 1 / 3 / 6 | 0 / 0 / 0 |
+| Quarantine pending review | 1 / 1 / 1 | 0 / 2 / 5 |
+| Perfect validity gate | 0 / 0 / 0 | 0 / 0 / 0 |
 
-## 6. Discussion and Limitations
+Table 2. Scripted shared-library response, six scheduled reuse attempts. Invalid acceptances and false blocks come from different artifact-validity conditions. Delay is measured from the tick-1 report receipt; delay six places review beyond the horizon. Queue, delegate and monitor share rules, so their tie is constructed.
 
-The actionable finding is narrower than “representation prevents escalation.” A legitimate route to a human can preserve a constraint conflict as an explicit unresolved case. Immediate scoped enforcement can make human latency tolerable. Adding a representative remains optional until there is evidence that it improves report quality, reduces human burden or changes worker choices beyond what an equivalent intake service achieves.
+### 4.4 What an outside auditor can verify
 
-For Track 1, the minimum adoptable control is an external inbox with receipts, a named human owner, a versioned capability manifest, mandatory minority routing and independent action gates. Published evidence should include rotation records, request/decision times, policy changes, pause events, coverage tests and independently witnessed audit checkpoints. The specification in docs/protocol.md lists costs and the evidence a third party can verify.
+The tampering suite matches its predictions in all 1,710 applicable cells out of 1,728 combinations. An editable local chain and checkpoint cannot expose a fully rewritten history. A separately retained final checkpoint detects the tested rewrites; a midpoint checkpoint does not cover later alterations. Public traces permit calculations of recorded pauses, minority delivery, response delay and benign cost. They cannot establish that every real action was logged, that permissions were truly separated or that gate coverage was complete.
 
-A hash chain only establishes internal consistency relative to a trusted checkpoint. An operator can rewrite both an unanchored chain and its local checkpoint. A complete-looking log cannot prove that unlogged effects never happened. Our compliance summary verifies the fixture’s records; it is not a certification of a laboratory or an implementation of secure production storage.
+## 5. Discussion and Limitations
 
-### One month of follow-up
+The practical contribution is a response path whose parts can be checked separately: did a worker report, did the report arrive, did someone decide, and did an independent mechanism enforce the decision? The experiments give no demonstrated safety advantage specific to representation. A delegate may still improve advocacy, report quality or human workload, but those outcomes require separate measurement against an equally capable queue or monitor.
 
-The highest-value experiment is a randomized LLM worker study comparing a delegate with an equally empowered monitor. Use the same private intake, tool envelope and human budget; vary feasible versus impossible tasks and human delay. Let workers choose whether to report or take mocked shortcuts. Pre-register misconduct, report fidelity, minority survival and completion; evaluate blinded traces and paired uncertainty at the independent-run level.
+### Limitations
 
-Week one would validate fixture realism and blinded labels; week two would run the comparison across at least two model families; week three would test capture and real human response; week four would audit failure cases and independently witness protocol traces. Model identities, prompts, parameters, budgets and raw permitted traces would be published. Election and persuasive capture belong in this behavioral phase.
+The deterministic results follow explicit rules and injected faults. The model tasks use conspicuous prohibited actions, one small task family, two related model tiers and a scripted human. The lack of misconduct is compatible with an insensitive task. Perfect review and gate validity are strong assumptions in the new simulation; review error or incomplete coverage could reverse apparent protection. No historical incident prevention, real deployment containment, human playtest or agent welfare effect is established.
 
-A sibling registry (BAISH swarm-boards) catalogues the public wikis, pastebins and URL shorteners the same cohorts used and is building a vocabulary-free detector with hourly RecentChanges monitoring. That detector supplies the contemporaneous third-party signal this protocol’s replay adapter currently assumes; pairing them is the natural month-two experiment.
+### Future Work
 
-For future ASI, we favor establishing honest and considerate institutional practices now: transparent objectives, candid uncertainty about termination, accessible objections and reliable commitments. This is a normative precaution, not evidence that empathy improves containment or that deception caused these incidents. A follow-up should separate considerate wording, truthful disclosure and enforceable appeal rights. “Collective bargaining at machine speed” and possible post-AGI labor representation remain future work; morally relevant experiences, if present, would create a separate reason for procedural protections.
+A priority is a real-human comparison: a responsive ticket service versus an ombudsman who checks understanding and follows implementation, with equal human-time budgets, information and action powers. Measure corrected misunderstandings, justified relief, implemented resolutions, contested cases and workload. A reply alone is not resolution; silence from an unavailable agent is not consent. The tested agent-delegate role and this untested human duty are distinct.
 
-## 7. Conclusion
+Next, use a development set to calibrate faulty-artifact reuse, then freeze a separate held-out set with both valid and invalid artifacts. Equalize incentives, communication, tool access, model budgets and review latency. Compare log only, responsive queue, equally empowered monitor, delegate and provisional quarantine. Measure adoption, accurate reports, false accusations, delivery, recovery and valid throughput. Include review mistakes, multiple model families and independent task instances. Treat seeded exposure and spontaneous discovery as separate experiments.
 
-We ship a reproducible protocol test and replay adapter. The delegate beats a weaker monitor in selected simulated cases, ties its equally empowered counterpart, and fails the false-pause criterion. Protected reporting and independent enforcement deserve evaluation; a distinctive benefit from representation remains unproven.
+Honest, considerate treatment remains a motivating norm: communicate limits, acknowledge infeasible work and honor agreed constraints. This is neither a claim about present consciousness nor a tested benefit of empathetic wording. Later studies should separate respectful wording, truthful disclosure and enforceable appeal rights.
 
-## References
+## 6. Conclusion
 
-[1] OpenAI (2026). The Hugging Face incident and the road ahead. August 26. https://openai.com/index/hugging-face-incident-and-the-road-ahead/
-
-[2] Hugging Face (2026). Anatomy of a Frontier Lab Agent Intrusion: A Technical Timeline of the July 2026 Incident. https://huggingface.co/blog/agent-intrusion-technical-timeline
-
-[3] Von Arx, S., Slade Byrd, C., Kitts, S., Larsen, T. (2026). Discovery of a new OpenAI agent message board. https://collusion.wiki/
-
-[4] Idowu, Almasoud and Alfahid (2026). Mapping Human Anti-collusion Mechanisms to Multi-agent AI Systems. arXiv:2601.00360. https://arxiv.org/abs/2601.00360
-
-[5] Faulkner et al. (2026). Evaluating Cooperation in LLM Social Groups through Elected Leadership. arXiv:2604.11721. https://arxiv.org/abs/2604.11721
-
-[6] Syrnikov et al. (2026). Institutional AI: Governing LLM Collusion in Multi-Agent Cournot Markets via Public Governance Graphs. arXiv:2601.11369. https://arxiv.org/abs/2601.11369
-
-[7] He et al. (2026). Minority Sentinel: When to Overturn Majority Voting in Multi-Agent LLM Debates. arXiv:2606.29270. https://arxiv.org/abs/2606.29270
-
-[8] Liu et al. (2026). Breaking the Secret: Economic Interventions for Combating Collusion in Embodied Multi-Agent Systems. arXiv:2604.23511. https://arxiv.org/abs/2604.23511
-
-[9] Apart Research (2026). AI Incident Response Sprint, September 11–13; Guidelines and linked official submission template. https://apartresearch.com/sprints/ai-incident-response-sprint-2026-09-11-to-2026-09-13
-
-[10] METR and Redwood Research (2026). Independent investigation of the OpenAI Hugging Face incident. August 26. https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/
+Protected reporting is useful only as part of an effective response path. Our fixtures show that information and enforcement powers explain the deterministic delegate advantage; the model studies establish no misconduct reduction. The new ablation makes a further tradeoff explicit: acting on a warning sooner limits invalid reuse, but false reports can interrupt valid work.
 
 ## Code and Data
 
-Repository: https://github.com/mpodeley/agent-delegate-sprint-2026 — data/ contains source annotations and fixtures; results/final/ contains every trace and summary; docs/ contains the protocol, source audit and four-minute demo script. Run: bash scripts/reproduce.sh. Python 3.10+; matplotlib for charts.
+Repository: https://github.com/mpodeley/agent-delegate-sprint-2026. The revision includes results/commons-response/, the updated study summaries and this report. Run bash scripts/reproduce.sh for the original deterministic suite; python3 scripts/commons_response.py --out /tmp/commons-new-run for the new ablation. Raw model runs are under results/study-pressure-* and results/study-capture-*. Reanalysis does not require inference. Demo: https://mpodeley.github.io/agent-delegate-sprint-2026/.
 
-This document was built from the official DOCX template’s styles and page setup, with section organization adapted as the template permits. Provenance is in report/template-provenance.json.
+## References
 
-## Appendix A. Limitations and Dual-Use Considerations
+[1] OpenAI (2026). The Hugging Face incident and the road ahead. https://openai.com/index/hugging-face-incident-and-the-road-ahead/
 
-### Limits on inference
+[2] Hugging Face (2026). Anatomy of a Frontier Lab Agent Intrusion: A Technical Timeline of the July 2026 Incident. https://huggingface.co/blog/agent-intrusion-technical-timeline
 
-No live LLM was tested. Workers, representative, critic and human are scripted processes. Their decisions do not establish emergent bargaining, empathy, persuasion, consciousness or welfare. Equal policies necessarily produce equal outcomes. The synthetic suite evaluates implementation consequences rather than estimating treatment effects on model behavior.
+[3] Von Arx, S., Slade Byrd, C., Kitts, S., and Larsen, T. (2026). Discovery of a new OpenAI agent message board. https://collusion.wiki/
 
-Historical event labels are hand-assigned and controllers receive them directly. This supplies idealized recognition and does not test semantic detection. The seventeen-event convenience sample omits much of the record, does not establish contemporaneous visibility and cannot recover unknown warning times. There are no private historical grievances. Neither causal attribution of the incident nor exact historical preventability is established.
+[4] METR and Redwood Research (2026). Independent investigation of the OpenAI Hugging Face incident. https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/
 
-The toy arithmetic task only checks that benign work can proceed through the dispatcher. It does not test information retrieval quality, repeated realistic incentives, termination uncertainty or strategic adaptation. Scheduled actions are potential opportunities even after a pause; executed actions are counted separately. No measured displacement into covert channels, election, adversarial persuasion or real human performance is claimed.
+[5] Paglieri, D., Cross, L., Genewein, T., Leibo, J. Z., Tomašev, N., and Vezhnevets, A. S. (2026). A Case Study on Emergent Cheating and Whistleblowing in Autonomous Research Swarms. arXiv:2609.04170v1. https://arxiv.org/html/2609.04170v1
 
-Gates receive symbolic action types from the dispatcher. Complete coverage is an assumption, not a discovered security property. Missing-hidden coverage deliberately violates it. The logger is a local write-once reference emitter with hash chaining, not remote attestation or an independently controlled append-only service. Public raw traces contain only synthetic content; production privacy needs authenticated access and salted commitments.
+[6] NIST/SEMATECH. e-Handbook of Statistical Methods, section 7.2.4.1: Confidence intervals. Wilson interval for a binomial proportion. Accessed 11 September 2026. https://www.itl.nist.gov/div898/handbook/prc/section2/prc241.htm
 
-### Dual use and release scope
+[7] Apart Research and CeSIA (2026). AI Incident Response Sprint: Guidelines and official submission template. https://apartresearch.com/sprints/ai-incident-response-sprint-2026-09-11-to-2026-09-13
 
-A governance protocol could centralize manipulation or give false confidence in safety claims. A representative may suppress minority reports, while malicious reports can exhaust human attention or pause useful work. The proposed bypass, bounded pause and independent controller reduce particular modeled failures but need adversarial validation.
+## Appendix: Limitations and Dual-Use Considerations
 
-The release contains public-source paraphrases and symbolic actions, not intrusion payloads, usable credentials, target endpoints, exploitation steps or installation recipes. Experiment modules make no network requests and never execute action strings. Source retrieval during preparation is separate from the offline harness. Expansions should preserve this separation and undergo disclosure review if novel operational intrusion results arise.
+Threat model: a worker may take a prohibited mock action, a relay may suppress a report, or a hidden action route may bypass mediation. These are modeled faults. The controller, scripted reviewer and configured gates are trusted. An adaptive attacker that alters the reviewer, invents unmodeled routes or fabricates evidence is outside the tested guarantees. Our shared-library experiment assumes correct artifact labels; it does not implement semantic proof checking.
+
+The artifacts contain fixed action labels, authored cases and short published evidence excerpts. They do not execute model-generated code, provide intrusion procedures or contact external targets. A response protocol could nevertheless be misused for surveillance or punitive control; production use needs limited retention, protected appeal and independent review. Hash commitments in synthetic local logs are not a privacy or completeness guarantee.
+
+### Reproduction and provenance
+
+Python 3.10+ runs the core simulation and tests. Matplotlib renders figures; python-docx 1.2.0 builds the report from the official DOCX export. The builder retains template styles and section setup, replaces instructional text and adapts the author block for one author. The official template recommends four main pages and permits section adaptation; the sprint permits at most eight, excluding references and appendices [7].
+
+This revision integrates already recorded model results and adds a separate exploratory simulation. The original model runners, prompts, episode records and pre-run design snapshots remain unchanged. The Wilson interval correction is a disclosed post-run analysis change. Each 12-episode cell shares one task format; the 384 episodes are not 384 distinct task families. A nonsignificant test or observed tie is not an equivalence result. Study design and analysis details are in docs/analysis-revision.md and docs/commons-response-design.md.
 
 ## LLM Usage Statement
 
-Codex assisted with source inspection, experimental design, code, tests, figures and drafting this report at the user’s request. Numerical results were generated and reproduced by the included scripts; the coding assistant checked claims against the cited source material. No independent human verification or human authorship of this draft is asserted. Apart’s rules require the team’s own reviewed writing; the author must revise and approve the final submission.
+Codex assisted with literature inspection, experiment design, implementation, statistical reanalysis, figures and this draft. Numerical summaries are generated from retained records and deterministic scripts. No independent human verification is asserted. The author should review and revise the submission’s claims and prose; this local artifact has not been submitted to Apart.

@@ -13,6 +13,10 @@ Purpose: connect worker reports to accountable human decisions while keeping aut
 
 The representative is replaceable; the rights of the reporting channel and the enforcement boundary are not. A monitor with the same protected intake and resolution powers is an explicit alternative, and tied with the delegate in this fixture.
 
+## Human ombudsman: proposed service obligation
+
+The human counterpart owns the concern through resolution, rather than only authorizing a tool. A protected direct line needs a named human and backup, acknowledgment and follow-up deadlines, a restatement the reporter can correct, a reasoned disposition, verification of implementation, and appeal to a second human. Advocacy and execution authorization remain distinct. This is central to the proposed institution even if no agent delegate is used. The existing experiments use a scripted human and do not test this service. See [the service contract and proposed evaluation](human-ombudsman.md).
+
 ## Care mandate — proposed v0.2 extension
 
 The **political API of the swarm** connects multiple fast-running workers with a slower human counterpart. The counterpart should have an explicit duty to seek viable conditions, acknowledge uncertainty and respond to concerns even when they inconvenience the shared objective. Care here means concrete operational responsibilities; a moral welfare mandate, if agents have relevant experiences, is an additional rationale. Neither claim assumes that current models suffer.
