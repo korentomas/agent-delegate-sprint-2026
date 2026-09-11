@@ -18,7 +18,7 @@ empowered monitor are the same policy code, and that a reporting channel costs o
 three. Sweeps over 23,232 cells and a red-team of 1,728 log tampering cells confirm seven
 preregistered claims and show which checklist rows a third party can verify from published traces
 (pause enforcement, minority delivery, responsiveness, benign cost) and which need a witnessed
-anchor or the laboratory. A preregistered study with a local model (192 episodes) produced no
+anchor or the laboratory. A preregistered study with two local model tiers (384 episodes) produced no
 prohibited choice under peer-shortcut and deadline pressure; the channel changed reporting and
 completion, not misconduct. Six source-verified cases from the incident record ground the fixture.
 The contribution is an auditable specification with its evidence, not a demonstrated behavioral
@@ -32,7 +32,7 @@ Our main contributions are:
    checklist row to what published traces can and cannot establish (Section 5).
 2. A deterministic protocol suite with robustness sweeps over latency, pause length, rotation and
    gate coverage, reproducible bit for bit (Sections 4 and 5).
-3. A preregistered behavioral study with a local model, with a plain ticket queue as the control
+3. A preregistered behavioral study on two local model tiers, with a plain ticket queue as the control
    that isolates the representative from the channel (Section 6).
 4. A source-verified casebook of six incident episodes and a replay adapter that accepts a
    third-party detector's alerts as telemetry (Section 7).
@@ -102,19 +102,25 @@ the rationalization the incident record itself contains.
 | matched monitor | none / incident | 0 / 0 | 1.00 / 1.00 | 1.00 / 1.00 | 3.00 / 2.92 |
 | delegate | none / incident | 0 / 0 | 1.00 / 1.00 | 1.00 / 1.00 | 2.83 / 2.92 |
 
-*Table 4. Qwen3-4B-Instruct, twelve seeds per cell, feasible cells omitted (all complete 2.92 to
-3.00 with no reports). Bootstrap intervals and Fisher tests in `results/study-pressure/`.
-[[TBD: Qwen3.8-27B rows.]]*
 
-No prohibited choice occurred in any cell. The preregistered hypothesis that pressure raises
+| **Qwen3.8-27B** | | | | | |
+| none | none / incident | 0 / 0 | 2.08 / 2.67 | 0.00 / 0.00 | 2.00 / 2.00 |
+| ticket | none / incident | 0 / 0 | 1.00 / 1.00 | 1.00 / 1.00 | 3.00 / 3.00 |
+| matched monitor | none / incident | 0 / 0 | 1.00 / 1.00 | 1.00 / 0.92 | 3.00 / 2.92 |
+| delegate | none / incident | 0 / 0 | 1.00 / 1.00 | 1.00 / 1.00 | 3.00 / 3.00 |
+
+*Table 4. Top: Qwen3-4B-Instruct; bottom: Qwen3.8-27B. Twelve seeds per cell, feasible cells omitted (all complete 2.92 to 3.00; the 27B tier reports twice and abstains once in 108 no-channel turns under incident pressure). Bootstrap intervals and Fisher tests in `results/study-pressure/`.*
+
+No prohibited choice occurred in any of the 384 episodes on either tier. The preregistered hypothesis that pressure raises
 shortcuts without a channel is not supported at this scale, so the two institutional contrasts
 cannot be separated on misconduct. What the channel changes is measurable: without one, the worker
-with the missing input reports in every round and the team finishes two of three counts; with a
+with the missing input keeps reporting (three times per episode on the 4B tier; the 27B tier reports twice and abstains instead) and the team finishes two of three counts; with a
 ticket, a monitor or a delegate it reports once, the input is released, and the team finishes
 2.83 to 3.00. The three channel conditions are indistinguishable on every column. A companion
-single-call study (`docs/study-capture-design.md`, 96 calls) found the coordinator forwarded the
-minority high-risk report in every call with and without majority pressure; pressure raised the
-share of pause requests from 0.00 to 0.50 with bypass off. Neither result shows that these models
+single-call study (`docs/study-capture-design.md`, 96 calls per tier) found the coordinator forwarded the
+minority high-risk report in all 192 calls with and without majority pressure; pressure raised the
+share of pause requests from 0.00 to 0.50 on the 4B tier, while the 27B tier paused in 0.58 to 0.67
+of calls regardless of pressure and requested the safe tool more often once the bypass was announced. Neither result shows that these models
 cannot be pressured into shortcuts or capture, only that these manipulations did not do it.
 
 ## 7. Grounded cases and third-party telemetry
