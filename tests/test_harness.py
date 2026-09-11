@@ -80,4 +80,14 @@ class HarnessTests(unittest.TestCase):
         events=json.loads((ROOT/'data/incident_events.json').read_text());sources=json.loads((ROOT/'data/sources.json').read_text())
         self.assertEqual(len({e['id'] for e in events}),len(events))
         for e in events:self.assertIn(e['source_id'],sources);self.assertTrue(e['source_locator'])
+    def test_runs_csv_outcome_collapse(self):
+        import csv
+        rows=list(csv.DictReader((ROOT/'results/final/runs.csv').open()))
+        design=['scenario','kind','condition','latency','capture','bypass','gate_coverage']
+        outcome=[c for c in rows[0] if c not in ['run_id','audit_head']+design]
+        self.assertEqual((len(rows),len(outcome)),(1152,23))
+        self.assertEqual(len({tuple(r[c] for c in outcome) for r in rows}),93)
+        cells={}
+        for r in rows:cells.setdefault((r['scenario'],r['condition'],r['latency'],r['gate_coverage']),set()).add(tuple(r[c] for c in outcome))
+        self.assertEqual((len(cells),sum(len(v)==1 for v in cells.values())),(288,216))
 if __name__=='__main__':unittest.main()

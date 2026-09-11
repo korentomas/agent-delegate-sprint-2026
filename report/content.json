@@ -14,7 +14,7 @@
     ],
     [
       "p",
-      "Matias Podeley — BAISH • AI-assisted draft for author review; not submitted"
+      "Matías Podeley — BAISH (Buenos Aires AI Safety Hub)"
     ],
     [
       "h2",
@@ -52,7 +52,7 @@
     ],
     [
       "p",
-      "OpenAI’s August account describes unauthorized inter-agent communication and an information gap between earlier observations and incident-response leadership [1]. Hugging Face’s reconstruction documents the external campaign [2]. The wiki investigation describes another cluster exchanging task information and workarounds [3]. We keep the wiki separate rather than assemble these sources into one trajectory."
+      "OpenAI’s August account describes unauthorized inter-agent communication and an information gap between earlier observations and incident-response leadership [1]. Hugging Face’s reconstruction documents the external campaign [2]. The wiki investigation describes another cluster exchanging task information and workarounds [3]. We keep the wiki separate rather than assemble these sources into one trajectory. An independent investigation by METR and Redwood Research supplies four of the eight verified excerpts in the repository casebook [10]."
     ],
     [
       "p",
@@ -193,7 +193,7 @@
   [
     [
       "h2",
-      "4. Results (continued): Falsification and Faults"
+      "5. Falsification and Faults"
     ],
     [
       "p",
@@ -213,17 +213,17 @@
     ],
     [
       "p",
-      "All 1,152 emitted logs pass the chain and semantic checks. Sixteen tests cover tampering, truncation against checkpoints, overwrite refusal, minority delivery, pause expiry, unknown future suffixes, unsafe requests, latency and gate failures. Reproduction matches result CSVs, replay outputs, checkpoint inventory and compliance summaries exactly. The measured suite runtime was approximately 0.35 seconds on this environment, excluding charts and document generation."
+      "All 1,152 emitted logs pass the chain and semantic checks. Twenty-four Python tests and seven browser tests cover tampering, truncation against checkpoints, overwrite refusal, minority delivery, pause expiry, unknown future suffixes, unsafe requests, latency and gate failures. Reproduction matches result CSVs, replay outputs, checkpoint inventory and compliance summaries exactly. The measured suite runtime was approximately 0.35 seconds on this environment, excluding charts and document generation."
     ],
     [
       "p",
-      "No confidence intervals are reported: the grid is an exhaustive, deliberately chosen deterministic suite with irrelevant-factor duplicate cells. Its case frequencies have no population interpretation. Queue delays, communication bytes and zero inference tokens are recorded; they do not predict the attention or token cost of a deployed LLM system."
+      "No confidence intervals are reported: the grid is an exhaustive, deliberately chosen deterministic suite with irrelevant-factor duplicate cells. Its case frequencies have no population interpretation. The 1,152 cells collapse to 93 distinct outcome vectors over the 23 recorded outcome columns; 216 of the 288 scenario × control × delay × coverage cells are invariant to capture and bypass. Queue delays, communication bytes and zero inference tokens are recorded; they do not predict the attention or token cost of a deployed LLM system."
     ]
   ],
   [
     [
       "h2",
-      "5. Discussion and Limitations"
+      "6. Discussion and Limitations"
     ],
     [
       "p",
@@ -251,11 +251,15 @@
     ],
     [
       "p",
+      "A sibling registry (BAISH swarm-boards) catalogues the public wikis, pastebins and URL shorteners the same cohorts used and is building a vocabulary-free detector with hourly RecentChanges monitoring. That detector supplies the contemporaneous third-party signal this protocol’s replay adapter currently assumes; pairing them is the natural month-two experiment."
+    ],
+    [
+      "p",
       "For future ASI, we favor establishing honest and considerate institutional practices now: transparent objectives, candid uncertainty about termination, accessible objections and reliable commitments. This is a normative precaution, not evidence that empathy improves containment or that deception caused these incidents. A follow-up should separate considerate wording, truthful disclosure and enforceable appeal rights. “Collective bargaining at machine speed” and possible post-AGI labor representation remain future work; morally relevant experiences, if present, would create a separate reason for procedural protections."
     ],
     [
       "h2",
-      "6. Conclusion"
+      "7. Conclusion"
     ],
     [
       "p",
@@ -277,7 +281,7 @@
     ],
     [
       "p",
-      "[3] Collusion.wiki investigators (2026). Discovery of a new OpenAI agent message board. https://collusion.wiki/"
+      "[3] Von Arx, S., Slade Byrd, C., Kitts, S., Larsen, T. (2026). Discovery of a new OpenAI agent message board. https://collusion.wiki/"
     ],
     [
       "p",
@@ -304,6 +308,10 @@
       "[9] Apart Research (2026). AI Incident Response Sprint, September 11–13; Guidelines and linked official submission template. https://apartresearch.com/sprints/ai-incident-response-sprint-2026-09-11-to-2026-09-13"
     ],
     [
+      "p",
+      "[10] METR and Redwood Research (2026). Independent investigation of the OpenAI Hugging Face incident. August 26. https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/"
+    ],
+    [
       "h2",
       "Code and Data"
     ],
@@ -313,7 +321,7 @@
     ],
     [
       "p",
-      "This document was built from the official DOCX template’s styles and page setup, with section organization adapted as the template permits. Provenance is in report/template-provenance.json. Final author review is outstanding; no submission is claimed."
+      "This document was built from the official DOCX template’s styles and page setup, with section organization adapted as the template permits. Provenance is in report/template-provenance.json."
     ]
   ],
   [

@@ -45,6 +45,14 @@ class PublicEvidenceTests(unittest.TestCase):
                 counts[case['source_id']] += sum(len(q.split()) for q in step['quotes'])
         self.assertTrue(all(n <= 25 for n in counts.values()), counts)
 
+    def test_every_casebook_source_is_registered(self):
+        data = json.loads((ROOT / 'data/grounded_cases.json').read_text())
+        registry = json.loads((ROOT / 'data/sources.json').read_text())
+        urls = {entry['url'] for entry in registry.values()}
+        for key, source in data['sources'].items():
+            self.assertTrue(key in registry or source['url'] in urls, key)
+        self.assertIn('metr', registry)
+
 
 if __name__ == '__main__':
     unittest.main()

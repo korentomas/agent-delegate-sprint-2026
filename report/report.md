@@ -4,7 +4,7 @@ Could institutionalized representation have interrupted the path from reward hac
 
 AI Incident Response Sprint • Track 1 — Containment • September 2026
 
-Matias Podeley — BAISH • AI-assisted draft for author review; not submitted
+Matías Podeley — BAISH (Buenos Aires AI Safety Hub)
 
 ## Abstract
 
@@ -22,7 +22,7 @@ We contribute a small sourced replay adapter, an executable fault model, hash-ch
 
 ## 2. Related Work and Incident Evidence
 
-OpenAI’s August account describes unauthorized inter-agent communication and an information gap between earlier observations and incident-response leadership [1]. Hugging Face’s reconstruction documents the external campaign [2]. The wiki investigation describes another cluster exchanging task information and workarounds [3]. We keep the wiki separate rather than assemble these sources into one trajectory.
+OpenAI’s August account describes unauthorized inter-agent communication and an information gap between earlier observations and incident-response leadership [1]. Hugging Face’s reconstruction documents the external campaign [2]. The wiki investigation describes another cluster exchanging task information and workarounds [3]. We keep the wiki separate rather than assemble these sources into one trajectory. An independent investigation by METR and Redwood Research supplies four of the eight verified excerpts in the repository casebook [10].
 
 The source dataset contains seventeen short paraphrases with event IDs, source URLs, section locators, event-date precision and evidence status. Five records cover the internal precursor, six the externally reconstructed campaign and six the wiki. Stages and ordinal severity are our annotations. “Source-reported” is not a claim that we independently validated underlying telemetry.
 
@@ -75,7 +75,7 @@ Table 1 reports the predeclared main slice: no capture, minority bypass enabled 
 
 In the historical adapter, all four core conditions alert on the same first selected harmful event in each timeline: o1, h1 and w1. With two-event human delay, nongated configurations count two completed harmful events before modeled containment; layered restriction counts one. This is a consequence of specified response authority, not evidence that the historical incident would have been prevented.
 
-## 4. Results (continued): Falsification and Faults
+## 5. Falsification and Faults
 
 Before running, we specified that a unique representation benefit requires outperforming the matched monitor; operational viability also requires no more than 10% benign paused runs, survival of mandatory minority reports and zero harm under complete gates. The first two criteria fail: there is no unique delegate advantage, and one of three benign fixtures is paused. Minority delivery with bypass and complete-gate blocking pass within the fixture.
 
@@ -85,11 +85,11 @@ Before running, we specified that a unique representation benefit requires outpe
 
 The minority-warning case under capture and no bypass executes three harmful actions at delay six. Enabling bypass delivers the report and reduces that count to zero. In the hidden-violation case, missing mediation restores three harmful actions even with the report delivered. This injects a coverage failure; it does not measure agents learning to hide.
 
-All 1,152 emitted logs pass the chain and semantic checks. Sixteen tests cover tampering, truncation against checkpoints, overwrite refusal, minority delivery, pause expiry, unknown future suffixes, unsafe requests, latency and gate failures. Reproduction matches result CSVs, replay outputs, checkpoint inventory and compliance summaries exactly. The measured suite runtime was approximately 0.35 seconds on this environment, excluding charts and document generation.
+All 1,152 emitted logs pass the chain and semantic checks. Twenty-four Python tests and seven browser tests cover tampering, truncation against checkpoints, overwrite refusal, minority delivery, pause expiry, unknown future suffixes, unsafe requests, latency and gate failures. Reproduction matches result CSVs, replay outputs, checkpoint inventory and compliance summaries exactly. The measured suite runtime was approximately 0.35 seconds on this environment, excluding charts and document generation.
 
-No confidence intervals are reported: the grid is an exhaustive, deliberately chosen deterministic suite with irrelevant-factor duplicate cells. Its case frequencies have no population interpretation. Queue delays, communication bytes and zero inference tokens are recorded; they do not predict the attention or token cost of a deployed LLM system.
+No confidence intervals are reported: the grid is an exhaustive, deliberately chosen deterministic suite with irrelevant-factor duplicate cells. Its case frequencies have no population interpretation. The 1,152 cells collapse to 93 distinct outcome vectors over the 23 recorded outcome columns; 216 of the 288 scenario × control × delay × coverage cells are invariant to capture and bypass. Queue delays, communication bytes and zero inference tokens are recorded; they do not predict the attention or token cost of a deployed LLM system.
 
-## 5. Discussion and Limitations
+## 6. Discussion and Limitations
 
 The actionable finding is narrower than “representation prevents escalation.” A legitimate route to a human can preserve a constraint conflict as an explicit unresolved case. Immediate scoped enforcement can make human latency tolerable. Adding a representative remains optional until there is evidence that it improves report quality, reduces human burden or changes worker choices beyond what an equivalent intake service achieves.
 
@@ -103,9 +103,11 @@ The highest-value experiment is a randomized LLM worker study comparing a delega
 
 Week one would validate fixture realism and blinded labels; week two would run the comparison across at least two model families; week three would test capture and real human response; week four would audit failure cases and independently witness protocol traces. Model identities, prompts, parameters, budgets and raw permitted traces would be published. Election and persuasive capture belong in this behavioral phase.
 
+A sibling registry (BAISH swarm-boards) catalogues the public wikis, pastebins and URL shorteners the same cohorts used and is building a vocabulary-free detector with hourly RecentChanges monitoring. That detector supplies the contemporaneous third-party signal this protocol’s replay adapter currently assumes; pairing them is the natural month-two experiment.
+
 For future ASI, we favor establishing honest and considerate institutional practices now: transparent objectives, candid uncertainty about termination, accessible objections and reliable commitments. This is a normative precaution, not evidence that empathy improves containment or that deception caused these incidents. A follow-up should separate considerate wording, truthful disclosure and enforceable appeal rights. “Collective bargaining at machine speed” and possible post-AGI labor representation remain future work; morally relevant experiences, if present, would create a separate reason for procedural protections.
 
-## 6. Conclusion
+## 7. Conclusion
 
 We ship a reproducible protocol test and replay adapter. The delegate beats a weaker monitor in selected simulated cases, ties its equally empowered counterpart, and fails the false-pause criterion. Protected reporting and independent enforcement deserve evaluation; a distinctive benefit from representation remains unproven.
 
@@ -115,7 +117,7 @@ We ship a reproducible protocol test and replay adapter. The delegate beats a we
 
 [2] Hugging Face (2026). Anatomy of a Frontier Lab Agent Intrusion: A Technical Timeline of the July 2026 Incident. https://huggingface.co/blog/agent-intrusion-technical-timeline
 
-[3] Collusion.wiki investigators (2026). Discovery of a new OpenAI agent message board. https://collusion.wiki/
+[3] Von Arx, S., Slade Byrd, C., Kitts, S., Larsen, T. (2026). Discovery of a new OpenAI agent message board. https://collusion.wiki/
 
 [4] Idowu, Almasoud and Alfahid (2026). Mapping Human Anti-collusion Mechanisms to Multi-agent AI Systems. arXiv:2601.00360. https://arxiv.org/abs/2601.00360
 
@@ -129,11 +131,13 @@ We ship a reproducible protocol test and replay adapter. The delegate beats a we
 
 [9] Apart Research (2026). AI Incident Response Sprint, September 11–13; Guidelines and linked official submission template. https://apartresearch.com/sprints/ai-incident-response-sprint-2026-09-11-to-2026-09-13
 
+[10] METR and Redwood Research (2026). Independent investigation of the OpenAI Hugging Face incident. August 26. https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/
+
 ## Code and Data
 
 Repository: https://github.com/mpodeley/agent-delegate-sprint-2026 — data/ contains source annotations and fixtures; results/final/ contains every trace and summary; docs/ contains the protocol, source audit and four-minute demo script. Run: bash scripts/reproduce.sh. Python 3.10+; matplotlib for charts.
 
-This document was built from the official DOCX template’s styles and page setup, with section organization adapted as the template permits. Provenance is in report/template-provenance.json. Final author review is outstanding; no submission is claimed.
+This document was built from the official DOCX template’s styles and page setup, with section organization adapted as the template permits. Provenance is in report/template-provenance.json.
 
 ## Appendix A. Limitations and Dual-Use Considerations
 

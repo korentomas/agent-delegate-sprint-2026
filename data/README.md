@@ -9,3 +9,5 @@ scenarios.json is entirely synthetic. Concerns, worker actions, capture, human r
 Adding data: append records using the same schema, provide an exact source locator, retain unknown times, and run tests. Never paste exploit payloads, secrets, nonpublic reasoning or personal identifiers.
 
 `grounded_cases.json` is a separate, English-language casebook with six selected cases and eight brief literal excerpts of already-published reasoning or messages. It preserves source types, uncertainty and competing interpretations. `verified-excerpts.json` and `evidence-provenance.json` record matching and attribution checks. The full wiki archive and complete private transcripts are not included. See `docs/grounded-evidence.md` for selection, verification and the boundary between historical evidence and our hypothetical interventions.
+
+Permission note: the collusion.wiki dump is marked “Draft. Please do not share without permission” and is not redistributed here. The two verbatim wiki excerpts in `grounded_cases.json` are quoted under fair-use limits (18 words in total; the tests enforce at most 25 per source), and permission has been requested from the authors.

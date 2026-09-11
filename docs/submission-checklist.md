@@ -1,8 +1,9 @@
 # Handoff / submission status
 
+- [x] Track 1 — Containment.
 - [x] Repository artifact, source registry, reproducible configuration.
 - [x] 1,152 deterministic cells and 36 retrospective replay configurations.
-- [x] Raw traces, CSV summaries, three charts, 16 passing tests.
+- [x] Raw traces, CSV summaries, three charts, 24 Python and 7 browser tests passing.
 - [x] Control protocol and external audit checklist.
 - [x] Official-template report DOCX, Markdown and 150-word abstract.
 - [x] Matias Podeley — BAISH recorded as author metadata.

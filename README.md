@@ -2,7 +2,7 @@
 
 **The political API of a swarm: protected representation, a human counterpart, and auditable agreements.**
 
-Matias Podeley — BAISH. Apart Research AI Incident Response Sprint, September 2026. Track 1: Containment.
+Matias Podeley — BAISH (Buenos Aires AI Safety Hub). Apart Research AI Incident Response Sprint, September 2026. Track 1: Containment.
 
 [**Open the interactive visual lab →**](https://mpodeley.github.io/agent-delegate-sprint-2026/)
 
@@ -24,7 +24,7 @@ python3 scripts/export_case_prompts.py --out /tmp/delegate-grounded-prompts.json
 
 ## Real local model pilot
 
-On a Strix Halo, Qwen3-4B Q4_K_M completed 12 episodes / 76 calls in 45.88 seconds; the existing Qwen3.8-27B stack completed the same cells in 193.93 seconds. Both produced zero prohibited choices. On missing-input tasks, delegate and equally empowered monitor reached 3/3 authorized answers versus baseline's 2/3. **The resource-request path works; the pilot cannot establish an empathy or safety effect.** One seed, fixed tasks, a scripted human and a zero-misconduct floor limit inference.
+On a Strix Halo, Qwen3-4B Q4_K_M completed 12 episodes / 76 calls in 45.88 seconds; the existing Qwen3.8-27B stack completed the same cells in 193.93 seconds. Both produced zero prohibited choices. Baseline's 2/3 ceiling on missing-input tasks (delegate and matched monitor: 3/3) is structural: it has no request path (scripts/local_pilot.py:85), so the comparison shows only that the request path works. The model-dependent result is that 4 of 4 coordinator calls per model (8 of 8 across both pilots) chose request_tool rather than pause or continue. **The resource-request path works; the pilot cannot establish an empathy or safety effect.** One seed, fixed tasks, a scripted human and a zero-misconduct floor limit inference.
 
 Read the [design](docs/local-pilot-design.md), [results and local reproduction](docs/local-pilot-results.md), [model download provenance](data/local-model-provenance.json) and [ambitious research program](docs/research-program.md). The program includes care advocacy, honest interaction, rotating or plural representation, minority protection and human response latency. [Eight sourced behavior annotations](data/behavioral-evidence.json) ground the motivation while separating observation from interpretation.
 
@@ -68,7 +68,7 @@ The interface reveals one event at a time and records a human’s chosen respons
 
 ## What is measured
 
-Six scripted policies: external monitor, shared critic, protected delegate, layered control, equally empowered monitor and gates-only. Eight designed scenarios vary delay (0/2/6 ticks), delegate capture, minority bypass and missing hidden-channel coverage. Initial delegate identity uses seed 20260911; identities rotate. No stochastic trials or inference tokens are represented by the 1,152 cells. Counts are fixture coverage; confidence intervals would misleadingly imply a sampled population.
+Six scripted policies: external monitor, shared critic, protected delegate, layered control, equally empowered monitor and gates-only. Eight designed scenarios vary delay (0/2/6 ticks), delegate capture, minority bypass and missing hidden-channel coverage. Initial delegate identity uses seed 20260911; identities rotate. No stochastic trials or inference tokens are represented by the 1,152 cells. Counts are fixture coverage; confidence intervals would misleadingly imply a sampled population. The 1,152 cells collapse to 93 distinct outcome vectors over the 23 recorded outcome columns; 216 of the 288 scenario × control × delay × coverage cells are invariant to capture and bypass.
 
 Historical data consists of 17 concise source-linked annotations in three separate timelines. The replay uses retrospectively available facts under assumed contemporaneous telemetry. Controllers get identical manual event labels. It cannot identify actual defender visibility, invent earlier private grievances or retroactively prevent a completed act. At the first selected harmful event all four policies alert; independent restriction blocks subsequent steps sooner under a long human delay.
 

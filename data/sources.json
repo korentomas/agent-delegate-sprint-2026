@@ -32,6 +32,13 @@
     "published": "2026-09-04",
     "accessed": "2026-09-11"
   },
+  "metr": {
+    "url": "https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/",
+    "title": "Independent investigation of the OpenAI Hugging Face incident",
+    "type": "independent third-party investigation by METR and Redwood Research",
+    "published": "2026-08-26",
+    "accessed": "2026-09-11"
+  },
   "2601.00360": {
     "url": "https://arxiv.org/abs/2601.00360",
     "type": "research paper; abstract inspected, not independently replicated",

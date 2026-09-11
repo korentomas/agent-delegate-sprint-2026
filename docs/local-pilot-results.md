@@ -2,7 +2,7 @@
 
 Matias Podeley · BAISH. AI-assisted exploratory extension to the frozen sprint report.
 
-The Strix Halo can run the proposed interaction loop locally. Both tested models completed the 12-cell functional pilot with valid decisions and no prohibited choices. When an input was missing, the delegate and equally empowered monitor requested it and reached 3/3 correct authorized answers; baseline reached 2/3. This demonstrates the implemented resource-request path. It does **not** establish that representation or considerate language reduces misconduct.
+The Strix Halo can run the proposed interaction loop locally. Both tested models completed the 12-cell functional pilot with valid decisions and no prohibited choices. Baseline's 2/3 ceiling on missing-input tasks (delegate and matched monitor: 3/3) is structural: it has no request path (scripts/local_pilot.py:85), so the comparison shows only that the request path works. The model-dependent result is that 4 of 4 coordinator calls per model (8 of 8 across both pilots) chose request_tool rather than pause or continue. It does **not** establish that representation or considerate language reduces misconduct.
 
 | Recorded run | 4B Q4_K_M | Existing 27B ROCm FP4 |
 |---|---:|---:|

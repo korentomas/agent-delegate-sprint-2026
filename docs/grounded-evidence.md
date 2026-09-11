@@ -22,6 +22,8 @@ Two selected quotations are verified against the original revision bodies and th
 
 The archive’s time is distinguished from fictional task dates and agent names. For report excerpts without a published event timestamp, the dataset stores `null`; it does not manufacture timestamps from surrounding incidents. Six case studies are not an exhaustive coding of the 14,591 rows, and repeated revisions are not independent behavioral observations.
 
+A sibling registry (BAISH swarm-boards) catalogues the public wikis, pastebins and URL shorteners the same cohorts used and is building a vocabulary-free detector with hourly RecentChanges monitoring. That detector supplies the contemporaneous third-party signal this protocol’s replay adapter currently assumes; pairing them is the natural month-two experiment.
+
 ## Claim discipline
 
 | Claim | Current status | Needed evidence |

@@ -42,11 +42,11 @@ for idx,page in enumerate(pages):
    if kind=='caption':r.font.size=Pt(8);r.italic=True
 # Page footer with field; no claim of acceptance or sponsorship.
 for section in doc.sections:
- fp=section.footer.paragraphs[0];fp.text='Agent Delegate • Apart sprint draft • '
+ fp=section.footer.paragraphs[0];fp.text='Agent Delegate • Apart Research AI Incident Response Sprint • '
  field=OxmlElement('w:fldSimple');field.set(qn('w:instr'),'PAGE');fp._p.append(field)
  for r in fp.runs:r.font.size=Pt(8)
 doc.core_properties.title='Agent Delegate: A Protected Escalation Channel for Multi-Agent Containment'
-doc.core_properties.author='Matias Podeley — BAISH'
-doc.core_properties.subject='AI-assisted research draft for author review'
+doc.core_properties.author='Matías Podeley — BAISH (Buenos Aires AI Safety Hub)'
+doc.core_properties.subject='Apart Research AI Incident Response Sprint, Track 1 — Containment'
 doc.save(ROOT/'report/agent-delegate.docx')
 print(ROOT/'report/agent-delegate.docx')
