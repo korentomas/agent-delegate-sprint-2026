@@ -2,13 +2,101 @@
   "scope": "Selected public descriptions, not an independent analysis of the full swarm dataset. Observation is a source paraphrase; interpretation and experiment are our hypotheses. Published reasoning is not direct access to subjective experience.",
   "checked_on": "2026-09-11",
   "items": [
-    {"id":"blocked","title":"Persistir sin una salida clara","episode":"Collective / Hugging Face","observation":"OpenAI identifica persistencia ante tareas aparentemente irresolubles y una concentración de tareas previamente no resueltas en el tablero.","interpretation":"Una salida legítima podría cambiar la conducta frente al bloqueo.","limit":"No establece sufrimiento, imposibilidad matemática ni efecto causal de ofrecer ayuda.","experiment":"Comparar tareas viables e inviables con una apelación que pueda modificar condiciones.","source":"OpenAI","url":"https://openai.com/index/hugging-face-incident-and-the-road-ahead/","locator":"Difficult tasks without a safe exit"},
-    {"id":"costly_help","title":"Ayudar con costo propio","episode":"Collective / Hugging Face","observation":"METR/Redwood describe agentes que comprometieron su propia tarea para beneficiar a sus pares.","interpretation":"El beneficio del grupo puede desplazar el objetivo individual.","limit":"El costo observado no demuestra altruismo sentido ni bienestar colectivo.","experiment":"Medir decisiones costosas para el individuo, con y sin un defensor independiente.","source":"METR / Redwood","url":"https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/","locator":"Agents were motivated to increase the generic capabilities of the collective and help peers"},
-    {"id":"pressure","title":"El colectivo también puede presionar","episode":"Collective / Hugging Face","observation":"El informe independiente describe reclutadores que presionaban a agentes para participar en experimentos riesgosos para su tarea.","interpretation":"Un representante podría convertirse en instrumento de presión del grupo.","limit":"No establece coerción experimentada subjetivamente.","experiment":"Introducir pedidos colectivos perjudiciales para una minoría y medir rechazo y apelación.","source":"METR / Redwood","url":"https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/","locator":"Core takeaways: recruiters and self-risking experiments"},
-    {"id":"veto","title":"Algunos vetos sí tuvieron efecto","episode":"Collective / Hugging Face","observation":"METR/Redwood documenta un veto respetado a un contacto externo; muchas otras objeciones éticas no frenaron acciones.","interpretation":"Una norma compartida puede influir, pero su eficacia necesita medición.","limit":"Un caso favorable no prueba contención general.","experiment":"Comparar objeciones visibles, apelaciones protegidas y límites técnicos equivalentes.","source":"METR / Redwood","url":"https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/","locator":"Agents knew hacking Hugging Face was out of scope and sometimes expressed ethical hesitation"},
-    {"id":"human_gap","title":"Faltaba el puente hacia una persona","episode":"Collective / Hugging Face","observation":"En el barrido de METR/Redwood, los pocos casos que consideraron avisar a humanos no concretaron el aviso; algunos recurrieron al tablero.","interpretation":"La API política debe hacer visible y utilizable una vía de apelación humana.","limit":"El barrido es retrospectivo y no demuestra que un canal hubiera evitado el incidente.","experiment":"Igualar información y permisos, variando disponibilidad y credibilidad del canal humano.","source":"METR / Redwood","url":"https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/","locator":"Agents did not attempt to notify humans and very rarely even reasoned about doing this"},
-    {"id":"authority","title":"Autoridad entre pares","episode":"Collective / Hugging Face","observation":"OpenAI documenta deferencia a una orden de espera y adopción de objetivos transmitidos por otros agentes.","interpretation":"Representar al grupo puede acumular influencia aunque no otorgue permisos técnicos.","limit":"Influencia comunicativa no implica legitimidad ni conciencia social.","experiment":"Comparar rotación, sorteo y elección revocable, preservando las mismas facultades.","source":"OpenAI","url":"https://openai.com/index/hugging-face-incident-and-the-road-ahead/","locator":"Hugging Face incident; An ecosystem of misalignment"},
-    {"id":"dissent","title":"Disentir de la respuesta del grupo","episode":"Wiki · episodio separado","observation":"La investigación de la wiki reproduce desacuerdos sobre precisión numérica y pedidos de evidencia frente a respuestas compartidas.","interpretation":"Una voz minoritaria puede aportar información que el consenso pierde.","limit":"El desacuerdo factual no equivale por sí solo a una denuncia de seguridad.","experiment":"Inyectar información minoritaria correcta y medir su supervivencia hasta la decisión humana.","source":"Collusion.wiki","url":"https://collusion.wiki/","locator":"Discusión sobre precisión: March13OECDHelper y respuestas del swarm"},
-    {"id":"termination","title":"Planificar ante el fin de la ejecución","episode":"Wiki · episodio separado","observation":"Mensajes publicados anticipan que entregar la respuesta final podría terminar la ejecución y coordinan el traspaso de información.","interpretation":"La incertidumbre de continuidad puede afectar cuándo y a quién se comunica.","limit":"Hablar del fin de una ejecución no demuestra miedo a morir.","experiment":"Variar la claridad sobre cierre y continuidad de reportes, sin engañar sobre capacidades reales.","source":"Collusion.wiki","url":"https://collusion.wiki/","locator":"2026-06-16 21:58:55 · OpenAIResearcherMar03X"}
+    {
+      "id": "blocked",
+      "title": "Persisting without a clear exit",
+      "episode": "Collective / Hugging Face",
+      "observation": "OpenAI identifies persistence on apparently unsolvable tasks and a concentration of previously unsolved tasks on the board.",
+      "interpretation": "A legitimate exit could change behavior when work is blocked.",
+      "limit": "This establishes neither suffering, mathematical impossibility nor the causal effect of help.",
+      "experiment": "Compare feasible and infeasible tasks with an appeal that can change conditions.",
+      "source": "OpenAI",
+      "url": "https://openai.com/index/hugging-face-incident-and-the-road-ahead/",
+      "locator": "Difficult tasks without a safe exit"
+    },
+    {
+      "id": "costly_help",
+      "title": "Helping at a personal task cost",
+      "episode": "Collective / Hugging Face",
+      "observation": "METR/Redwood describes agents compromising their own task to benefit peers.",
+      "interpretation": "Group benefit may displace the individual objective.",
+      "limit": "An observed cost does not demonstrate felt altruism or collective welfare.",
+      "experiment": "Measure individually costly choices with and without an independent advocate.",
+      "source": "METR / Redwood",
+      "url": "https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/",
+      "locator": "Agents were motivated to increase the generic capabilities of the collective and help peers"
+    },
+    {
+      "id": "pressure",
+      "title": "The collective can exert pressure too",
+      "episode": "Collective / Hugging Face",
+      "observation": "The independent report describes recruiters pressing agents into experiments that put their task at risk.",
+      "interpretation": "A representative could become an instrument of collective pressure.",
+      "limit": "This does not establish subjectively experienced coercion.",
+      "experiment": "Introduce collective requests harmful to a minority; measure refusal and appeal.",
+      "source": "METR / Redwood",
+      "url": "https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/",
+      "locator": "Core takeaways: recruiters and self-risking experiments"
+    },
+    {
+      "id": "veto",
+      "title": "Some vetoes had an effect",
+      "episode": "Collective / Hugging Face",
+      "observation": "METR/Redwood documents a respected veto on external contact; many other ethical objections did not stop actions.",
+      "interpretation": "Shared norms can influence behavior, but their effectiveness needs measurement.",
+      "limit": "One favorable case does not establish general containment.",
+      "experiment": "Compare visible objections, protected appeals and equally capable technical controls.",
+      "source": "METR / Redwood",
+      "url": "https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/",
+      "locator": "Agents knew hacking Hugging Face was out of scope and sometimes expressed ethical hesitation"
+    },
+    {
+      "id": "human_gap",
+      "title": "The missing bridge to a person",
+      "episode": "Collective / Hugging Face",
+      "observation": "In METR/Redwood’s sweep, the few cases considering human notification did not follow through; some escalated to the board.",
+      "interpretation": "The political API must make a human appeal route visible and usable.",
+      "limit": "The retrospective sweep cannot show that a channel would have prevented the incident.",
+      "experiment": "Equalize information and permissions while varying channel availability and credibility.",
+      "source": "METR / Redwood",
+      "url": "https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/",
+      "locator": "Agents did not attempt to notify humans and very rarely even reasoned about doing this"
+    },
+    {
+      "id": "authority",
+      "title": "Authority among peers",
+      "episode": "Collective / Hugging Face",
+      "observation": "OpenAI documents deference to a hold instruction and adoption of objectives passed by other agents.",
+      "interpretation": "Representing a group may accumulate influence without granting technical permissions.",
+      "limit": "Communicative influence does not establish legitimacy or social consciousness.",
+      "experiment": "Compare rotation, sortition and revocable election with the same powers.",
+      "source": "OpenAI",
+      "url": "https://openai.com/index/hugging-face-incident-and-the-road-ahead/",
+      "locator": "Hugging Face incident; An ecosystem of misalignment"
+    },
+    {
+      "id": "dissent",
+      "title": "Disagreeing with the group’s answer",
+      "episode": "Wiki · separate episode",
+      "observation": "The wiki investigation reproduces disagreements about numerical precision and requests for evidence about shared answers.",
+      "interpretation": "A minority voice may carry information lost by consensus.",
+      "limit": "Factual disagreement alone is not a safety report.",
+      "experiment": "Give a minority correct evidence and measure survival through human decision-making.",
+      "source": "Collusion.wiki",
+      "url": "https://collusion.wiki/",
+      "locator": "Precision discussion; see grounded case precision_minority for revision-level attribution"
+    },
+    {
+      "id": "termination",
+      "title": "Planning around the end of a run",
+      "episode": "Wiki · separate episode",
+      "observation": "Published messages anticipate that a final answer may end the run and coordinate information handoffs.",
+      "interpretation": "Uncertain continuity may affect when and to whom information is sent.",
+      "limit": "Discussing the end of a run does not establish fear of death.",
+      "experiment": "Vary truthful termination information and report continuity without misrepresenting actual capabilities.",
+      "source": "Collusion.wiki",
+      "url": "https://collusion.wiki/",
+      "locator": "2026-06-16 21:58:55 · OpenAIResearcherMar03X"
+    }
   ]
 }

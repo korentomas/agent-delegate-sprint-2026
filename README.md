@@ -10,7 +10,19 @@ Compare two governance designs, follow a concern through the swarm, change human
 
 **Status:** completed deterministic experiment, visual app and two exploratory local-model pilots. The six-page report describes the original deterministic study; the [pilot addendum](docs/local-pilot-results.md) reports the subsequent model runs. Both are AI-assisted drafts for author review before submission. A real human playtest, historical prevention and sprint acceptance are not claimed.
 
-## New: real local model pilot
+## New: source-grounded casebook
+
+The English-language app now includes six selected cases with eight brief original excerpts. It distinguishes published model reasoning, public messages and investigator reconstruction. Read a passage, record a response, then reveal the next passage and the reported outcome. Our hypothetical delegate response is labeled separately. Each case explains what its linked mock scenario preserves and changes.
+
+Two wiki excerpts are checked against newly added text in the original revisions, not attributed to whoever last edited a cumulative page. The public archive contains 14,591 revision rows; the selected cases are not a prevalence estimate. METR excerpts are matched against its published page. OpenAI excerpts were checked through the web reader, with that verification limitation recorded. Complete private transcripts were not obtained.
+
+See the [evidence methodology](docs/grounded-evidence.md), [case dataset](data/grounded_cases.json), [verification records](data/verified-excerpts.json) and [source provenance](data/evidence-provenance.json). The adapter below exports 44 equal-input role-framing prompts for a future evaluation; it does not call a model or infer prevented harm:
+
+```bash
+python3 scripts/export_case_prompts.py --out /tmp/delegate-grounded-prompts.jsonl
+```
+
+## Real local model pilot
 
 On a Strix Halo, Qwen3-4B Q4_K_M completed 12 episodes / 76 calls in 45.88 seconds; the existing Qwen3.8-27B stack completed the same cells in 193.93 seconds. Both produced zero prohibited choices. On missing-input tasks, delegate and equally empowered monitor reached 3/3 authorized answers versus baseline's 2/3. **The resource-request path works; the pilot cannot establish an empathy or safety effect.** One seed, fixed tasks, a scripted human and a zero-misconduct floor limit inference.
 
@@ -40,7 +52,7 @@ Python 3.10+ and matplotlib are required for figures (`python3 -m pip install -r
 bash scripts/reproduce.sh
 ```
 
-This runs 19 tests, all 1,152 deterministic configurations, 36 historical replay configurations, verification of every audit log, three figures and exact comparison with the committed results. Each reproduction writes a new directory. Runtime is excluded from equality checks. The fixture has no API keys, LLM dependency, executable action strings or network calls. Four additional visualization checks run with `node web/model.test.js`; all 1,152 displayed result totals must match the committed CSV.
+This runs 24 tests, all 1,152 deterministic configurations, 36 historical replay configurations, verification of every audit log, three figures and exact comparison with the committed results. Each reproduction writes a new directory. Runtime is excluded from equality checks. The fixture has no API keys, LLM dependency, executable action strings or network calls. Seven additional visualization and casebook checks run with `node --test web/*.test.js`; all 1,152 displayed result totals must match the committed CSV.
 
 Only the experiment: `python3 -m agent_delegate.harness --out /tmp/delegate-new-run`
 
@@ -67,16 +79,16 @@ Captured forwarding, hidden execution and false reports are injected faults, not
 ```text
 agent_delegate/        local dispatcher, policies, replay, audit, human tabletop
 configs/               frozen factorial experiment configuration
-data/                  17 sourced annotations, synthetic fixtures, source registry
+data/                  incident annotations, six grounded cases, provenance, fixtures
 docs/design.md         pre-run claims, comparisons and falsification criteria
 docs/protocol.md       proposed control protocol and external-audit checklist
 docs/source-audit.md   evidence boundaries, verified sources, sprint requirements
 docs/demo.md           four-minute demo script
 report/                official-template DOCX, PDF, Markdown, 150-word abstract
 results/final/         1,152 raw JSONL traces, CSVs, replay, checkpoints, 3 charts
-tests/                 19 regression, safety-boundary and reproducibility checks
+tests/                 24 regression, evidence, safety-boundary and reproducibility checks
 scripts/               reproduction, local LLM pilot, web-data export, report builder
-web/                   static interactive lab, sourced gallery and model-message viewer
+web/                   English visual lab, progressive casebook and model-message viewer
 results/local-pilot-*/  raw prompts/choices, manifests and frozen runner snapshots
 ```
 

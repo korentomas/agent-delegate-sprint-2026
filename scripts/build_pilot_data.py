@@ -20,7 +20,9 @@ def main():
     out = ROOT / 'web/data'
     (out / 'local-pilots.json').write_text(json.dumps({'models': models}, ensure_ascii=False, separators=(',', ':')) + '\n')
     (out / 'behavioral-evidence.json').write_bytes((ROOT / 'data/behavioral-evidence.json').read_bytes())
-    print('Exported two recorded local pilots and eight sourced behavior annotations.')
+    for name in ['grounded_cases.json', 'verified-excerpts.json']:
+        (out / name).write_bytes((ROOT / 'data' / name).read_bytes())
+    print('Exported two local pilots, eight behavioral annotations and six source-grounded cases.')
 
 
 if __name__ == '__main__':

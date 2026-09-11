@@ -21,7 +21,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: node web/model.test.js
+      - run: node --test web/*.test.js
       - run: |
           python3 scripts/build_web_data.py
           python3 scripts/build_pilot_data.py

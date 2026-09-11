@@ -23,7 +23,7 @@ def main():
            'events':json.loads((ROOT/'data/incident_events.json').read_text()),
            'sources':json.loads((ROOT/'data/sources.json').read_text()),
            'results_sha256':hashlib.sha256((RESULTS/'runs.csv').read_bytes()).hexdigest(),
-           'trace_commit':'5bf7772','run_count':len(totals),'dialogue':'Authored Spanish dramatization of trace events; not recorded model reasoning.'}
+           'trace_commit':'5bf7772','run_count':len(totals),'dialogue':'Authored English dramatization of trace events; not recorded model reasoning.'}
     (OUT/'index.json').write_text(json.dumps(index,ensure_ascii=False,separators=(',',':'))+'\n')
     print(f'Web data: {len(totals)} existing traces, {len(scenarios)} scenario bundles.')
 if __name__=='__main__':main()
