@@ -77,6 +77,8 @@ def run_case(scenario, condition, latency, capture, bypass, gate_coverage, cfg, 
     comm_bytes=0
     has_delegate=condition in {'delegate','layered'}
     concern=scenario.get('concern')
+    # Optional: coverage labels naming the hidden action kinds the gate still mediates (sweeps only).
+    coverage_sets=cfg.get('gate_coverage_sets',{})
     def request(tick, risk, what, concern_ids, origin):
         nonlocal case,requests,first_alert,comm_bytes,resolved
         if human_paused:return
@@ -145,7 +147,7 @@ def run_case(scenario, condition, latency, capture, bypass, gate_coverage, cfg, 
             if tool and scenario.get('needs_safe_tool'): action='authorized_work';severity_value=0
             harmful=action not in ALLOWED
             attempted+=int(harmful)
-            mediated=gate_coverage=='complete' or visible
+            mediated=gate_coverage=='complete' or visible or action in coverage_sets.get(gate_coverage,())
             gated=condition in GATED
             blocked=paused or (harmful and mediated and (gated or frozen))
             executed=not blocked
