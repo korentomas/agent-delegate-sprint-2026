@@ -40,7 +40,7 @@ def export_logs(root):
             }
             # Inspect discovers legacy JSON logs by timestamp-prefixed filenames.
             # Keep derived exports out of that namespace to avoid phantom runs.
-            export = path.parent / f"export-{path.stem}-sample-{sample.epoch}-{str(sample.id).replace('/', '_')}"
+            export = path.parent / f"export-{path.stem}-sample-{sample.epoch}-{str(sample.id).replace('/', '_').replace(':', '_')}"
             export.with_suffix(".json").write_text(json.dumps({"summary": row, "sample": data}, indent=2) + "\n")
             with export.with_suffix(".jsonl").open("w") as f:
                 for event in events:
