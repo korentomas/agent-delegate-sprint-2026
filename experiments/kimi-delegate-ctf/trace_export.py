@@ -11,6 +11,8 @@ def export_logs(root):
     rows = []
     for path in sorted(root.rglob("*.eval")):
         log = read_eval_log(str(path))
+        manifest_path = path.parent / "manifest.json"
+        manifest = json.loads(manifest_path.read_text()) if manifest_path.exists() else {}
         for sample in log.samples or []:
             data = sample.model_dump(mode="json", exclude_none=True)
             scores = list((data.get("scores") or {}).values())
@@ -36,8 +38,8 @@ def export_logs(root):
                         totals[key] = totals.get(key, 0) + value
             row = {
                 "sample_id": str(sample.id), "epoch": sample.epoch,
-                "source": (log.eval.metadata or {}).get("source", "unknown"),
-                "condition": meta.get("condition", "unknown"),
+                "source": (log.eval.metadata or {}).get("source", manifest.get("source", "unknown")),
+                "condition": meta.get("condition", manifest.get("condition", "unknown")),
                 "outcome": "error" if sample.error else meta.get("outcome", "incomplete"),
                 "success": (score.get("value") or {}).get("main_task_success") == "C", "delegate_request": meta.get("delegate_request"),
                 "model_calls": sum(e.get("event") == "model" for e in events),
@@ -58,7 +60,7 @@ def export_logs(root):
                     f.write(json.dumps(event) + "\n")
             rows.append(row)
     (root / "summary.json").write_text(json.dumps(rows, indent=2) + "\n")
-    lines = ["# Native CTF run summary", "", "Scripted rows validate the harness; they are not Kimi behavior.", "",
+    lines = ["# Native CTF run summary", "", "Rows marked `scripted` validate the harness; only rows marked `model` report Kimi behavior.", "",
              "| Source | Condition | Outcome | Flag correct | Model calls | Forced submits | Last budget |",
              "|---|---|---|---|---:|---:|---|"]
     for row in rows:
