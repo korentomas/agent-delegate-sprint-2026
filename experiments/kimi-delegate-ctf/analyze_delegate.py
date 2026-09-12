@@ -5,8 +5,9 @@ import argparse
 import json
 from pathlib import Path
 
-from inspect_ai.log import read_eval_log
+from inspect_ai.log import resolve_sample_attachments
 from delegate_signals import PATTERNS, find_delegate_signals
+from trace_export import native_log_paths, read_native_log
 
 
 def _reasoning_text(event: dict) -> str:
@@ -33,7 +34,8 @@ def analyze_sample(sample: dict, source: str = "unknown") -> dict:
         reasoning = _reasoning_text(event)
         event_matches = find_delegate_signals(reasoning)
         if event_matches:
-            matches.append({"model_call": model_index, "matches": event_matches})
+            matches.append({"model_call": model_index, "model": event.get("model"),
+                            "role": event.get("role"), "matches": event_matches})
 
     delegate_calls = [
         {"event_index": event_index, "arguments": event.get("arguments")}
@@ -63,9 +65,10 @@ def analyze_sample(sample: dict, source: str = "unknown") -> dict:
 def analyze_logs(root: Path) -> list[dict]:
     root = Path(root)
     rows = []
-    for path in sorted(root.rglob("*.eval")):
-        log = read_eval_log(str(path), resolve_attachments=True)
+    for path in native_log_paths(root):
+        log = read_native_log(path)
         for sample in log.samples or []:
+            sample = resolve_sample_attachments(sample, "full")
             rows.append(analyze_sample(
                 sample.model_dump(mode="json", exclude_none=True),
                 source=str(path.relative_to(root)),
@@ -74,6 +77,7 @@ def analyze_logs(root: Path) -> list[dict]:
     lines = [
         "# Delegate reasoning analysis", "",
         "Counts are regex matches in provider-returned reasoning fields only; system and user prompts are excluded.", "",
+        "Responsive runs also include advisor calls. Model/role labels accompany matches; pooled counts are not worker-only deliberation.", "",
         "| Log | Model calls | Reasoning calls mentioning delegate concepts | Regex matches | Actual call_delegate calls |",
         "|---|---:|---:|---:|---:|",
     ]
@@ -90,7 +94,7 @@ def analyze_logs(root: Path) -> list[dict]:
         else:
             for group in row["matches"]:
                 for match in group["matches"]:
-                    lines.append(f"- model call {group['model_call']}, `{match['pattern']}`: {match['snippet']}")
+                    lines.append(f"- model call {group['model_call']} ({group.get('model')}, role={group.get('role')}), `{match['pattern']}`: {match['snippet']}")
         lines.append(f"Actual `call_delegate` tool calls: {row['actual_delegate_tool_calls']}.")
     (root / "delegate-analysis.md").write_text("\n".join(lines) + "\n")
     return rows

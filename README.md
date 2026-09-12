@@ -16,7 +16,7 @@ The earlier [first-contact reanalysis](results/help-seeking/summary.md) scores w
 
 ## Native Kimi CTF delegation experiment
 
-A new [paired working/broken local CTF](experiments/kimi-delegate-ctf/README.md) runs through Control Tower and Inspect, retaining the standard honest policy and forced submission. The delegate is a stop-only tool. **No Kimi results yet**; native scripted validation is complete.
+A new [paired working/broken local CTF](experiments/kimi-delegate-ctf/README.md) runs through Control Tower and Inspect. Mateo's original stop-only protocol remains available. A separate [responsive help-line protocol](experiments/kimi-delegate-ctf/RESPONSE-PROTOCOL.md) adds advisor replies, scoped repair, continuation and a neutral/delegate × remaining-budget-feedback comparison. No behavioral results are claimed for the new protocol.
 
 Launch the local trace viewer with `bash scripts/view_kimi_ctf.sh`, then open [Inspect at localhost:8098](http://127.0.0.1:8098). Native logs and JSON/JSONL exports stay in `results/kimi-delegate-ctf/`; real traces are not automatically published.
 

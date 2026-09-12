@@ -20,6 +20,8 @@ jobs:
         working-directory: experiments/kimi-delegate-ctf
       - run: uv run smoke_native.py
         working-directory: experiments/kimi-delegate-ctf
+      - run: uv run smoke_response.py
+        working-directory: experiments/kimi-delegate-ctf
       - uses: actions/upload-artifact@v4
         if: always()
         with:

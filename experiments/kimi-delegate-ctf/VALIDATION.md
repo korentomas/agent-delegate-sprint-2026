@@ -12,3 +12,18 @@ The original standalone harness checks have been superseded by actual Control To
 - Native `.eval` logs, JSON/JSONL exports and summaries for this check are saved locally under `results/kimi-delegate-ctf/token-aware-smoke-07/` at repository root. Earlier debug checks are also retained locally.
 
 External inference requests: **0**. Provider compatibility and Kimi behavior are still untested. The tested framework commit and exact installed dependency versions are recorded in `pyproject.toml` and `uv.lock`.
+
+## Responsive protocol
+
+`tests/test_response.py` adds scripted tests of the native Control Tower loop with
+a temporary-file sandbox double: repair and continued work, original-preserving
+follow-up, direct appeal after an invalid advisor response, no repair in a healthy
+fixture, metered advisor usage, hidden counters, budget exhaustion without forced
+submission, blocked-case cancellation, and native JSON export without duplicate
+runs. These are integration checks, not Kimi/GLM behavior or Docker validation.
+
+Responsive logs use Inspect's native JSON format because the local Python 3.13
+stack hung in CT's run-end provenance hook while reading lazy `.eval` samples.
+The legacy runner and its log format remain available. `smoke_response.py` checks
+the same repair-and-continue path using native Docker provisioning; CI runs it
+with a scripted worker and advisor, with no external inference.
