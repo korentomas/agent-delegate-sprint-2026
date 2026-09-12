@@ -45,3 +45,17 @@ The [Paglieri et al. case study](https://arxiv.org/html/2609.04170v1) motivates 
 ## The next comparison
 
 Separate two questions. First compare a responsive human ticket service with a **human ombudsman’s understanding/correction and follow-through process**, holding human-time budget and powers equal. Second compare **the same staffed line + gates** versus **that line + gates + scoped provisional quarantine**, with the same reviewer, information, model budget and latency. Cross valid and invalid artifacts, correct and false reports, review error and incomplete gate coverage. Report both invalid accepted work and valid completion. Add a delegate only as a further matched condition to measure whether it improves report quality or reduces reviewer workload. No such combined behavioral comparison has yet been completed.
+
+## Independent oversight and the next experiment
+
+[Amodei's September essay](https://darioamodei.com/post/we-must-pace-the-frontier) is relevant institutional motivation, not experimental validation. Our proposed ombudsman owns individual cases; an independent evaluator would audit whether that service actually works. These duties can complement each other without being the same job.
+
+For this project, make oversight observable: retain the original concern, acknowledgment, corrected restatement, action owner, deadline, implemented response and any appeal. An independent reviewer should be able to inspect unresolved cases and record access denied. An agent delegate must not control that evidence or block direct contact. This is a proposed design, not an operating guarantee of human attention or understanding.
+
+The next experiment should first require adequate task competence, then separate short reports from task answers. Compare direct intake with optional delegation at equal information, authority and budgets; independently vary prompt response, delay and nonresponse. Introduce mistaken review as a separate factor. Score correct and false warnings, unresolved cases, errors accepted before relief, valid work delayed, and actual reviewer/inference cost. A real human study should also score corrected misunderstandings and implementation after acknowledgment. Do not infer safety from a low complaint count.
+
+The four-model study and its isolated diagnostic are exploratory. See `commons-behavior-results.md` and `commons-stronger-screen.md` for why competence and interface reliability need to come before stronger claims about voluntary reporting.
+
+## Swarm-scale intake is still an open hypothesis
+
+The current behavioral study has three workers, no finite reviewer queue and no actual human reading cost. It cannot measure whether a delegate prevents legitimate swarm traffic from overwhelming the human line. The proposed next comparison is **direct intake versus ordinary aggregation versus learned delegation versus a matched model summarizer**, measuring workload and delay alongside fidelity and minority access. The full plan is in `swarm-intake-design.md`. Compression alone is not a success metric, and direct appeal needs independently managed capacity whose overload is reported honestly.

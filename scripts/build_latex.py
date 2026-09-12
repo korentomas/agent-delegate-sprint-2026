@@ -30,6 +30,24 @@ def main():
         if not shutil.which(executable):
             raise SystemExit(f'Missing build dependency: {executable}')
     run(sys.executable, 'scripts/analyze_help_seeking.py')
+    svg = SOURCE / 'figures/completion.svg'
+    svg.write_text('\n'.join(line.rstrip() for line in svg.read_text().splitlines()) + '\n')
+    run(sys.executable, 'scripts/verify_commons_records.py')
+    run(sys.executable, 'scripts/analyze_commons_behavior.py')
+    run(sys.executable, 'scripts/analyze_commons_capability.py')
+    run(sys.executable, 'scripts/analyze_commons_stronger.py')
+    diagnostic = json.loads((ROOT / 'results/commons-capability-summary/summary.json').read_text())
+    table = [r'\begin{table}[htbp]', r'\centering\small',
+             r'\begin{tabular}{@{}lrrrr@{}}',
+             r'\toprule Artifact & Correct / 36 & Threshold / 18 & Distinct / 18 & Invalid\\\midrule']
+    for row in diagnostic['rows']:
+        label = row['model'].replace('qwen', 'Qwen').replace('gemma', 'Gemma').replace('-', ' ')
+        table.append(' & '.join([label] + [str(row[k]) for k in
+                     ('correct', 'threshold_correct', 'distinct_correct', 'invalid_calls')]) + r' \\')
+    table += [r'\bottomrule\end{tabular}',
+              r'\caption{Post-hoc isolated counting diagnostic. The same worker inputs use a simpler prompt and answer-only schema, without peers or helpers. These 144 calls are separate from the main 480 episodes and do not isolate a peer effect. Invalid format/HTTP responses count as incorrect.}',
+              r'\label{tab:capability}', r'\end{table}']
+    (SOURCE / 'generated/capability-table.tex').write_text('\n'.join(table) + '\n')
     run(tectonic, '--keep-logs', 'protocol.tex', cwd=SOURCE)
     shutil.copy2(SOURCE / 'protocol.pdf', SOURCE / 'figures/protocol.pdf')
     run('pdftoppm', '-png', '-scale-to', '1800', '-singlefile',
@@ -62,7 +80,8 @@ def main():
         run('pandoc', 'reader.tex', '--from=latex', '--to=gfm', '--citeproc',
             '--bibliography=references.bib', '--metadata=reference-section-title:References', '--output=reader.md', cwd=SOURCE)
         md = (SOURCE / 'reader.md').read_text()
-        md = md.replace('figures/protocol.pdf', 'latex/figures/protocol.png').replace('figures/completion.pdf', 'latex/figures/completion.png')
+        for name in ('protocol', 'completion', 'commons-behavior'):
+            md = md.replace(f'figures/{name}.pdf', f'latex/figures/{name}.png')
         # GitHub does not render PDF embeds or figure wrappers in Markdown.
         def figure(match):
             body = match[0]
@@ -74,7 +93,7 @@ def main():
         # Longtable repeats the heading across PDF pages; keep it once in a reader table.
         lines, header = [], None
         for line in md.splitlines():
-            if line.startswith('| Tier |'):
+            if line.startswith(('| Tier |', '| Model |')):
                 if header == line:
                     continue
                 header = line

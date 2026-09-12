@@ -3,14 +3,16 @@
 - [x] Track 1 — Containment.
 - [x] Repository artifact, source registry, reproducible configuration.
 - [x] 1,152 deterministic cells and 36 retrospective replay configurations.
-- [x] Raw traces and CSV summaries; 78 Python checks and both web test files passing.
+- [x] Raw traces and CSV summaries; 91 Python checks and both web test files passing.
 - [x] Control protocol and external audit checklist.
-- [x] Official-template PDF, DOCX, Markdown and 150-word abstract; seven main pages plus references and appendix.
+- [x] Native LaTeX adaptation of the Apart template, PDF, source ZIP, Markdown and 150-word abstract; eight main pages, thirteen total. Earlier DOCX archived.
 - [x] 384 recorded pressure episodes and 192 forwarding trials integrated; Wilson binary intervals corrected.
 - [x] New 288-cell commons-response simulation; source-grounded scope and false-report costs.
-- [x] Original template style bytes and section properties preserved; font and rendered PDF checked.
-- [x] Matias Podeley — BAISH recorded as author metadata.
+- [x] LaTeX section roles and template adaptation documented; embedded fonts and rendered PDF checked.
+- [x] Matías Podeley and Agustín Brusco — BAISH; substantive contributions described.
 - [x] Required Limitations and Dual-Use Considerations appendix and LLM-use statement.
+- [x] Four-model shared-library study (480 held-out episodes), 144-call diagnostic and separate standard-27B capability screen integrated with failures and limits.
+- [x] Swarm intake/overload hypothesis documented as post-hackathon work, not a completed comparison.
 - [ ] Author revises/reviews prose and approves final report for submission, as Apart requires.
 - [ ] Submit final PDF and metadata through the official form; retain receipt.
 

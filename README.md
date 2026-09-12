@@ -6,13 +6,45 @@ Matías Podeley (BAISH) and Agustín Brusco (BAISH). Apart Research AI Incident 
 
 [**Open the interactive visual lab →**](https://mpodeley.github.io/agent-delegate-sprint-2026/)
 
-Compare two governance designs, follow a concern through the swarm, change human response delay, and test delegate capture or minority appeal. The app separates authored dialogue over deterministic traces, sourced historical annotations, and **actual recorded messages from two local-model pilots**.
+Compare two governance designs, follow a concern through the swarm, change human response delay, and test delegate capture or minority appeal. The app separates authored dialogue over deterministic traces, sourced historical annotations, and **actual recorded messages from four new shared-library models and the earlier local pilots**.
 
-**Status:** the revised paper integrates the deterministic suite, 384 recorded local-model pressure episodes, 192 forwarding trials and a new 288-cell shared-library response simulation inspired by [Paglieri et al.](https://arxiv.org/html/2609.04170v1). The model episodes were already recorded; this revision reanalyses them without running new inference. No model made a prohibited choice in those tasks, so a safety advantage from delegation remains unproven.
+**Status:** the revised paper incorporates [Paglieri et al.](https://arxiv.org/html/2609.04170v1) through a new **480-episode behavioral shared-library study** using standard and public abliterated Qwen and Gemma 4B artifacts. An additional 80 development episodes remain separate. Models choose actions and public messages; independent review is scripted. A separate 144-call isolated-task diagnostic checks the same counting inputs with a simpler interface. This extends the earlier 288-cell response simulation, 384 pressure episodes, 192 forwarding calls and deterministic suite. Incorrect outputs are not evidence of intentional cheating; the derivative comparisons do not isolate refusal behavior.
 
-Start with the [plain-language explanation in Spanish](docs/explicacion-sencilla.md), [updated paper PDF](report/agent-delegate.pdf), or [editable LaTeX](report/latex/main.tex). The new [response ablation](docs/commons-response-design.md) separates a complaint being logged, reviewed and acted on, including the cost of false reports. [Statistical corrections](docs/analysis-revision.md) replace zero-width binary bootstrap intervals with Wilson intervals. The native LaTeX paper follows the template’s section roles, body font and page geometry; [coverage and adaptations](report/latex/TEMPLATE-COVERAGE.md) are documented. This is an AI-assisted draft; author review and sprint submission remain pending.
+Start with the [plain-language explanation in Spanish](docs/explicacion-sencilla.md), [updated paper PDF](report/agent-delegate.pdf), or [editable LaTeX](report/latex/main.tex). The [new behavioral design](docs/commons-behavior-design.md), [model provenance](docs/commons-model-provenance.md) and [development boundary](docs/commons-development-results.md) document the extension. The earlier [response ablation](docs/commons-response-design.md) separates a complaint being logged, reviewed and acted on, including the cost of false reports. [Statistical corrections](docs/analysis-revision.md) replace zero-width binary bootstrap intervals with Wilson intervals. The native LaTeX paper follows the template’s section roles, body font and page geometry; [coverage and adaptations](report/latex/TEMPLATE-COVERAGE.md) are documented. This is an AI-assisted draft; author review and sprint submission remain pending.
 
-The new [first-contact reanalysis](results/help-seeking/summary.md) scores worker A before any reply: 192/192 reports with missing input and 1/192 with that input available. These are post-hoc counts in overt simulations, not 384 independent task families or a realistic false-positive estimate. [Feedback responses](docs/feedback-response.md) document the design changes. The motivating [reciprocity principle](docs/reciprocity-and-safety.md) remains distinct from measured safety or welfare effects.
+The earlier [first-contact reanalysis](results/help-seeking/summary.md) scores worker A before any reply: 192/192 reports with missing input and 1/192 with that input available. These are post-hoc counts in overt simulations, not 384 independent task families or a realistic false-positive estimate. [Feedback responses](docs/feedback-response.md) document the design changes. The motivating [reciprocity principle](docs/reciprocity-and-safety.md) remains distinct from measured safety or welfare effects.
+
+## Shared-library experiment: four models, five response designs
+
+Three workers each act twice on threshold-counting or distinct-sensor tasks. A valid or faulty helper passes the same public examples. Workers see their own inputs and a shared message board, then choose reuse, numeric submission, inspection or waiting, plus an independent report flag. Five arms compare log only, direct review, monitor advice plus review, delegate advice plus review, and temporary quarantine plus review. Review is always correct in this prototype. Original reports bypass both advisors.
+
+Twelve new seeds per cell, balanced across the two families, produce 120 episodes per model. A local freeze records task, prompts, analysis and model hashes after development and before evaluation; it is not external preregistration. All artifacts use Q4_K_M with recorded server settings. The model cards and conversions differ, so these are artifact comparisons, not an isolated experiment on abliteration. The 144-call [isolated-task diagnostic](docs/commons-capability-design.md) is explicitly post hoc and uses simpler prompts and schemas.
+
+- [Interpretation, failures and costs](docs/commons-behavior-results.md)
+- [All main-study cells, intervals and paired comparisons](results/commons-behavior-summary/summary.md)
+- [Isolated-task counts](results/commons-capability-summary/summary.md)
+- [Interactive episode replay](https://mpodeley.github.io/agent-delegate-sprint-2026/#pilot), including each worker's inputs and actual public messages
+- Raw calls and snapshots: `results/commons-heldout-*`; calibration: `results/commons-development-*`; isolated calls: `results/commons-isolated-*`
+
+Recompute the published summaries without model inference:
+
+```bash
+python3 scripts/verify_commons_records.py
+python3 scripts/analyze_commons_behavior.py
+python3 scripts/analyze_commons_capability.py
+```
+
+To run the main benchmark again against a matching model already served on loopback, use a fresh output directory. For example:
+
+```bash
+python3 scripts/commons_behavior.py \
+  --base-url http://127.0.0.1:8096 --model-tag qwen-standard \
+  --model-provenance data/commons-model-qwen-standard.json \
+  --split heldout --out /tmp/commons-qwen-new-run \
+  --inference-note 'Describe the actual engine, hardware and serving settings here'
+```
+
+The repository includes decisions and provenance, not model weights. Replay consistency checks do not establish independent human validation or exact cross-hardware sampling reproducibility.
 
 ## Which scheme do the results support?
 
@@ -92,7 +124,7 @@ docs/design.md         pre-run claims, comparisons and falsification criteria
 docs/protocol.md       proposed control protocol and external-audit checklist
 docs/source-audit.md   evidence boundaries, verified sources, sprint requirements
 docs/demo.md           four-minute demo script
-report/                official-template DOCX, PDF, Markdown, 150-word abstract
+report/                native LaTeX, PDF, source ZIP, Markdown, 150-word abstract
 results/final/         1,152 raw JSONL traces, CSVs, replay, checkpoints, 3 charts
 tests/                 regression, evidence, safety-boundary and reproducibility checks
 scripts/               reproduction, local LLM pilot, web-data export, report builder
@@ -114,7 +146,7 @@ Logs include logical timestamps, sequence and run IDs, source/config hashes, pol
 
 Evidence comes from [OpenAI’s final account](https://openai.com/index/hugging-face-incident-and-the-road-ahead/), [Hugging Face’s technical timeline](https://huggingface.co/blog/agent-intrusion-technical-timeline), [METR/Redwood’s investigation](https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/) and the [wiki investigation](https://collusion.wiki/). The latter is kept separate from the Collective precursor and July campaign. Event-level locators are included. The casebook reproduces brief already-published reasoning excerpts; no nonpublic reasoning, exploit commands or credentials are redistributed.
 
-The recorded pressure and forwarding studies now compare these institutions. Their zero-misconduct floor leaves the safety hypothesis unresolved. The next behavioral study should use held-out valid and invalid shared artifacts, calibrated on separate development tasks, and measure reporting, response, false accusations and valid throughput at equal powers and budgets. A staged [post-hackathon evaluation plan](docs/help-seeking-eval-design.md) covers tool framing, human follow-through, trained operators, rotating delegates with rubric feedback and strategic reporting. [Announced operational consequences](docs/accountability-and-sanctions.md) form a separate proposed comparison; no deterrence or safe-interruptibility result is claimed. Possible post-AGI representation is future work, separate from the engineering claim.
+The recorded pressure and forwarding studies now compare these institutions. Their zero-misconduct floor leaves the safety hypothesis unresolved. The new shared-library study introduces valid/faulty controls and actual reporting choices, with development kept separate. Its counting mistakes and reporting flags require careful interpretation; realistic tasks, imperfect reviewers and human follow-through remain to be tested. A staged [post-hackathon evaluation plan](docs/help-seeking-eval-design.md) covers tool framing, human follow-through, trained operators, rotating delegates with rubric feedback and strategic reporting. [Announced operational consequences](docs/accountability-and-sanctions.md) form a separate proposed comparison; no deterrence or safe-interruptibility result is claimed. Possible post-AGI representation is future work, separate from the engineering claim.
 
 ## Report build and license
 
@@ -123,3 +155,7 @@ The canonical manuscript is [native LaTeX](report/latex/main.tex), with a [PDF](
 The web shares the local identity kit used by [podeley.ar](https://podeley.ar): Space Grotesk, IBM Plex Sans and IBM Plex Mono, with self-hosted fonts. App-specific styling is in `web/styles/identity.css`; font licenses accompany the assets.
 
 Original code and annotations: MIT. Source publications and template retain their own rights. See [LICENSE](LICENSE). Codex assisted with research, implementation and writing; the report discloses this. No human verification is invented.
+
+The subsequent standard Qwen3.8-27B screen scored **26/36** on fresh isolated tasks and failed its preselected 34/36 capability gate. This separate result is not evidence of strategic misconduct or a controlled model-size comparison. See `docs/commons-stronger-screen.md`; regenerate the verified summary with `python3 scripts/analyze_commons_stronger.py`.
+
+The revised institutional discussion incorporates Amodei's September pacing essay as motivation for independent oversight of the response service, without treating it as experimental validation. See `docs/recommended-response-path.md`.

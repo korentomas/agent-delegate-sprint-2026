@@ -1,3 +1,4 @@
+import {loadCommonsStudy} from './commons-view.js';
 import {CONDITIONS,SCENARIOS,runKey,project,messages,EXPERIMENTS} from './model.js';
 import {initCasebook} from './cases.js';
 const $=s=>document.querySelector(s);
@@ -159,6 +160,7 @@ $('#experiment-grid').innerHTML=EXPERIMENTS.map(e=>`<article class="experiment-c
 document.querySelectorAll('[data-lane]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-lane]').forEach(x=>{x.classList.toggle('active',x===b);x.setAttribute('aria-pressed',String(x===b));});document.querySelectorAll('.lane').forEach(x=>x.classList.toggle('mobile-active',x.id==='lane-'+b.dataset.lane));}));
 let pilotData=null,pilotModel=null,pilotEpisode=null;
 async function loadPilots(){
+ loadCommonsStudy();
  try{
   if(!pilotData){const res=await fetch('data/local-pilots.json');if(!res.ok)throw Error('No pilot data');pilotData=await res.json();pilotModel=pilotData.models[0].id;}
   $('#pilot-model').innerHTML=pilotData.models.map(m=>`<option value="${m.id}">${esc(m.label)}</option>`).join('');$('#pilot-model').value=pilotModel;

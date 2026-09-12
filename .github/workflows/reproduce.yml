@@ -14,3 +14,10 @@ jobs:
         run: |
           python3 scripts/analyze_help_seeking.py --no-figure
           git diff --exit-code -- results/help-seeking report/latex/generated
+      - name: Verify shared-library records and analysis
+        run: |
+          python3 scripts/verify_commons_records.py
+          python3 scripts/analyze_commons_behavior.py --no-figure
+          python3 scripts/analyze_commons_capability.py
+          python3 scripts/analyze_commons_stronger.py
+          git diff --exit-code -- results/commons-behavior-summary results/commons-capability-summary results/commons-stronger-summary report/latex/generated

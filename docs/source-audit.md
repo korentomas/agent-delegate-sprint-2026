@@ -35,3 +35,13 @@ The official template copy at `/tmp/apart-template.docx` matches the previously 
 
 
 September 12: the current manuscript moved to native LaTeX at the author’s request. The previous DOCX/style checks are archived. `report/latex/TEMPLATE-COVERAGE.md` records section coverage and adaptation; `report/latex-build.json` records current page/abstract checks. The LaTeX adaptation does not assert DOCX XML identity.
+
+## Four-model shared-library extension
+
+The behavioral extension follows the same source-grounded distinction between a flawed shared artifact, a report and an effective response. It uses 480 new local-model episodes, plus 80 separate development episodes, rather than attributing scripted reporting to a model. The tasks are seeded counting problems, not Lean conjectures or a replication of the source's 100-worker research swarm. Initial fault discovery, intentional cheating, realistic evaluation awareness and historical prevention remain outside the measured claims. Model cards, pinned commits and verified GGUF hashes are retained in `docs/commons-model-provenance.md` and `data/commons-model-*.json`.
+
+A separate 144-call isolated counting diagnostic was specified while the main evaluation was underway, before its own calls. It reuses the main inputs under a simpler prompt and schema, so it is explicitly post hoc and cannot isolate a peer effect. Neither local freeze is an externally registered study or independent human verification.
+
+## Pacing and independent oversight
+
+Read the full primary-source essay [Amodei, We Must Pace the Frontier](https://darioamodei.com/post/we-must-pace-the-frontier), September 2026, on September 12. It motivates independent oversight, access to evidence and verifiable follow-through. Its risk forecasts are the author's judgments, not measurements from this project. It supplies no treatment effect for a delegate, welfare protocol or interruption incentive. The proposed external evaluator and our case-following ombudsman have different roles.

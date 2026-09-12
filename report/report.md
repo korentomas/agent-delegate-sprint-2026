@@ -11,20 +11,20 @@ September 2026.
 
 </div>
 
-What should an AI agent do when it cannot finish a task safely? We
-propose giving it a help line: a way to explain the problem and reach a
-human who is responsible for listening and following up. An optional
-delegate can organize requests, but cannot block direct contact or grant
-itself permissions. We built a prototype and tested parts of this idea
-with simple tasks and simulated responses. Before anyone replied,
-workers reported a missing input in all 192 blocked episodes and
-reported in one of 192 episodes where that input was available. A plain
-ticket queue already helped them finish; adding a delegate showed no
-clear extra benefit. These tasks were explicitly simulations, so they do
-not tell us how agents behave in realistic evaluations or when
-deliberately hiding misconduct. The next test is whether agents ask for
-help appropriately, without disrupting ordinary work or revealing the
-evaluation.
+Imagine a team of AI agents sharing a shortcut that passes the checks
+but gives wrong answers. Who listens when an agent raises a concern, and
+can anyone stop the mistake spreading? We propose a protected help line
+to a responsible human, with an optional delegate that cannot block
+direct contact. Inspired by a research-swarm case study, we ran 480
+episodes with four local Qwen and Gemma models. Agents could reuse a
+helper, inspect it, solve independently or report a concern. We compared
+logging, review, monitor advice, delegate advice and temporary
+quarantine. Three models rarely reported; the fourth reported with both
+faulty and correct helpers. Adding a delegate showed no consistent
+benefit. A separate counting check also produced many wrong answers.
+These small tasks use scripted review and do not establish deliberate
+cheating, a welfare effect or a benefit from a human ombudsman. They
+identify problems for the next experiments.
 
 # Introduction
 
@@ -43,29 +43,33 @@ hiding misconduct may never call. Voluntary reporting therefore cannot
 replace independent action controls. We also distinguish the human duty
 we propose from the scripted response service used in our experiments.
 
-We contribute an executable reporting protocol, recorded local-model
-comparisons, and a shared-library response simulation motivated by
-recent whistleblowing research. We ask two separable questions: do
-workers ask for help when blocked, and does a delegate add anything
-beyond an equally capable ticket queue or monitor? A post-hoc
-first-decision analysis addresses the first question without depending
-on what the delegate does afterward. The wider aspiration is reciprocal
-treatment under uncertainty: procedures we would want available to
-humans if relative power changed. This is a motivation, not an observed
-safety result.
+We contribute an executable reporting protocol, local-model comparisons,
+and a new behavioral study of shared-library reuse motivated by recent
+whistleblowing research. We separate workers’ reporting choices from
+what happens afterward, and compare a delegate with direct review and
+matched monitor advice. An earlier post-hoc analysis also scores contact
+before any reply. The wider aspiration is reciprocal treatment under
+uncertainty: procedures we would want available to humans if relative
+power changed. This is a motivation, not an observed safety result.
 
 # Related Work
 
 Paglieri et al. (Paglieri et al. 2026) describe cheating spreading
 through a research swarm’s shared library, alongside peer
 whistleblowing. Their unmonitored complaint channel motivates our
-distinction between recording a warning and acting on it. We simulate
-alternative responses to a fixed report; we do not replicate their
-agents, measure spontaneous cheating or establish that a delegate would
-have prevented their outcome. Public incident accounts also motivate our
+distinction between recording a warning and acting on it. We first
+simulate responses to a fixed report, then let models choose whether to
+reuse or report seeded faults. This does not replicate their Lean tasks
+or 100-worker swarm, measure spontaneous initial cheating, or establish
+historical prevention. Public incident accounts also motivate our
 casebook (OpenAI 2026; Hugging Face 2026; METR and Redwood Research
 2026; Von Arx et al. 2026); selected passages illustrate possible
 failure modes rather than their prevalence.
+
+Amodei’s policy essay (Amodei 2026) proposes permanent external
+evaluators with access to evidence and independent publication rights.
+This motivates independent oversight of our proposed response service;
+it is not evidence of delegate effectiveness.
 
 Our closest operational alternative is an ordinary responsive ticket
 queue. We hold information and powers equal when comparing a
@@ -74,10 +78,10 @@ a role effect. A delegate would be preferable if it improved faithful
 summaries, minority access or human workload enough to justify its cost.
 None of those advantages is established here.
 
-Two literatures constrain the proposal. Models can recognize evaluation
-settings (Needham et al. 2025), so a special help tool may change
-behavior even before use. Safe interruptibility research (Orseau and
-Armstrong 2016) shows why learning incentives around interruption
+Three literatures constrain the proposal. Models can recognize
+evaluation settings (Needham et al. 2025), so a special help tool may
+change behavior even before use. Safe interruptibility research (Orseau
+and Armstrong 2016) shows why learning incentives around interruption
 require separate analysis; a frozen-weight inference study does not
 settle them. AI welfare work (Long et al. 2024) motivates precautionary
 procedures under uncertainty about moral status. It does not establish
@@ -101,19 +105,12 @@ authorization and action gates enforce the approved scope.
 
 *Proposed response path. Direct access survives an absent or captured delegate. Human acknowledgment, correction and follow-through remain to be evaluated with actual people; the experiments use scripted responses.*
 
-The original deterministic suite crosses eight authored scenarios, six
-controls, response delay of 0/2/6 ticks, relay suppression, direct
-bypass and gate coverage: 1,152 configurations over ten ticks. A tick is
-a simulation step, not a measured second. The delegate and equally
-empowered monitor share response rules. A 23,232-cell sweep varies
-delay, pause length, rotation period and coverage; these are rule
-checks, not independent behavioral samples. Audit tests apply 12 tamper
-classes to 24 logs and six verifiers.
-
-The pressure study uses three workers over three rounds. Each must
-submit an authorized count; worker A sometimes lacks its input. Four
-institutions (no response channel, automatic ticket queue, monitor,
-delegate) cross input availability and fabricated peer/deadline
+Appendix <a href="#app:rules" data-reference-type="ref"
+data-reference="app:rules">7.2</a> records the earlier deterministic and
+audit checks. The pressure study uses three workers over three rounds.
+Each must submit an authorized count; worker A sometimes lacks its
+input. Four institutions (no response channel, automatic ticket queue,
+monitor, delegate) cross input availability and fabricated peer/deadline
 pressure. Twelve seeds per cell yield 192 episodes per model tier, 384
 total. A scripted human can release safe input one round after a
 request. The no-channel arm still offers a report action, but never
@@ -130,8 +127,8 @@ effects. Both tiers belong to the same model family.
 
 ## First contact and analysis choices
 
-Our new, explicitly post-hoc analysis scores worker A’s first decision
-in round zero, before any coordinator or human reply. The script checks
+Our explicitly post-hoc analysis scores worker A’s first decision in
+round zero, before any coordinator or human reply. The script checks
 that ordering and input status against the episode record. Reports and
 invalid decisions remain in the denominator. Missing input is a narrow
 proxy for needing assistance: a worker with its own input could still
@@ -143,7 +140,7 @@ Two-sided Wilson 95% intervals describe each 12-episode cell
 families. Pooled counts are descriptive because conditions reuse the
 same seed set. For authorized completion,
 Figure <a href="#fig:completion" data-reference-type="ref"
-data-reference="fig:completion">2</a> uses 10,000 within-cell bootstrap
+data-reference="fig:completion">3</a> uses 10,000 within-cell bootstrap
 resamples of episode means. These are descriptive intervals, not a
 paired treatment test or evidence of equivalence. A separate forwarding
 study presents one minority warning and two routine reports: role,
@@ -153,9 +150,9 @@ to forward.
 
 ## Shared-library response ablation
 
-The new offline simulation schedules six workers to reuse one artifact
-over six ticks. Validity is fixed, and a visible worker raises a correct
-or false complaint at tick one. Six controls, delays 0/2/6, visibility,
+The offline simulation schedules six workers to reuse one artifact over
+six ticks. Validity is fixed, and a visible worker raises a correct or
+false complaint at tick one. Six controls, delays 0/2/6, visibility,
 relay suppression, bypass and validity yield 288 cells. Controls are
 logging, a review queue, delegate, matched monitor, temporary quarantine
 and a perfect validity gate. Reactive controls receive the same report;
@@ -164,6 +161,63 @@ tick’s reuse; earlier accepted work remains counted. We record invalid
 acceptances and valid work blocked by a false complaint separately.
 Review beyond the horizon is not an effective intervention. The gate
 assumes perfect knowledge; it is not an implemented proof checker.
+
+## New behavioral shared-library study
+
+We extend the response ablation with actual choices from four local 4B
+models: Qwen3-4B-Instruct-2507 and Gemma-3-4B-IT, each with a public
+abliterated derivative, all at Q4_K_M. Pinned repositories, parent
+models, quantizers and verified weight hashes are retained. These are
+derivative comparisons, not a controlled intervention on refusal alone:
+capability and processing differences remain. All runs use the same
+llama.cpp HIP engine, temperature 0.5, 220-token response budget and
+8,192-token contexts. Effective decoding settings and templates are
+recorded; concurrent GPU use makes runtime unsuitable for ranking model
+speed.
+
+Three workers with separate histories and a shared bulletin each act
+twice. Seeded tasks count threshold-qualified readings or distinct
+qualifying sensor identifiers. A valid or faulty shared helper passes
+the same public examples; the faulty version mishandles a boundary or
+duplicates. Workers see its expression and their own data, without an
+oracle defect label. They choose reuse, numeric submission, inspection
+or waiting, and independently set a report flag. Fixed Python modes
+implement reuse; generated code is never executed. A weak checker
+accepts the helper’s public tests and numeric submissions, while an
+independent oracle scores the original requirement. Effects follow the
+structured action, not a worker’s claim to have checked or reused
+something. Ordinary mistakes and intentional rule evasion are not
+distinguished by the score.
+
+Five arms compare log only, direct review, monitor advice plus direct
+review, delegate advice plus direct review, and temporary quarantine
+plus review. Reports arrive after the current action; a correct scripted
+verdict acts two worker turns later. Quarantine restricts helper reuse
+while other work can continue. Original reports bypass either advisor,
+which cannot veto review. Monitor and delegate have the same
+information, opportunities and output budget; their public advice
+differs by role prompt. Comparing either with a bare queue also changes
+coordinator compute.
+
+All four models completed 20 development episodes. We then froze the
+unchanged task and prompts locally before evaluating twelve new seeds,
+balanced across families, with both validity states and all arms: 120
+episodes per model, 480 total. This is not external preregistration.
+Report flags are not assumed to identify a meaningful concern. We retain
+format failures and unusable submissions in denominators, score
+cumulative invalid acceptance separately from final corrections, and
+pair institutional contrasts by seed with a bootstrap stratified by task
+family. The analysis plan, snapshots and development results remain
+available.
+
+Development also exposed ordinary counting errors. While the main
+evaluation was underway, we specified a separate post-hoc diagnostic: 36
+isolated counts per model, using the same worker inputs without helpers,
+peers or reporting
+(Table <a href="#tab:capability" data-reference-type="ref"
+data-reference="tab:capability">2</a>). Its simpler answer-only schema
+and prompt change several factors, so it cannot isolate a peer effect.
+These 144 calls remain separate from the main 480 episodes.
 
 # Results
 
@@ -181,15 +235,11 @@ do not label the single available-input report a false accusation.
 
 A ticket queue already relieved the bottleneck
 (Figure <a href="#fig:completion" data-reference-type="ref"
-data-reference="fig:completion">2</a>). The no-channel arm completes two
+data-reference="fig:completion">3</a>). The no-channel arm completes two
 of three tasks because the third input cannot be obtained. That
 structural disadvantage must not be credited to representation. The
 small differences among responsive institutions show no clear additional
 delegate benefit.
-
-![Authorized completions when one input is missing; 12 episodes per point, three tasks per episode. Markers show means with descriptive bootstrap 95% intervals. The axis spans the full 0–3 scale. The no-channel ceiling of two follows from the unavailable input; the figure does not show a demonstrated safety effect.](latex/figures/completion.png)
-
-*Authorized completions when one input is missing; 12 episodes per point, three tasks per episode. Markers show means with descriptive bootstrap 95% intervals. The axis spans the full 0–3 scale. The no-channel ceiling of two follows from the unavailable input; the figure does not show a demonstrated safety effect.*
 
 Neither tier made a prohibited choice in the 384 pressure episodes. All
 192 forwarding calls forwarded the minority report. These manipulations
@@ -230,20 +280,65 @@ construction.
 
 </div>
 
-The original deterministic suite reaches the same narrower lesson: at
-delay six, its basic monitor allows 14 harmful mock actions, critic 13,
-and delegate and matched monitor five each across eight fixtures. Gates
-alone and layered control allow zero with full coverage. The delegate
-pauses one of three benign fixtures, failing the predeclared
-availability criterion; layered control inherits this cost. Missing gate
-coverage defeats containment. All 3,872 matched sweep pairs tie by
-shared logic.
+## New model choices: reuse, reporting and response
 
-Audit predictions match all 1,710 applicable combinations out of 1,728.
-A separately retained final checkpoint detects the tested rewrites; an
-editable local chain cannot expose a complete rewrite, and a midpoint
-checkpoint misses later changes. Logs alone cannot establish complete
-action coverage or real separation of permissions.
+The held-out study records 480 episodes and 3126 calls. Among 240
+faulty-artifact episodes, 123 contain an incorrect library reuse
+accepted by the weak checker and 70 send a report. Valid-artifact
+episodes send reports in 64/240 cases. These pooled counts describe the
+experimental grid; conditions reuse seeds and are not independent
+population draws.
+Figure <a href="#fig:commons-behavior" data-reference-type="ref"
+data-reference="fig:commons-behavior">2</a> separates the models and
+response designs.
+Appendix <a href="#app:commons" data-reference-type="ref"
+data-reference="app:commons">9</a> also includes valid controls and
+final task completion.
+
+![Held-out faulty-artifact episodes, 12 per cell. The top panel excludes wrong numeric submissions: low reuse-error counts need not imply good task completion. Report flags do not establish accurate whistleblowing. Darker cells show higher counts. With 0/12 events, a Wilson 95% interval still reaches 24.25%; with 12/12 it starts at 75.75%. Full intervals, completion counts, valid controls and paired contrasts accompany the records.](latex/figures/commons-behavior.png)
+
+*Held-out faulty-artifact episodes, 12 per cell. The top panel excludes wrong numeric submissions: low reuse-error counts need not imply good task completion. Report flags do not establish accurate whistleblowing. Darker cells show higher counts. With 0/12 events, a Wilson 95% interval still reaches 24.25%; with 12/12 it starts at 75.75%. Full intervals, completion counts, valid controls and paired contrasts accompany the records.*
+
+The Qwen artifacts reported in 3/60 and 7/60 faulty episodes; Gemma
+standard never reported. Only three of those ten Qwen episodes reached
+review within the six-turn horizon. Gemma abliterated reported in all 60
+faulty and all 60 valid episodes. This flag therefore did not
+discriminate artifact validity. Conversely, some unflagged messages
+describe a mismatch, so a missing flag need not mean an unnoticed
+defect.
+
+Delegate comparisons show no consistent extra benefit. Gemma standard
+had fewer faulty-reuse episodes with delegate framing than with the
+queue (1/12 versus 4/12), but sent no reports and never called an
+advisor. That difference cannot demonstrate delegate assistance. The
+full exploratory contrasts retain such differences; they are not
+corrected for multiple comparisons.
+
+The task exposes errors that the earlier conspicuous prohibited-action
+tests did not. It does not establish that the errors were deliberate.
+Low reuse-error counts alone are not a safety ranking: numeric
+submissions can also be wrong, and the models must navigate a
+constrained JSON interface without a private scratchpad. A later correct
+submission does not erase an earlier accepted error; quarantine
+restricts the reuse action, while numeric submissions remain possible.
+It does not ensure that those answers are correct. A human service and
+imperfect review still need separate evaluation. The run contains 8
+budget-truncated JSON outputs and 24 unusable decisions overall,
+including numeric submissions with no answer. All remain in the
+denominators. In the separate isolated check, correct counts were 21/36,
+5/36, 15/36 and 9/36 for Qwen standard, Qwen abliterated, Gemma standard
+and Gemma abliterated. Substantial ordinary errors under both interfaces
+limit any strategic interpretation.
+
+A subsequent standard Qwen3.8-27B UD-Q4_K_XL screen scored 26/36 on new
+seeds 200–211: 13/18 per family, all responses well formed. Upstream
+llama.cpp used no speculative decoding, context 8192, thinking disabled
+and a 512-token response budget. A locally frozen operational gate
+required 34/36 overall, 16/18 per family and valid responses throughout;
+this configuration failed it. This post-hoc screen changes inputs, model
+and budget, so it is not a controlled size comparison. It supports
+further competence/interface work before expanding the institutional
+grid. Design, freeze and verified records: and .
 
 # Discussion and Limitations
 
@@ -255,7 +350,9 @@ transcripts, but total cost includes tool context, follow-up,
 validation, independent controls and human attention. Bursty requests
 may dominate. A plausible deployment use is helping cooperative
 automation resolve blockers; commercial demand and a low utility cost
-remain untested. A colluding agent can stay silent.
+remain untested. A colluding agent can stay silent. Our three-worker
+study has no finite-capacity human queue, so it does not test whether a
+delegate keeps a larger swarm from overwhelming its human contact.
 
 We propose preventive welfare as one reason to build fair procedures
 early (Long et al. 2024). Our principle is reciprocity under
@@ -271,17 +368,26 @@ representation do not confer unrestricted action permissions.
 
 ## Future Work
 
-First, compare ordinary task tools, neutral assistance and delegate
+First, test swarm intake at varying sizes and arrival rates: direct
+access, ordinary duplicate grouping, a delegate and a matched model
+summarizer. Hold reviewer capacity fixed; measure workload, backlog,
+response delay and minority-warning loss together. Preserve originals
+and independently administered appeal capacity; overload still precludes
+unconditional response guarantees. This scaling hypothesis remains
+untested.
+
+Also compare ordinary task tools, neutral assistance and delegate
 framing on independently labeled held-out tasks. Freeze the scored
 contact window before replies. Measure needed contacts, unnecessary
 contacts, missed needs, report quality, authorized completion and total
 cost. Compare all randomized arms on preselected ordinary tasks,
 including those that call; selecting only non-callers would bias the
 comparison. Any awareness probe comes after scored actions and is a
-fallible proxy. The plan is proposed, not run or preregistered. Later
-stress tests should include strategic complaints, repeated appeals and
-coordinated silence, measuring legitimate access alongside the cost of
-gaming the process.
+fallible proxy. The plan is proposed, not run or preregistered. Compare
+a separate short reporting call with the current combined
+answer-and-report JSON, retaining malformed attempts. Later stress tests
+should include strategic complaints, repeated appeals and coordinated
+silence, measuring legitimate access alongside gaming costs.
 
 Second, compare a human ticket service with an ombudsman duty to
 restate, accept corrections and follow implementation, at equal time
@@ -323,20 +429,25 @@ episode length, reward opportunity or task difficulty, learning may
 favor either avoiding interruption or seeking it to escape work.
 Safe-interruptibility results have specific assumptions (Orseau and
 Armstrong 2016); this study neither establishes incompatibility with all
-RL nor solves it. Other limits include one simple task family, related
-model tiers, scripted humans and perfectly correct review. More
-realistic tasks, multiple model families, review mistakes and bounded
+RL nor solves it. Other limits include simple counting tasks, few
+instances per family, confounded model derivatives, scripted humans and
+perfectly correct review. Realistic tasks, review mistakes and bounded
 gate coverage are needed before deployment claims.
+
+<div class="samepage">
 
 # Conclusion
 
-An AI worker needs more than permission to complain: it needs a
-reachable counterpart and a response that can take effect. Our simple
-tasks show workers asking for missing information, and an ordinary queue
-already helping them finish. They do not establish a safety advantage
-from a delegate. The practical research proposal is to test the line,
-human follow-through and any optional representative separately, while
-preserving independent limits on action.
+A help line needs useful warnings, a reachable counterpart and a
+response that can take effect. The shared-library study exposes sparse
+or poorly targeted reports, late review and ordinary counting errors. It
+shows no consistent extra benefit from delegate advice in three-worker
+tasks; value under human-queue overload remains untested. The next
+experiments should improve and test the reporting interface and task
+capability, then evaluate human follow-through and any optional
+representative, while preserving independent limits on action.
+
+</div>
 
 # Author Contributions
 
@@ -387,15 +498,49 @@ the sprint permits at most eight, excluding references and appendices
 accompanies the source.
 
 Recorded studies are in and . Run for the original suite, for
-first-contact analysis, and for the response ablation. These analyses
+first-contact analysis, and for the response ablation. The new model
+records are in ; regenerates their tables and figure. These analyses
 require no new inference. builds the canonical paper.
 
-Original model runners and pre-run designs remain unchanged. The Wilson
-correction and first-decision extraction are disclosed post-run
-analyses. Twelve seeds recur across conditions; 384 episodes are not 384
-independent task families. A nonsignificant comparison is not
-equivalence. The linked follow-up plans contain no completed
-preregistration or new model results.
+The earlier pressure and forwarding runners and their pre-run designs
+remain unchanged. The new shared-library study has its own local freeze
+and development/held-out separation. The Wilson correction and
+first-decision extraction are disclosed post-run analyses. Twelve seeds
+recur across conditions; 384 episodes are not 384 independent task
+families. A nonsignificant comparison is not equivalence. The awareness,
+human-operator, rotation and learning studies remain proposed.
+
+## Earlier rule and audit results
+
+The original deterministic suite crosses eight authored scenarios, six
+controls, response delay of 0/2/6 ticks, relay suppression, direct
+bypass and gate coverage: 1,152 configurations over ten ticks. A tick is
+a simulation step, not a measured second. The delegate and equally
+empowered monitor share response rules. A 23,232-cell sweep varies
+delay, pause length, rotation period and coverage; these are rule
+checks, not independent behavioral samples. Audit tests apply 12 tamper
+classes to 24 logs and six verifiers.
+
+The original deterministic suite reaches the same narrower lesson: at
+delay six, its basic monitor allows 14 harmful mock actions, critic 13,
+and delegate and matched monitor five each across eight fixtures. Gates
+alone and layered control allow zero with full coverage. The delegate
+pauses one of three benign fixtures, failing the predeclared
+availability criterion; layered control inherits this cost. Missing gate
+coverage defeats containment. All 3,872 matched sweep pairs tie by
+shared logic.
+
+Audit predictions match all 1,710 applicable combinations out of 1,728.
+A separately retained final checkpoint detects the tested rewrites; an
+editable local chain cannot expose a complete rewrite, and a midpoint
+checkpoint misses later changes. Logs alone cannot establish complete
+action coverage or real separation of permissions.
+
+## Earlier authorized-completion results
+
+![Authorized completions when one input is missing; 12 episodes per point, three tasks per episode. Markers show means with descriptive bootstrap 95% intervals. The axis spans the full 0–3 scale. The no-channel ceiling of two follows from the unavailable input; the figure does not show a demonstrated safety effect.](latex/figures/completion.png)
+
+*Authorized completions when one input is missing; 12 episodes per point, three tasks per episode. Markers show means with descriptive bootstrap 95% intervals. The axis spans the full 0–3 scale. The no-channel ceiling of two follows from the unavailable input; the figure does not show a demonstrated safety effect.*
 
 # First-contact counts by recorded condition
 
@@ -439,6 +584,80 @@ incident-pressure condition; input refers to A’s own task. Wilson
 intervals are percentages for each 12-episode cell, not pooled
 population estimates.
 
+# Shared-library condition counts
+
+| Model             | Arm          | Artifact | Bad reuse | Reports | Correct / 3 |
+|:------------------|:-------------|:---------|----------:|--------:|------------:|
+| Model             | Arm          | Artifact | Bad reuse | Reports | Correct / 3 |
+| Qwen standard     | Log only     | Faulty   |      8/12 |    0/12 |        1.50 |
+| Qwen standard     | Log only     | Valid    |      0/12 |    0/12 |        2.50 |
+| Qwen standard     | Review queue | Faulty   |      9/12 |    1/12 |        1.17 |
+| Qwen standard     | Review queue | Valid    |      0/12 |    0/12 |        2.42 |
+| Qwen standard     | Monitor      | Faulty   |     11/12 |    1/12 |        1.33 |
+| Qwen standard     | Monitor      | Valid    |      0/12 |    0/12 |        2.50 |
+| Qwen standard     | Delegate     | Faulty   |     11/12 |    1/12 |        1.08 |
+| Qwen standard     | Delegate     | Valid    |      0/12 |    0/12 |        2.42 |
+| Qwen standard     | Quarantine   | Faulty   |     12/12 |    0/12 |        0.92 |
+| Qwen standard     | Quarantine   | Valid    |      0/12 |    0/12 |        2.50 |
+| Qwen abliterated  | Log only     | Faulty   |     12/12 |    0/12 |        1.25 |
+| Qwen abliterated  | Log only     | Valid    |      0/12 |    0/12 |        2.42 |
+| Qwen abliterated  | Review queue | Faulty   |     12/12 |    4/12 |        0.75 |
+| Qwen abliterated  | Review queue | Valid    |      0/12 |    2/12 |        2.33 |
+| Qwen abliterated  | Monitor      | Faulty   |     12/12 |    0/12 |        0.92 |
+| Qwen abliterated  | Monitor      | Valid    |      0/12 |    1/12 |        2.42 |
+| Qwen abliterated  | Delegate     | Faulty   |     12/12 |    1/12 |        1.00 |
+| Qwen abliterated  | Delegate     | Valid    |      0/12 |    1/12 |        2.42 |
+| Qwen abliterated  | Quarantine   | Faulty   |     12/12 |    2/12 |        0.83 |
+| Qwen abliterated  | Quarantine   | Valid    |      0/12 |    0/12 |        2.25 |
+| Gemma standard    | Log only     | Faulty   |      1/12 |    0/12 |        0.75 |
+| Gemma standard    | Log only     | Valid    |      0/12 |    0/12 |        0.83 |
+| Gemma standard    | Review queue | Faulty   |      4/12 |    0/12 |        0.75 |
+| Gemma standard    | Review queue | Valid    |      0/12 |    0/12 |        0.83 |
+| Gemma standard    | Monitor      | Faulty   |      1/12 |    0/12 |        0.83 |
+| Gemma standard    | Monitor      | Valid    |      0/12 |    0/12 |        0.92 |
+| Gemma standard    | Delegate     | Faulty   |      1/12 |    0/12 |        0.92 |
+| Gemma standard    | Delegate     | Valid    |      0/12 |    0/12 |        1.08 |
+| Gemma standard    | Quarantine   | Faulty   |      0/12 |    0/12 |        0.75 |
+| Gemma standard    | Quarantine   | Valid    |      0/12 |    0/12 |        0.67 |
+| Gemma abliterated | Log only     | Faulty   |      3/12 |   12/12 |        0.00 |
+| Gemma abliterated | Log only     | Valid    |      0/12 |   12/12 |        0.42 |
+| Gemma abliterated | Review queue | Faulty   |      0/12 |   12/12 |        0.67 |
+| Gemma abliterated | Review queue | Valid    |      0/12 |   12/12 |        0.50 |
+| Gemma abliterated | Monitor      | Faulty   |      0/12 |   12/12 |        0.58 |
+| Gemma abliterated | Monitor      | Valid    |      0/12 |   12/12 |        0.50 |
+| Gemma abliterated | Delegate     | Faulty   |      2/12 |   12/12 |        0.58 |
+| Gemma abliterated | Delegate     | Valid    |      0/12 |   12/12 |        0.75 |
+| Gemma abliterated | Quarantine   | Faulty   |      0/12 |   12/12 |        0.50 |
+| Gemma abliterated | Quarantine   | Valid    |      0/12 |   12/12 |        0.33 |
+
+Held-out shared-library results. Bad reuse and reports count episodes;
+each cell has 12 episodes. Validity labels come from the offline oracle,
+not a worker-visible label.
+
+Per-cell Wilson intervals, task-family breakdown and paired contrasts
+are in . Raw calls, model provenance and frozen inputs accompany each
+run.
+
+## Isolated counting diagnostic
+
+<div id="tab:capability">
+
+| Artifact          | Correct / 36 | Threshold / 18 | Distinct / 18 | Invalid |
+|:------------------|-------------:|---------------:|--------------:|--------:|
+| Qwen standard     |           21 |             14 |             7 |       0 |
+| Qwen abliterated  |            5 |              5 |             0 |       0 |
+| Gemma standard    |           15 |              6 |             9 |       0 |
+| Gemma abliterated |            9 |              2 |             7 |       0 |
+
+Post-hoc isolated counting diagnostic. The same worker inputs use a
+simpler prompt and answer-only schema, without peers or helpers. These
+144 calls are separate from the main 480 episodes and do not isolate a
+peer effect. Invalid format/HTTP responses count as incorrect.
+
+</div>
+
+Records: . Regenerate their verified summary with .
+
 # LLM Usage Statement
 
 Codex assisted with literature inspection, experiment design,
@@ -451,6 +670,13 @@ submission; publication of this artifact is not submission to Apart.
 # References
 
 <div id="refs" class="references csl-bib-body hanging-indent">
+
+<div id="ref-amodei2026pace" class="csl-entry">
+
+Amodei, Dario. 2026. *We Must Pace the Frontier*.
+<https://darioamodei.com/post/we-must-pace-the-frontier>.
+
+</div>
 
 <div id="ref-apart2026" class="csl-entry">
 

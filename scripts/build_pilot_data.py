@@ -22,6 +22,8 @@ def main():
     (out / 'behavioral-evidence.json').write_bytes((ROOT / 'data/behavioral-evidence.json').read_bytes())
     for name in ['grounded_cases.json', 'verified-excerpts.json']:
         (out / name).write_bytes((ROOT / 'data' / name).read_bytes())
+    from build_commons_web import main as export_commons
+    export_commons()
     print('Exported two local pilots, eight behavioral annotations and six source-grounded cases.')
 
 
