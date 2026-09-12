@@ -2,8 +2,8 @@
 
 # Agent Delegate: A Help Line for AI Workers
 
-Matías Podeley (BAISH); Agustín Brusco. With Apart Research, September
-2026.
+Matías Podeley (BAISH); Agustín Brusco (BAISH). With Apart Research,
+September 2026.
 
 <div class="center">
 

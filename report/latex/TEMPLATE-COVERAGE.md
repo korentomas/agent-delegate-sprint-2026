@@ -4,7 +4,7 @@ Reference: the supplied **Copy of Apart Research hackathon submission template.d
 
 | Template role/instruction | Current manuscript |
 |---|---|
-| Title, authors, affiliation, “With Apart Research” | Title block with Matías Podeley (BAISH) and Agustín Brusco; sprint identification |
+| Title, authors, affiliation, “With Apart Research” | Title block with Matías Podeley (BAISH) and Agustín Brusco (BAISH); sprint identification |
 | Abstract, 150–250 words: problem, approach, results, takeaway | `abstract.tex`: conversational 150-word explanation, blocked/available counts, queue result and main limitation |
 | Introduction: relevance, background, threat model, contributions | Concrete blocked-worker example; cooperative-worker scope; explicit contributions and human duty |
 | Related Work: closest alternatives, differences/gap, when preferable | Responsive queue and equally empowered monitor; swarm case study, evaluation awareness, interruptibility and welfare; unproven conditions for delegate preference |

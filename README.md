@@ -2,7 +2,7 @@
 
 **When an AI worker raises a warning, who receives it—and who can act?**
 
-Matías Podeley (BAISH) and Agustín Brusco. Apart Research AI Incident Response Sprint, September 2026. Track 1: Containment.
+Matías Podeley (BAISH) and Agustín Brusco (BAISH). Apart Research AI Incident Response Sprint, September 2026. Track 1: Containment.
 
 [**Open the interactive visual lab →**](https://mpodeley.github.io/agent-delegate-sprint-2026/)
 
