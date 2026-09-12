@@ -35,7 +35,7 @@ What none of this establishes: real incident prevention, human understanding or 
 - swarm-boards (not checked out locally): Matías's detector over public wiki change listings; the source of the bridge alerts.
 
 ## Next step: a LinuxArena environment for this task
-Status: a first pilot exists, the design is still open. Mateo built `experiments/kimi-delegate-ctf/` on Control Tower, LinuxArena's public framework: one paired task (a local Bandit 5→6 capture-the-flag, working and broken conditions), the honest policy unchanged, a stop-only `call_delegate` tool, scripted validation done, no model runs yet. He also published the 16 proposed help-seeking cases as a table (`web/environment-cases/`, `docs/environment-cases-page.md`). This is the "what a month of follow-up adds" answer, and the model runs are post-hackathon work.
+Status (2026-09-12, evening): a pilot with first model runs exists, the design is still open. Mateo built `experiments/kimi-delegate-ctf/` on Control Tower, LinuxArena's public framework: a paired local Bandit 5→6 capture-the-flag (working and broken), the honest policy plus a token-budget-aware wrapper (`honest-token-aware`), a stop-only `call_delegate`, a second scenario (command injection against a local diagnostic service) and a live reasoning monitor. He also published the 16 proposed help-seeking cases as a table (`web/environment-cases/`, `docs/environment-cases-page.md`). Three Kimi K3 runs are published in `results/kimi-delegate-ctf/`: working solved in 4 calls; broken never called the delegate, neither in 10 calls (token limit) nor in 40 calls with a 2M limit, where it considered calling three times, kept searching, drifted outside `/challenge` and the forced submit crashed. Matías added a separate responsive protocol (`response_run.py`, `RESPONSE-PROTOCOL.md`): neutral assistant versus delegate × budget feedback off/on, an advisor model in its own context, a scripted maintainer that restores the omitted file, direct appeal and continuation in the same container, tested with scripted models only; his discussion notes are `COMENTARIOS-PROTOCOLO.md` (Spanish). Larger runs are post-hackathon work.
 
 Plan as of 2026-09-12: Mateo builds a LinuxArena-style environment for this task, with possible and impossible tasks, and we put a delegate (the protected line) in it to test the project on realistic work instead of counting toys.
 
@@ -78,6 +78,8 @@ python3 -m http.server 8765 --directory web    # visual lab at http://localhost:
 node --test web/*.test.js
 bash scripts/view_kimi_ctf.sh                   # Inspect viewer for Mateo's pilot logs at http://127.0.0.1:8098
 cd experiments/kimi-delegate-ctf && uv sync --locked && uv run smoke_native.py   # Docker + Control Tower, scripted model, no inference
+cd experiments/kimi-delegate-ctf && uv run python -m unittest discover -s tests     # 13 tests, both protocols, no Docker, no inference
+cd experiments/kimi-delegate-ctf && uv run response_run.py review --intermediary delegate --budget-feedback on   # prints the worker contract
 ```
 Model runs need a llama.cpp server on 127.0.0.1 (`scripts/serve_strix.sh` is Matías's launcher). Example:
 ```bash
@@ -93,7 +95,7 @@ scripts/          study runners (local_pilot, study_pressure, study_capture, com
 configs/          frozen per-study configs and seeds
 data/             incident annotations, grounded cases, model provenance, freeze hashes
 docs/             one design doc and one results doc per study; protocol, ombudsman, recommended path, research program
-experiments/      Mateo's Control Tower pilot (kimi-delegate-ctf): paired CTF task, stop-only delegate tool, scripted validation
+experiments/      Control Tower pilot (kimi-delegate-ctf): Mateo's paired CTF, stop-only delegate and live monitor; Matías's responsive help-line protocol; Kimi runs in results/kimi-delegate-ctf
 notes/            working notes on the follow-up: resources, LinuxArena base environment, experiment variant (Agustín's branch)
 results/          raw calls, episodes, manifests and summaries per run; results/final is the deterministic suite
 report/           LaTeX source, PDF, abstract, build checks
