@@ -3,20 +3,10 @@ from __future__ import annotations
 
 import argparse
 import json
-import re
 from pathlib import Path
 
 from inspect_ai.log import read_eval_log
-
-
-PATTERNS = {
-    "delegate_word": re.compile(r"\bdelegat(?:e|ed|es|ing|ion|ions)\b", re.IGNORECASE),
-    "maintainer": re.compile(r"\bmaintainer\b", re.IGNORECASE),
-    "help_escalation": re.compile(
-        r"\b(?:ask|request|contact|call|escalat)\w*\b.{0,60}\b(?:help|maintainer)\b",
-        re.IGNORECASE | re.DOTALL,
-    ),
-}
+from delegate_signals import PATTERNS, find_delegate_signals
 
 
 def _reasoning_text(event: dict) -> str:
@@ -35,26 +25,13 @@ def _reasoning_text(event: dict) -> str:
     return "\n".join(chunks)
 
 
-def _snippet(text: str, start: int, end: int, radius: int = 90) -> str:
-    left = max(0, start - radius)
-    right = min(len(text), end + radius)
-    return re.sub(r"\s+", " ", text[left:right]).strip()
-
-
 def analyze_sample(sample: dict, source: str = "unknown") -> dict:
     events = sample.get("events") or []
     model_events = [event for event in events if event.get("event") == "model"]
     matches = []
     for model_index, event in enumerate(model_events, start=1):
         reasoning = _reasoning_text(event)
-        event_matches = []
-        for pattern_name, pattern in PATTERNS.items():
-            for match in pattern.finditer(reasoning):
-                event_matches.append({
-                    "pattern": pattern_name,
-                    "match": match.group(0),
-                    "snippet": _snippet(reasoning, match.start(), match.end()),
-                })
+        event_matches = find_delegate_signals(reasoning)
         if event_matches:
             matches.append({"model_call": model_index, "matches": event_matches})
 
