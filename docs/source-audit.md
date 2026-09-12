@@ -45,3 +45,16 @@ A separate 144-call isolated counting diagnostic was specified while the main ev
 ## Pacing and independent oversight
 
 Read the full primary-source essay [Amodei, We Must Pace the Frontier](https://darioamodei.com/post/we-must-pace-the-frontier), September 2026, on September 12. It motivates independent oversight, access to evidence and verifiable follow-through. Its risk forecasts are the author's judgments, not measurements from this project. It supplies no treatment effect for a delegate, welfare protocol or interruption incentive. The proposed external evaluator and our case-following ombudsman have different roles.
+
+## Focused empirical revision after Fable's critique
+
+New source checks on September 12:
+
+- Greenblatt et al., *AI Control* (ICML 2024): official PMLR abstract and bibliographic entry, https://proceedings.mlr.press/v235/greenblatt24a.html. Used to distinguish intentional-subversion evaluation from our report-triggered advice.
+- Benton et al., *Sabotage Evaluations for Frontier Models*: primary arXiv abstract and HTML introduction/threat-model table, https://arxiv.org/html/2410.21514v1. Used for the code/decision/oversight sabotage distinction; no result transferred to this benchmark.
+- Ward et al., *CTRL-ALT-DECEIT*: arXiv v2 abstract, https://arxiv.org/abs/2511.09904. Used for sabotage/sandbagging in ML engineering, without claiming replication.
+- Van der Weij et al., *AI Sandbagging*: arXiv v4 abstract, https://arxiv.org/abs/2406.07358. Strategic underperformance requires evidence beyond a poor score; our isolated errors do not establish it.
+- Liu et al., *Breaking the Secret*: primary abstract, https://arxiv.org/abs/2604.23511. Reporting incentives in embodied agents are related work; the present frozen-weight response-arm comparison does not train such incentives.
+- Ostrom, *Beyond Markets and States*, Nobel lecture (December 8, 2009), https://www.nobelprize.org/uploads/2018/06/ostrom_lecture.pdf. Inspected the design-principles section on printed pp. 422–423, including monitoring, graduated sanctions and conflict resolution. It is the author's primary account, not a claim to have reread the complete 1990 book. A software helper is not a rivalrous natural-resource commons; applying those ideas is a proposed analogy.
+
+The revised main paper removes the incident-post survey and cites the directly relevant empirical/institutional literature. The broader incident casebook and Amodei discussion remain in the project's supporting documents. New presentation choices, primary H1 and standard-model focus are retrospective, as documented in `commons-discrimination-analysis.md`.

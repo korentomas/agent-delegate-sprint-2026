@@ -20,4 +20,5 @@ jobs:
           python3 scripts/analyze_commons_behavior.py --no-figure
           python3 scripts/analyze_commons_capability.py
           python3 scripts/analyze_commons_stronger.py
-          git diff --exit-code -- results/commons-behavior-summary results/commons-capability-summary results/commons-stronger-summary report/latex/generated
+          python3 scripts/analyze_commons_discrimination.py --no-figure
+          git diff --exit-code -- results/commons-behavior-summary results/commons-capability-summary results/commons-stronger-summary results/commons-discrimination report/latex/generated

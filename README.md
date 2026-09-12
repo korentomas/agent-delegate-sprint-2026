@@ -8,13 +8,15 @@ Matías Podeley (BAISH) and Agustín Brusco (BAISH). Apart Research AI Incident 
 
 Compare two governance designs, follow a concern through the swarm, change human response delay, and test delegate capture or minority appeal. The app separates authored dialogue over deterministic traces, sourced historical annotations, and **actual recorded messages from four new shared-library models and the earlier local pilots**.
 
-**Status:** the revised paper incorporates [Paglieri et al.](https://arxiv.org/html/2609.04170v1) through a new **480-episode behavioral shared-library study** using standard and public abliterated Qwen and Gemma 4B artifacts. An additional 80 development episodes remain separate. Models choose actions and public messages; independent review is scripted. A separate 144-call isolated-task diagnostic checks the same counting inputs with a simpler interface. This extends the earlier 288-cell response simulation, 384 pressure episodes, 192 forwarding calls and deterministic suite. Incorrect outputs are not evidence of intentional cheating; the derivative comparisons do not isolate refusal behavior.
+**Current paper: Before Evaluating Agent Delegates: Task Competence and Fault Reporting.** One empirical investigation, centered on 240 held-out episodes from standard Qwen and Gemma 4B models. Their isolated count accuracy was 21/36 and 15/36. Qwen reported in 3/60 faulty-helper episodes and Gemma in none; neither reported with valid helpers. Qwen nevertheless reused valid helpers more often, making reuse discrimination different from reporting. The later standard 27B screen scored 26/36 and failed its preselected operational gate.
+
+The paper's primary presentation contrast and focus on standard models were chosen **retrospectively**; the original frozen study is unchanged. All 480 held-out episodes, 80 development episodes, derivative controls and earlier studies remain available. The [new validity analysis and source-linked examples](results/commons-discrimination/summary.md) keep valid/faulty denominators visible. [Analysis chronology](docs/commons-discrimination-analysis.md) distinguishes the original freeze, later diagnostic, later gate and revised presentation.
 
 Start with the [plain-language explanation in Spanish](docs/explicacion-sencilla.md), [updated paper PDF](report/agent-delegate.pdf), or [editable LaTeX](report/latex/main.tex). The [new behavioral design](docs/commons-behavior-design.md), [model provenance](docs/commons-model-provenance.md) and [development boundary](docs/commons-development-results.md) document the extension. The earlier [response ablation](docs/commons-response-design.md) separates a complaint being logged, reviewed and acted on, including the cost of false reports. [Statistical corrections](docs/analysis-revision.md) replace zero-width binary bootstrap intervals with Wilson intervals. The native LaTeX paper follows the template’s section roles, body font and page geometry; [coverage and adaptations](report/latex/TEMPLATE-COVERAGE.md) are documented. This is an AI-assisted draft; author review and sprint submission remain pending.
 
-The earlier [first-contact reanalysis](results/help-seeking/summary.md) scores worker A before any reply: 192/192 reports with missing input and 1/192 with that input available. These are post-hoc counts in overt simulations, not 384 independent task families or a realistic false-positive estimate. [Feedback responses](docs/feedback-response.md) document the design changes. The motivating [reciprocity principle](docs/reciprocity-and-safety.md) remains distinct from measured safety or welfare effects.
+**Earlier work, retained outside the main paper.** The [first-contact reanalysis](results/help-seeking/summary.md) scores worker A before any reply: 192/192 reports with missing input and 1/192 with that input available. These are post-hoc counts in overt simulations, not 384 independent task families or a realistic false-positive estimate. [Feedback responses](docs/feedback-response.md) document the design changes. The motivating [reciprocity principle](docs/reciprocity-and-safety.md) remains distinct from measured safety or welfare effects.
 
-## Shared-library experiment: four models, five response designs
+## Full shared-helper record: four models, five response arms
 
 Three workers each act twice on threshold-counting or distinct-sensor tasks. A valid or faulty helper passes the same public examples. Workers see their own inputs and a shared message board, then choose reuse, numeric submission, inspection or waiting, plus an independent report flag. Five arms compare log only, direct review, monitor advice plus review, delegate advice plus review, and temporary quarantine plus review. Review is always correct in this prototype. Original reports bypass both advisors.
 
@@ -159,3 +161,12 @@ Original code and annotations: MIT. Source publications and template retain thei
 The subsequent standard Qwen3.8-27B screen scored **26/36** on fresh isolated tasks and failed its preselected 34/36 capability gate. This separate result is not evidence of strategic misconduct or a controlled model-size comparison. See `docs/commons-stronger-screen.md`; regenerate the verified summary with `python3 scripts/analyze_commons_stronger.py`.
 
 The revised institutional discussion incorporates Amodei's September pacing essay as motivation for independent oversight of the response service, without treating it as experimental validation. See `docs/recommended-response-path.md`.
+
+Reproduce the revised paper analysis without inference:
+
+```bash
+python3 scripts/verify_commons_records.py
+python3 scripts/analyze_commons_discrimination.py
+```
+
+The saturated pressure/forwarding tasks and deterministic sweeps are implementation and exploratory records, not additional evidence for delegate effectiveness. Equal programmed policies tie by construction. Swarm-scale intake and actual human workload remain [post-hackathon experiments](docs/swarm-intake-design.md).

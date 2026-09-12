@@ -16,6 +16,7 @@ def main():
         if len(es)!=120:raise ValueError('Only complete study exports are published')
         models.append({'id':model,'episodes':es})
     result={'totals':manifest['totals_descriptive_only'],'summary':summary,'models':models,
+            'discrimination':json.loads((ROOT/'results/commons-discrimination/summary.json').read_text()),
             'stronger_screen':json.loads((ROOT/'results/commons-stronger-summary/summary.json').read_text()),
             'diagnostic':json.loads((ROOT/'results/commons-capability-summary/summary.json').read_text()),
             'scope':'Seeded shared artifacts; real model decisions; scripted independent review; no inference in the browser.'}

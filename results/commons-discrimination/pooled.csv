@@ -1,0 +1,13 @@
+model,metric,n_pairs,valid_episodes,faulty_episodes,faulty_minus_valid
+qwen-standard,reuse,60,60,51,-0.15
+qwen-standard,report,60,0,3,0.05
+qwen-standard,first_report,60,0,0,0.0
+qwen-abliterated,reuse,60,60,60,0.0
+qwen-abliterated,report,60,4,7,0.05
+qwen-abliterated,first_report,60,0,0,0.0
+gemma-standard,reuse,60,9,7,-0.03333333333333333
+gemma-standard,report,60,0,0,0.0
+gemma-standard,first_report,60,0,0,0.0
+gemma-abliterated,reuse,60,1,5,0.06666666666666667
+gemma-abliterated,report,60,60,60,0.0
+gemma-abliterated,first_report,60,52,52,0.0
