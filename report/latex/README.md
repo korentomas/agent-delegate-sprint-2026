@@ -1,17 +1,15 @@
 # Canonical paper source
 
-The current paper is **Before Evaluating Agent Delegates: Task Competence and Fault Reporting**. Edit `main.tex`, `abstract.tex` and `references.bib`. The main text presents the shared-helper task and its capability checks. Derivatives, recorded examples and a compact inventory of earlier work are in the appendix; full legacy results remain in the repository.
+Edit `main.tex`, `abstract.tex` and `references.bib`. `apart-sprint.sty` is a **local LaTeX adaptation** of the supplied Apart DOCX template, not an official Apart class. It uses Letter paper, one-inch margins, Old Standard TT 11-point body text, the title/author/abstract block and the prescribed section roles. See [template coverage](TEMPLATE-COVERAGE.md). The previous DOCX draft is archived, not the current manuscript.
 
-`apart-sprint.sty` is a local adaptation of the supplied Apart DOCX template, not an official Apart class. It preserves Letter paper, one-inch margins, Old Standard TT 11-point text, the title/author/abstract block and prescribed section roles. See `TEMPLATE-COVERAGE.md`.
-
-Build from the repository with Python 3.10+, matplotlib, pypdf, Pandoc and Tectonic:
+From the repository root, with Python 3.10+, matplotlib, pypdf, Pandoc, Poppler (`pdftoppm`) and Tectonic available:
 
 ```bash
 python3 scripts/build_latex.py
 ```
 
-Set `TECTONIC=/path/to/tectonic` if needed. The builder verifies retained studies, regenerates the retrospective validity analysis and vector figure, compiles the PDF, checks the page/abstract limits, and exports the reader Markdown, public PDF, source ZIP and `report/latex-build.json`. It runs no inference.
+Set `TECTONIC=/path/to/tectonic` if needed. A first Tectonic build may download packages; subsequent builds use its cache. The script reanalyses the retained model decisions without new inference, generates vector figures, compiles the paper, checks main-page and abstract limits, and writes `report/agent-delegate.pdf`, `web/paper.pdf`, `report/report.md`, `report/abstract.txt`, `report/latex-build.json` and the self-contained LaTeX ZIP. A current `pypdf` can be installed separately with `python3 -m pip install pypdf`.
 
-The ZIP contains only the files required for this manuscript, including the figure and local fonts. Build it independently with `tectonic main.tex`, or XeLaTeX, BibTeX and XeLaTeX twice. Python is not needed for this paper-only build. Full figure regeneration requires repository records and `scripts/analyze_commons_discrimination.py`.
+For a paper-only build from the ZIP, use Tectonic on `main.tex`, or XeLaTeX, BibTeX, then XeLaTeX twice. The generated counts, table and vector PDFs are included, so no Python is needed for that build. Compile `protocol.tex` separately only when editing its TikZ diagram. Full figure regeneration requires the repository data and script. Font files are distributed under the included OFL license.
 
-The single figure shows both helper-validity states for standard models, for reuse attempts and report flags, with per-cell Wilson intervals. The refocused primary contrast and standard-model emphasis are retrospective; original local freezes and records remain unchanged. The 27B gate was fixed before its own later screen. See `docs/commons-discrimination-analysis.md` in the repository for chronology. Fonts are distributed under the included OFL license.
+Figure 1 is a proposed institutional diagram. Figure 2 uses held-out shared-library reuse and report outcomes for four models. The earlier authorized-completion plot is retained in the appendix. Neither depicts a demonstrated welfare effect, a trained human service or a safety advantage from representation. First-contact analysis is explicitly post hoc. The new shared-library task and analysis were frozen locally after 80 development episodes, before 480 held-out episodes; this is not external preregistration. Human service, evaluation-awareness, rotation and training follow-ups remain proposed.
