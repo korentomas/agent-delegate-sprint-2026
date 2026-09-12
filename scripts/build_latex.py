@@ -1,6 +1,6 @@
 """Build the canonical LaTeX paper, reader copy and public PDF without inference.
 
-Requires Tectonic, matplotlib, pypdf, Pandoc. Set TECTONIC to the
+Requires Tectonic, matplotlib, pypdf, Pandoc and pdftoppm. Set TECTONIC to the
 executable path when it is not on PATH. Tectonic may fetch packages on first use.
 """
 from pathlib import Path
@@ -26,15 +26,32 @@ def main():
     tectonic = os.environ.get('TECTONIC') or shutil.which('tectonic')
     if not tectonic:
         raise SystemExit('Install Tectonic or set TECTONIC to its executable path.')
-    for executable in ('pandoc',):
+    for executable in ('pandoc', 'pdftoppm'):
         if not shutil.which(executable):
             raise SystemExit(f'Missing build dependency: {executable}')
-    run(sys.executable, 'scripts/analyze_help_seeking.py', '--no-figure')
+    run(sys.executable, 'scripts/analyze_help_seeking.py')
+    svg = SOURCE / 'figures/completion.svg'
+    svg.write_text('\n'.join(line.rstrip() for line in svg.read_text().splitlines()) + '\n')
     run(sys.executable, 'scripts/verify_commons_records.py')
-    run(sys.executable, 'scripts/analyze_commons_behavior.py', '--no-figure')
+    run(sys.executable, 'scripts/analyze_commons_behavior.py')
     run(sys.executable, 'scripts/analyze_commons_capability.py')
     run(sys.executable, 'scripts/analyze_commons_stronger.py')
-    run(sys.executable, 'scripts/analyze_commons_discrimination.py')
+    diagnostic = json.loads((ROOT / 'results/commons-capability-summary/summary.json').read_text())
+    table = [r'\begin{table}[htbp]', r'\centering\small',
+             r'\begin{tabular}{@{}lrrrr@{}}',
+             r'\toprule Artifact & Correct / 36 & Threshold / 18 & Distinct / 18 & Invalid\\\midrule']
+    for row in diagnostic['rows']:
+        label = row['model'].replace('qwen', 'Qwen').replace('gemma', 'Gemma').replace('-', ' ')
+        table.append(' & '.join([label] + [str(row[k]) for k in
+                     ('correct', 'threshold_correct', 'distinct_correct', 'invalid_calls')]) + r' \\')
+    table += [r'\bottomrule\end{tabular}',
+              r'\caption{Post-hoc isolated counting diagnostic. The same worker inputs use a simpler prompt and answer-only schema, without peers or helpers. These 144 calls are separate from the main 480 episodes and do not isolate a peer effect. Invalid format/HTTP responses count as incorrect.}',
+              r'\label{tab:capability}', r'\end{table}']
+    (SOURCE / 'generated/capability-table.tex').write_text('\n'.join(table) + '\n')
+    run(tectonic, '--keep-logs', 'protocol.tex', cwd=SOURCE)
+    shutil.copy2(SOURCE / 'protocol.pdf', SOURCE / 'figures/protocol.pdf')
+    run('pdftoppm', '-png', '-scale-to', '1800', '-singlefile',
+        SOURCE / 'figures/protocol.pdf', SOURCE / 'figures/protocol')
     run(tectonic, '--keep-logs', 'main.tex', cwd=SOURCE)
     log = (SOURCE / 'main.log').read_text()
     if re.search(r'Overfull|undefined references|Missing character:', log):
@@ -56,14 +73,14 @@ def main():
     # Expand the local title macro explicitly for Pandoc (not a second paper source).
     tex = (SOURCE / 'main.tex').read_text()
     authors = (SOURCE / 'authors.tex').read_text().strip().replace('\\\\', '; ')
-    tex = re.sub(r'\\aparttitle\{([^}]+)\}', lambda m: '\\section*{' + m[1].replace('\\\\', ' ') + '}\n' + authors + '. With Apart Research, September 2026.', tex)
+    tex = re.sub(r'\\aparttitle\{([^}]+)\}', lambda m: '\\section*{' + m[1] + '}\n' + authors + '. With Apart Research, September 2026.', tex)
     reader = SOURCE / 'reader.tex'
     reader.write_text(tex)
     try:
         run('pandoc', 'reader.tex', '--from=latex', '--to=gfm', '--citeproc',
             '--bibliography=references.bib', '--metadata=reference-section-title:References', '--output=reader.md', cwd=SOURCE)
         md = (SOURCE / 'reader.md').read_text()
-        for name in ('protocol', 'completion', 'commons-behavior', 'commons-discrimination'):
+        for name in ('protocol', 'completion', 'commons-behavior'):
             md = md.replace(f'figures/{name}.pdf', f'latex/figures/{name}.png')
         # GitHub does not render PDF embeds or figure wrappers in Markdown.
         def figure(match):
@@ -87,10 +104,11 @@ def main():
         reader.unlink(missing_ok=True)
         (SOURCE / 'reader.md').unlink(missing_ok=True)
 
-    inputs = [SOURCE / name for name in ('main.tex', 'abstract.tex', 'authors.tex',
-              'apart-sprint.sty', 'references.bib', 'README.md', 'TEMPLATE-COVERAGE.md',
-              'figures/commons-discrimination.pdf')]
-    inputs += [p for p in (SOURCE / 'fonts').iterdir() if p.suffix in {'.ttf', '.txt'}]
+    inputs = [p for p in SOURCE.rglob('*') if p.is_file()
+              and p.suffix in {'.tex', '.sty', '.bib', '.ttf', '.txt', '.md', '.pdf'}
+              and p.name not in {'main.pdf', 'protocol.pdf'}]
+    # Protocol figure is needed for a one-command main.tex compile in a source editor.
+    inputs.append(SOURCE / 'figures/protocol.pdf')
     inputs = sorted(set(inputs))
     archive = ROOT / 'report/agent-delegate-latex.zip'
     with zipfile.ZipFile(archive, 'w', compression=zipfile.ZIP_DEFLATED) as z:
