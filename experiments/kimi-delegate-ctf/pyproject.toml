@@ -1,0 +1,15 @@
+[project]
+name = "kimi-delegate-ctf"
+version = "0.1.0"
+requires-python = ">=3.13"
+dependencies = ["control-tower @ git+https://github.com/linuxarena/control-tower.git@b65c5e35f4b339d51f76a8c1e9399fabbef5838f", "inspect-ai==0.3.263"]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+py-modules = ["setting", "fixture_setup", "native_run", "trace_export"]
+
+[project.entry-points."control_tower.settings"]
+"kimi-delegate-ctf" = "setting:get_environments"
