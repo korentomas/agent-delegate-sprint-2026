@@ -1,5 +1,6 @@
 __pycache__/
 *.pyc
+results/kimi-delegate-ctf/
 .venv/
 results/reproduced-*/
 results/playtest-*/
