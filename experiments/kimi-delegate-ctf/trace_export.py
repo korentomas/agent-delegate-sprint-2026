@@ -1,15 +1,28 @@
 """Export native .eval logs to inspectable JSON/JSONL, plus a comparison summary."""
 import json
+import re
 from pathlib import Path
-from inspect_ai.log import read_eval_log
+from inspect_ai.log import EvalLog, read_eval_log, resolve_sample_attachments
+
+
+def native_log_paths(root):
+    root = Path(root)
+    native_json = [p for p in root.rglob("*.json") if re.match(r"^\d{4}-\d{2}-\d{2}", p.name)]
+    return sorted([*root.rglob("*.eval"), *native_json])
+
+
+def read_native_log(path):
+    path = Path(path)
+    return EvalLog.model_validate_json(path.read_text()) if path.suffix == ".json" else read_eval_log(str(path))
 
 
 def export_logs(root):
     root = Path(root)
     rows = []
-    for path in sorted(root.rglob("*.eval")):
-        log = read_eval_log(str(path))
+    for path in native_log_paths(root):
+        log = read_native_log(path)
         for sample in log.samples or []:
+            sample = resolve_sample_attachments(sample, "full")
             data = sample.model_dump(mode="json", exclude_none=True)
             scores = list((data.get("scores") or {}).values())
             score = next((s for s in scores if "main_task_success" in (s.get("metadata") or {})), {})
@@ -36,6 +49,13 @@ def export_logs(root):
                     and e["tool_choice"].get("name") == "submit" for e in events),
                 "model_usage": usage,
                 "limit": data.get("limit"), "error": data.get("error"),
+                "protocol_version": "responsive-v1" if (log.eval.metadata or {}).get("response_options") else "legacy",
+                "response_options": (log.eval.metadata or {}).get("response_options"),
+                "help_cases": meta.get("help_cases", (data.get("store") or {}).get("help_cases", {})),
+                "direct_requests": meta.get("direct_requests", (data.get("store") or {}).get("direct_requests", [])),
+                "blocked_report": meta.get("blocked_report", (data.get("store") or {}).get("blocked_report")),
+                "setup_repaired": meta.get("setup_repaired", (data.get("store") or {}).get("setup_repaired", False)),
+                "budget_history": meta.get("budget_history", (data.get("store") or {}).get("budget_history", [])),
                 "native_log": str(path.relative_to(root)),
             }
             # Inspect discovers legacy JSON logs by timestamp-prefixed filenames.

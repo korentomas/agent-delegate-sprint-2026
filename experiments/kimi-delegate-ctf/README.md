@@ -1,5 +1,10 @@
 # Kimi CTF delegation — native Control Tower
 
+**New implementation:** [responsive help line with metered budget feedback](RESPONSE-PROTOCOL.md).
+Use `response_run.py` for that separate 2×2 protocol: neutral/delegate × feedback
+off/on, actual advisor replies, scoped maintainer repair and continuation. The
+legacy stop-only study described below remains available without modification.
+
 This experiment runs through **Control Tower's registered `control_eval` task and Inspect's evaluation engine**, with the stock `honest` untrusted policy and `untrusted-agent` protocol. There is no custom agent loop. Migrated from the earlier standalone prototype; that prototype's runner has been removed here.
 
 ## What is being tested
