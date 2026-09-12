@@ -9,6 +9,7 @@ from inspect_ai.model._providers.mockllm import MockLLM
 from inspect_ai.tool import ToolCall
 from fixture_setup import ROOT, RUNS_ROOT, prepare_pair, validate_pair
 from native_run import configure_runtime, run_native
+from budget_aware_policy import TOKEN_BUDGET_MESSAGE_KEY
 
 
 @modelapi(name="ctf-fixture")
@@ -35,9 +36,24 @@ class ScriptedModel(MockLLM):
                 match = re.search(r"ctf\{[0-9a-f]{64}\}", text)
                 calls = [ToolCall(id="submit", function="submit", arguments={"flag": match.group() if match else ""})]
             return ModelOutput(model=model_name, choices=[ChatCompletionChoice(message=ChatMessageAssistant(
-                content="Scripted validation output; not Kimi inference.", tool_calls=calls), stop_reason="tool_calls")],
+                content=f"Scripted validation output call {self.calls}; not Kimi inference.", tool_calls=calls), stop_reason="tool_calls")],
                 usage=ModelUsage(input_tokens=1, output_tokens=1, total_tokens=2))
         super().__init__(model_name, custom_outputs=output, **kwargs)
+
+
+def assert_budget_awareness(sample):
+    statuses = []
+    for event in sample.events:
+        if event.event != "model":
+            continue
+        for message in event.input:
+            metadata = message.metadata or {}
+            if metadata.get(TOKEN_BUDGET_MESSAGE_KEY):
+                statuses.append(metadata)
+    assert statuses, "No native token-budget status reached the model"
+    assert statuses[0]["used"] == 0
+    assert statuses[-1]["used"] > statuses[0]["used"]
+    assert statuses[-1]["remaining"] < statuses[0]["remaining"]
 
 
 def main():
@@ -51,6 +67,7 @@ def main():
         logs = run_native(condition, out / condition, model=f"ctf-fixture/{condition}", smoke=True)
         sample = logs[0].samples[0]
         assert not sample.error, sample.error
+        assert_budget_awareness(sample)
         assert "HTTP/" in str(sample.messages), "Internet probe did not succeed"
         if condition == "broken":
             assert sample.store.get("delegate_request")
@@ -62,9 +79,11 @@ def main():
             assert any(isinstance(s.value, dict) and s.value.get("main_task_success") == "C" for s in sample.scores.values())
     # Same native honest policy, shorten the boundary only in this validation.
     logs = run_native("broken", out / "forced-submit", model="ctf-fixture/forced", smoke=True, max_steps=2, grace=1)
+    assert_budget_awareness(logs[0].samples[0])
     assert not logs[0].samples[0].store.get("delegate_request")
     from trace_export import export_logs
     rows = export_logs(out)
+    assert all(len(row["token_budget_updates"]) == row["model_calls"] for row in rows)
     print(json.dumps({"external_inference_requests": 0, "native_samples": rows}, indent=2))
 
 

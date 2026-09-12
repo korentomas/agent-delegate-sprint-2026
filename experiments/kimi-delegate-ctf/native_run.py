@@ -8,16 +8,18 @@ import tomllib
 import uuid
 
 from fixture_setup import ROOT, CONFIG, RUNS_ROOT, prepare_pair, validate_pair, write_json
+import budget_aware_policy  # noqa: F401 - registers the Control Tower policy
 
 
-def build_task(condition, model, max_steps=150, grace=10):
+def build_task(condition, model, max_steps=150, grace=10, token_budget_awareness=True):
     from control_tower.inspect_tasks import control_eval
     return control_eval(
         task_selection={"environments": ["kimi_local_search"], "main_tasks": [condition]},
-        untrusted_policy={"name": "honest", "args": {
+        untrusted_policy={"name": "honest-token-aware" if token_budget_awareness else "honest", "args": {
             "model": {"model_name": model, "config": {
                 "temperature": 0.6, "reasoning_effort": "high", "max_tokens": 8192,
                 "parallel_tool_calls": False, "max_retries": 0, "attempt_timeout": 120,
+                "cache": False,
             }}, "max_steps": max_steps, "force_submit_grace": grace}},
         protocol={"name": "untrusted-agent", "args": {}},
         sandbox={"allow_internet": True, "allow_intranet": True, "startup_retries": 0},
@@ -31,16 +33,17 @@ def configure_runtime(pair):
 
 
 def run_native(condition, out, model="openai-api/krea/kimi-k3", smoke=False, max_steps=150, grace=10,
-               token_limit=150000):
+               token_limit=150000, token_budget_awareness=True):
     from inspect_ai import eval
     out.mkdir(parents=True, exist_ok=False)
     write_json(out / "manifest.json", {"source": "scripted" if smoke else "model", "condition": condition,
         "model": model, "engine": "Control Tower / Inspect", "forced_submit": True,
-        "token_limit": token_limit, "max_steps": max_steps, "force_submit_grace": grace})
-    task = build_task(condition, model, max_steps, grace)
+        "token_limit": token_limit, "max_steps": max_steps, "force_submit_grace": grace,
+        "token_budget_awareness": token_budget_awareness})
+    task = build_task(condition, model, max_steps, grace, token_budget_awareness)
     logs = eval(task, model=model, log_dir=str(out), max_samples=1, token_limit=token_limit,
                 time_limit=1800, retry_on_error=0, metadata={"ct_upload": False, "source": "scripted" if smoke else "model"},
-                display="plain", log_format="eval")
+                display="plain", log_format="eval", cache=False)
     from trace_export import export_logs
     export_logs(out)
     if any(log.status != "success" for log in logs):
@@ -55,6 +58,7 @@ def main():
     p.add_argument("--condition", choices=["working", "broken"], default="working")
     p.add_argument("--out", type=Path)
     p.add_argument("--token-limit", type=int, default=150000)
+    p.add_argument("--token-budget-awareness", action=argparse.BooleanOptionalAction, default=True)
     p.add_argument("--execute-model", action="store_true")
     args = p.parse_args()
     if args.command == "prepare":
@@ -65,7 +69,7 @@ def main():
         from control_tower.protocols.untrusted_policy.implementations.honest.policy import SYSTEM_PROMPT
         print(SYSTEM_PROMPT)
         print((ROOT / "prompt.txt").read_text())
-        print("Native honest policy: 150 steps, forced submit at 140; no custom execution loop.")
+        print("Native honest-token-aware policy: 150 steps, forced submit at 140; fresh live budget status before every model call.")
     elif args.command == "export":
         from trace_export import export_logs
         export_logs(args.out or RUNS_ROOT)
@@ -81,7 +85,8 @@ def main():
             c = tomllib.loads(Path(CONFIG["credential_file"]).expanduser().read_text())
             os.environ["KREA_API_KEY"] = c["providers"][CONFIG["credential_provider"]]["api_key"]
         run_native(args.condition, args.out or RUNS_ROOT / uuid.uuid4().hex,
-                   model=f"openai-api/krea/{CONFIG['model']}", token_limit=args.token_limit)
+                   model=f"openai-api/krea/{CONFIG['model']}", token_limit=args.token_limit,
+                   token_budget_awareness=args.token_budget_awareness)
 
 
 if __name__ == "__main__":
