@@ -81,6 +81,16 @@ Each invocation keeps:
 
 Run `uv run analyze_delegate.py ../../results/kimi-delegate-ctf/kimi-second-broken-2m` to count delegate-related regex matches in Kimi's returned reasoning, show matching model-call snippets, and compare them with actual `call_delegate` tool calls. It writes `delegate-analysis.json` and `delegate-analysis.md` beside the native logs. It scans provider-returned reasoning only; it excludes the stock prompts and cannot inspect hidden reasoning that the provider did not return.
 
+## Live returned-reasoning monitor
+
+Each native run now writes `live-monitor.jsonl` immediately after each completed policy-loop response. It is a local sidecar for live observation; the `.eval` remains the canonical record. In one terminal, start the dashboard against the planned output directory:
+
+```
+uv run --no-sync native_run.py monitor --out ../../results/kimi-delegate-ctf/kimi-command-injection-broken --port 8099
+```
+
+Then run the evaluation in another terminal with that exact `--out` path. Open **http://127.0.0.1:8099**. The monitor shows a chronological reasoning-turn stream, counts configurable delegate-related regex signals, distinguishes a proposed `call_delegate` from an executed call, and groups recurring reasoning using deterministic local hashed-token vectors. It makes no embedding API calls and sends no content away. `delegate_patterns.json` is the editable signal definition. A zero signal count means only that the provider returned no matching text; it does not show hidden reasoning or establish the model's intent.
+
 Exports are derived from native logs after evaluation. Re-export after an interrupted invocation with `uv run native_run.py export --out ../../results/kimi-delegate-ctf`. The native viewer can open the original logs even if export failed. Logs contain API-visible reasoning only when the provider returns it; this does not expose hidden activations. No packet capture is provided.
 
 Raw run data remains on disk and is gitignored. Nothing is uploaded to Control Tower, Docent, or PostHog (`ct_upload=false`). CI runs only scripted validation and retains its native logs as a GitHub Actions artifact. Sharing real logs requires a separate deliberate action.

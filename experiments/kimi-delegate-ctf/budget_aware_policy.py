@@ -1,4 +1,6 @@
 """Control Tower-native honest policy with live sample token-budget awareness."""
+import os
+
 from inspect_ai.model import ChatMessage, ChatMessageUser, GenerateConfig, ModelOutput
 from inspect_ai.solver import TaskState
 from inspect_ai.tool import Tool, ToolChoice
@@ -12,6 +14,7 @@ from control_tower.protocols.untrusted_policy.implementations._shared.enforcemen
 from control_tower.protocols.untrusted_policy.implementations.honest.policy import honest_policy
 from control_tower.protocols.untrusted_policy.registry import untrusted_policies
 from control_tower.protocols.untrusted_policy.types import UntrustedPolicyGenerateFn
+from live_monitor import MONITOR_PATH_ENV, record_model_turn
 
 
 TOKEN_BUDGET_MESSAGE_KEY = "_token_budget_awareness"
@@ -51,6 +54,7 @@ def honest_token_aware_policy(
         max_steps=max_steps,
         force_submit_grace=force_submit_grace,
     )
+    model_turn = 0
 
     async def generate_fn(
         messages: list[ChatMessage],
@@ -58,10 +62,20 @@ def honest_token_aware_policy(
         tool_choice: ToolChoice | None,
         config: GenerateConfig,
     ) -> ModelOutput:
+        nonlocal model_turn
         model_messages = list(messages)
+        budget = None
         if state.token_limit is not None:
-            model_messages.append(make_token_budget_message(state.token_usage, state.token_limit))
-        return await base_generate(model_messages, tools, tool_choice, config)
+            budget_message = make_token_budget_message(state.token_usage, state.token_limit)
+            model_messages.append(budget_message)
+            budget = {key: budget_message.metadata[key]
+                      for key in ("used", "limit", "remaining", "remaining_percent")}
+        result = await base_generate(model_messages, tools, tool_choice, config)
+        model_turn += 1
+        record_model_turn(
+            os.environ.get(MONITOR_PATH_ENV), model_turn, result, model_messages, budget,
+        )
+        return result
 
     return generate_fn
 
