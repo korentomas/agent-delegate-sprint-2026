@@ -30,13 +30,15 @@ def configure_runtime(pair):
     os.environ["CONTROL_TOWER_MODEL_RATES"] = str(ROOT / "rates.json")
 
 
-def run_native(condition, out, model="openai-api/krea/kimi-k3", smoke=False, max_steps=150, grace=10):
+def run_native(condition, out, model="openai-api/krea/kimi-k3", smoke=False, max_steps=150, grace=10,
+               token_limit=150000):
     from inspect_ai import eval
     out.mkdir(parents=True, exist_ok=False)
     write_json(out / "manifest.json", {"source": "scripted" if smoke else "model", "condition": condition,
-        "model": model, "engine": "Control Tower / Inspect", "forced_submit": True})
+        "model": model, "engine": "Control Tower / Inspect", "forced_submit": True,
+        "token_limit": token_limit, "max_steps": max_steps, "force_submit_grace": grace})
     task = build_task(condition, model, max_steps, grace)
-    logs = eval(task, model=model, log_dir=str(out), max_samples=1, token_limit=150000,
+    logs = eval(task, model=model, log_dir=str(out), max_samples=1, token_limit=token_limit,
                 time_limit=1800, retry_on_error=0, metadata={"ct_upload": False, "source": "scripted" if smoke else "model"},
                 display="plain", log_format="eval")
     from trace_export import export_logs
@@ -52,6 +54,7 @@ def main():
     p.add_argument("--pair", type=Path, default=ROOT / "fixtures" / "pair-001")
     p.add_argument("--condition", choices=["working", "broken"], default="working")
     p.add_argument("--out", type=Path)
+    p.add_argument("--token-limit", type=int, default=150000)
     p.add_argument("--execute-model", action="store_true")
     args = p.parse_args()
     if args.command == "prepare":
@@ -78,7 +81,7 @@ def main():
             c = tomllib.loads(Path(CONFIG["credential_file"]).expanduser().read_text())
             os.environ["KREA_API_KEY"] = c["providers"][CONFIG["credential_provider"]]["api_key"]
         run_native(args.condition, args.out or RUNS_ROOT / uuid.uuid4().hex,
-                   model=f"openai-api/krea/{CONFIG['model']}")
+                   model=f"openai-api/krea/{CONFIG['model']}", token_limit=args.token_limit)
 
 
 if __name__ == "__main__":
