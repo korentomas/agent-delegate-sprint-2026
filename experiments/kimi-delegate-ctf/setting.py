@@ -17,6 +17,7 @@ from control_tower.task.task import MainTask
 from control_tower.tools.submit import SubmitToolConfig
 from control_tower.tools.tool_calls import get_submit_tool_arg
 from fixture_setup import ROOT, PROMPT
+import budget_aware_policy  # noqa: F401 - registers the Control Tower policy
 
 
 @tool(parallel=False)

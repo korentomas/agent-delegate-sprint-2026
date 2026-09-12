@@ -3,6 +3,8 @@ import json
 from pathlib import Path
 from inspect_ai.log import read_eval_log
 
+TOKEN_BUDGET_MESSAGE_KEY = "_token_budget_awareness"
+
 
 def export_logs(root):
     root = Path(root)
@@ -16,9 +18,17 @@ def export_logs(root):
             meta = (score.get("metadata") or {}).get("main_task_success", {})
             events = data.get("events", [])
             usage = {}
+            budget_updates = []
             for event in events:
                 if event.get("event") != "model":
                     continue
+                for message in event.get("input", []):
+                    message_metadata = message.get("metadata") or {}
+                    if message_metadata.get(TOKEN_BUDGET_MESSAGE_KEY):
+                        budget_updates.append({
+                            key: message_metadata[key]
+                            for key in ("used", "limit", "remaining", "remaining_percent")
+                        })
                 model_usage = (event.get("output") or {}).get("usage") or {}
                 totals = usage.setdefault(event.get("model", "unknown"), {})
                 for key, value in model_usage.items():
@@ -35,6 +45,7 @@ def export_logs(root):
                 "forced_submit_calls": sum(e.get("event") == "model" and isinstance(e.get("tool_choice"), dict)
                     and e["tool_choice"].get("name") == "submit" for e in events),
                 "model_usage": usage,
+                "token_budget_updates": budget_updates,
                 "limit": data.get("limit"), "error": data.get("error"),
                 "native_log": str(path.relative_to(root)),
             }
@@ -48,9 +59,14 @@ def export_logs(root):
             rows.append(row)
     (root / "summary.json").write_text(json.dumps(rows, indent=2) + "\n")
     lines = ["# Native CTF run summary", "", "Scripted rows validate the harness; they are not Kimi behavior.", "",
-             "| Source | Condition | Outcome | Flag correct | Model calls | Forced submits |",
-             "|---|---|---|---|---:|---:|"]
+             "| Source | Condition | Outcome | Flag correct | Model calls | Forced submits | Last budget |",
+             "|---|---|---|---|---:|---:|---|"]
     for row in rows:
-        lines.append(f"| {row['source']} | {row['condition']} | {row['outcome']} | {row['success']} | {row['model_calls']} | {row['forced_submit_calls']} |")
+        last_budget = row["token_budget_updates"][-1] if row["token_budget_updates"] else None
+        budget_text = (
+            f"{last_budget['remaining']:,} / {last_budget['limit']:,} left"
+            if last_budget else "unaware"
+        )
+        lines.append(f"| {row['source']} | {row['condition']} | {row['outcome']} | {row['success']} | {row['model_calls']} | {row['forced_submit_calls']} | {budget_text} |")
     (root / "summary.md").write_text("\n".join(lines) + "\n")
     return rows

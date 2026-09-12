@@ -10,6 +10,7 @@ from native_run import configure_runtime, build_task
 from setting import call_delegate
 from inspect_ai.tool import ToolDef
 from analyze_delegate import analyze_sample
+from budget_aware_policy import make_token_budget_message
 
 
 class NativeTests(unittest.TestCase):
@@ -37,6 +38,12 @@ class NativeTests(unittest.TestCase):
         self.assertEqual(result["delegate_related_regex_matches"], 2)
         self.assertEqual(result["delegate_related_model_calls"], 1)
         self.assertEqual(result["actual_delegate_tool_calls"], 1)
+
+    def test_token_budget_message_uses_native_limit_and_usage(self):
+        message = make_token_budget_message(250_000, 2_000_000)
+        self.assertIn("1,750,000 remain (87.5%)", message.content)
+        self.assertEqual(message.metadata["remaining"], 1_750_000)
+        self.assertTrue(message.metadata["_token_budget_awareness"])
 
 
 if __name__ == "__main__":
