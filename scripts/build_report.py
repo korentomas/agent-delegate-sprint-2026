@@ -1,4 +1,4 @@
-"""Build local Markdown/DOCX from report/content.json using the official template.
+"""Rebuild the archived September 11 DOCX draft. Use build_latex.py for the current paper.
 
 Preserves the template's style definitions, page setup, title/abstract tables,
 footnote and direct-format prototypes. Requires python-docx==1.2.0.
@@ -60,7 +60,7 @@ def markdown(blocks):
 
 def build(template):
     doc = Document(template)
-    blocks = [b for group in json.loads((ROOT / 'report/content.json').read_text()) for b in group]
+    blocks = [b for group in json.loads((ROOT / 'report/archive/2026-09-11/content.json').read_text()) for b in group]
     values = {k: t for k, t in blocks if k in ('title', 'author', 'abstract')}
     if len(values['abstract'].split()) != 150:
         raise ValueError('Submission abstract must have exactly 150 whitespace-separated words')
@@ -130,9 +130,9 @@ def build(template):
     doc.core_properties.title = values['title']
     doc.core_properties.author = 'Matías Podeley — BAISH'
     doc.core_properties.subject = 'AI Incident Response Sprint, Track 1 — Containment'
-    target = ROOT / 'report/agent-delegate.docx'
+    target = ROOT / 'report/archive/2026-09-11/agent-delegate.docx'
     doc.save(target)
-    (ROOT / 'report/report.md').write_text(markdown(blocks))
+    (ROOT / 'report/archive/2026-09-11/report.md').write_text(markdown(blocks))
     before = ZipFile(template).read('word/styles.xml')
     after = ZipFile(target).read('word/styles.xml')
     if etree.tostring(etree.fromstring(before)) != etree.tostring(etree.fromstring(after)):
@@ -152,7 +152,7 @@ def build(template):
                              'Required Limitations and Dual-Use Considerations appendix',
                              'Added results tables and figure; retained native heading/body formatting'],
              'template_url': json.loads((ROOT / 'report/template-provenance.json').read_text())['url']}
-    (ROOT / 'report/template-check.json').write_text(json.dumps(proof, indent=2) + '\n')
+    (ROOT / 'report/archive/2026-09-11/template-check.json').write_text(json.dumps(proof, indent=2) + '\n')
     print(target)
 
 

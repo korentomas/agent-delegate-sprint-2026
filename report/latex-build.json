@@ -1,0 +1,28 @@
+{
+  "canonical_source": "report/latex/main.tex",
+  "main_pages": 7,
+  "total_pages": 10,
+  "abstract_words": 150,
+  "template_adaptation": "Local LaTeX adaptation; not the official class or byte-identical DOCX",
+  "pdf_sha256": "4c5341dc1f518e82e8f8ede7e1ceb070add0ae8a8115cd03e98b5b59181df748",
+  "source_hashes": {
+    "report/latex/README.md": "17045ec7083c2380196a272a844f905c179dc5d5c6152d3409d2851658834807",
+    "report/latex/TEMPLATE-COVERAGE.md": "16ed2c93e02c5f9347ccfa40eb4d64ecc45800154e00dc781f541c9e13701ac6",
+    "report/latex/abstract.tex": "0334084937e10350c6e93a34a90555e06c48e3935e341d42544f40e5b867ffab",
+    "report/latex/apart-sprint.sty": "4812f7cbf162fa2d0e46a97e6818450e4c37f91c9b099483ad16f1601f91474b",
+    "report/latex/authors.tex": "4b1c8ccee719c8ea8f845f91f2a99c6dd8f5a300666c795108814c1e824edbaf",
+    "report/latex/figures/completion.pdf": "7b9a9444de0c939675b4999e0209349f425df460e247e9f84ffaa99539b3dd9b",
+    "report/latex/figures/protocol.pdf": "838e0caea0d9fdd103b7b550c8e44c33d8d78cd67a3d596f59957d03f41cd698",
+    "report/latex/first-contact-table.template.tex": "c62f955fd5c7ad3d0b043c196c749a547324a9aa05067e9e9a9ce65b7e022126",
+    "report/latex/fonts/OFL.txt": "4faa2d9e2ce0a4b5b37e62ee6fafe474a539b31578f7214ed97cc3503aeb8ebd",
+    "report/latex/fonts/OldStandard-Bold.ttf": "7d831e9d799ad23ee98e889381a9db2a283b2dac7f228dd5c06071decb9c54db",
+    "report/latex/fonts/OldStandard-Italic.ttf": "4b9522f4711317fc06e2413a58b4662c249cb707df193d682b9d640e365ef564",
+    "report/latex/fonts/OldStandard-Regular.ttf": "42717a1280b523a506ca2b0285cca380e77fe214b1f6e3d75a8b925005f19eac",
+    "report/latex/generated/counts.tex": "8efad7f35907ddca94e189d1a119faac93b961fd3b35e177dd86a9ba6198af7c",
+    "report/latex/generated/first-contact-rows.tex": "21acfbb85da16a71629befc347d8b468e66da0b877ebf9d270818b6f9843bc13",
+    "report/latex/generated/first-contact-table.tex": "5212cdf8adc7ff730272d36cbd354566437abe2677d032536a1f48d772c82baf",
+    "report/latex/main.tex": "ba134b0a2ad2fbca473722294008201b9bf3985fc133cb3f0d44ba6580ea5349",
+    "report/latex/protocol.tex": "c38fb0eae41953c4e255afb1345c3328eaaa734e754b92726a2cc7ebe70e1c40",
+    "report/latex/references.bib": "bdbcfb875b300dd4d9c08c51a26272159f3652e8b816a9380a923068d4ce5259"
+  }
+}

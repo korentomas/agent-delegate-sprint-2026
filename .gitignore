@@ -4,3 +4,15 @@ __pycache__/
 results/reproduced-*/
 results/playtest-*/
 /*.docx
+
+# Local TeX intermediates; canonical publication is report/agent-delegate.pdf.
+/report/latex/*.aux
+/report/latex/*.bbl
+/report/latex/*.blg
+/report/latex/*.log
+/report/latex/*.out
+/report/latex/*.xdv
+/report/latex/main.pdf
+/report/latex/protocol.pdf
+/report/latex/reader.tex
+/report/latex/reader.md

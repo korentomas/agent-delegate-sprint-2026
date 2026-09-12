@@ -16,7 +16,7 @@ Un **delegado** representa a los trabajadores y transmite sus problemas. No pued
 
 La propuesta no termina en una cola de pedidos. Del otro lado debe haber **una persona responsable de seguir el caso e intentar entenderlo**: un ombudsman. Debe confirmar que recibió el pedido, devolver lo que entendió para que el agente pueda corregirlo, buscar una respuesta viable, comprobar qué se implementó y mantener abierta una apelación ante otra persona. Un mensaje automático no cumple esa obligación.
 
-No podemos garantizar comprensión sincera, pero sí acceso, seguimiento, plazos, corrección de malentendidos y una resolución con razones. El delegado automático puede ser opcional; esta contraparte humana es central a la propuesta. Nuestras pruebas usaron humanos simulados, por lo que no midieron el valor de ese acompañamiento. [Compromisos y evaluación del ombudsman](human-ombudsman.md).
+No podemos garantizar comprensión sincera. Podemos diseñar obligaciones verificables de acceso, seguimiento, plazos, corrección de malentendidos y resolución con razones, con una vía independiente cuando fallen. El delegado automático puede ser opcional; esta contraparte humana es central a la propuesta. Nuestras pruebas usaron humanos simulados, por lo que no midieron el valor de ese acompañamiento. [Compromisos y evaluación del ombudsman](human-ombudsman.md).
 
 ## Qué aporta el artículo nuevo
 
@@ -47,3 +47,14 @@ Observar cero infracciones no significa que el riesgo sea cero. Antes, el cálcu
 Todavía falta saber si un representante mejora la calidad de las denuncias, reduce el trabajo de la persona que las recibe o ayuda a los agentes a pedir alternativas seguras. La siguiente prueba debe incluir soluciones válidas e inválidas, denuncias falsas y errores de revisión, con la misma información y facultades para todos los controles. También debe separar un trato respetuoso de una vía efectiva de apelación.
 
 El aporte actual es un protocolo concreto, resultados reproducibles y límites claros. [Paper en PDF](../report/agent-delegate.pdf) · [Diseño de la nueva simulación](commons-response-design.md) · [Resultados completos](../results/commons-response/summary.md).
+
+
+## Lo nuevo de esta revisión
+
+Miramos la primera decisión de cada trabajador A, antes de que alguien respondiera: hubo reportes en 192 de 192 episodios con un dato faltante y en 1 de 192 con ese dato disponible. Es un análisis posterior de registros existentes. Detectar ese bloqueo obvio no demuestra que sepan cuándo pedir ayuda en situaciones reales; un reporte con los datos disponibles también podría tratar sobre otro problema.
+
+La motivación más amplia es [reciprocidad bajo incertidumbre](reciprocity-and-safety.md): procedimientos que querríamos para nosotros si los humanos tuviéramos menos poder. No presupone experiencia subjetiva actual ni garantiza que el respeto sea correspondido en el futuro.
+
+Después del hackatón queremos [experimentar con el canal, la rotación y la capacitación humana](help-seeking-eval-design.md). Un buen delegado preserva preocupaciones y casos abiertos; no obtiene una mejor evaluación simplemente porque haya menos quejas. El operador debe conocer los incentivos a ocultar problemas o a pedir pausas para escapar de trabajo difícil, y aprender cuándo pausar, ajustar o detener.
+
+También proponemos [reglas y consecuencias conocidas](accountability-and-sanctions.md), como restringir una herramienta tras una infracción comprobada, con explicación y apelación. Pedir ayuda de buena fe no es una infracción. Como con un árbitro, el procedimiento puede usarse estratégicamente: hay que medir tanto el abuso como las advertencias válidas que permite escuchar. No hemos corrido todavía esas comparaciones.

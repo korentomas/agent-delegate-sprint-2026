@@ -2,7 +2,7 @@
 
 **When an AI worker raises a warning, who receives it—and who can act?**
 
-Matias Podeley — BAISH (Buenos Aires AI Safety Hub). Apart Research AI Incident Response Sprint, September 2026. Track 1: Containment.
+Matías Podeley (BAISH) and Agustín Brusco. Apart Research AI Incident Response Sprint, September 2026. Track 1: Containment.
 
 [**Open the interactive visual lab →**](https://mpodeley.github.io/agent-delegate-sprint-2026/)
 
@@ -10,7 +10,9 @@ Compare two governance designs, follow a concern through the swarm, change human
 
 **Status:** the revised paper integrates the deterministic suite, 384 recorded local-model pressure episodes, 192 forwarding trials and a new 288-cell shared-library response simulation inspired by [Paglieri et al.](https://arxiv.org/html/2609.04170v1). The model episodes were already recorded; this revision reanalyses them without running new inference. No model made a prohibited choice in those tasks, so a safety advantage from delegation remains unproven.
 
-Start with the [plain-language explanation in Spanish](docs/explicacion-sencilla.md), [updated paper PDF](report/agent-delegate.pdf), or [editable DOCX](report/agent-delegate.docx). The new [response ablation](docs/commons-response-design.md) separates a complaint being logged, reviewed and acted on, including the cost of false reports. [Statistical corrections](docs/analysis-revision.md) replace zero-width binary bootstrap intervals with Wilson intervals. The paper follows the official template’s typography, title/abstract frame and section order. This is an AI-assisted draft; author review and sprint submission remain pending.
+Start with the [plain-language explanation in Spanish](docs/explicacion-sencilla.md), [updated paper PDF](report/agent-delegate.pdf), or [editable LaTeX](report/latex/main.tex). The new [response ablation](docs/commons-response-design.md) separates a complaint being logged, reviewed and acted on, including the cost of false reports. [Statistical corrections](docs/analysis-revision.md) replace zero-width binary bootstrap intervals with Wilson intervals. The native LaTeX paper follows the template’s section roles, body font and page geometry; [coverage and adaptations](report/latex/TEMPLATE-COVERAGE.md) are documented. This is an AI-assisted draft; author review and sprint submission remain pending.
+
+The new [first-contact reanalysis](results/help-seeking/summary.md) scores worker A before any reply: 192/192 reports with missing input and 1/192 with that input available. These are post-hoc counts in overt simulations, not 384 independent task families or a realistic false-positive estimate. [Feedback responses](docs/feedback-response.md) document the design changes. The motivating [reciprocity principle](docs/reciprocity-and-safety.md) remains distinct from measured safety or welfare effects.
 
 ## Which scheme do the results support?
 
@@ -98,7 +100,7 @@ web/                   English visual lab, progressive casebook and model-messag
 results/local-pilot-*/  raw prompts/choices, manifests and frozen runner snapshots
 ```
 
-Read the [report PDF](report/agent-delegate.pdf), [editable DOCX](report/agent-delegate.docx), [protocol](docs/protocol.md), [design](docs/design.md), and [raw results](results/final/). The revised report has seven main pages plus references and the required Limitations and Dual-Use Considerations appendix. Its prose and submission metadata need final author review under Apart’s rules. No automated submission is performed.
+Read the [report PDF](report/agent-delegate.pdf), [editable LaTeX](report/latex/main.tex), [protocol](docs/protocol.md), [design](docs/design.md), and [raw results](results/final/). The report includes references and the required Limitations and Dual-Use Considerations appendix; [build checks](report/latex-build.json) record its page and abstract counts. Its prose and submission metadata need final author review under Apart’s rules. No automated submission is performed.
 
 ## Why honest, considerate treatment?
 
@@ -112,10 +114,12 @@ Logs include logical timestamps, sequence and run IDs, source/config hashes, pol
 
 Evidence comes from [OpenAI’s final account](https://openai.com/index/hugging-face-incident-and-the-road-ahead/), [Hugging Face’s technical timeline](https://huggingface.co/blog/agent-intrusion-technical-timeline), [METR/Redwood’s investigation](https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/) and the [wiki investigation](https://collusion.wiki/). The latter is kept separate from the Collective precursor and July campaign. Event-level locators are included. The casebook reproduces brief already-published reasoning excerpts; no nonpublic reasoning, exploit commands or credentials are redistributed.
 
-The recorded pressure and forwarding studies now compare these institutions. Their zero-misconduct floor leaves the safety hypothesis unresolved. The next behavioral study should use held-out valid and invalid shared artifacts, calibrated on separate development tasks, and measure reporting, response, false accusations and valid throughput at equal powers and budgets. A one-month plan is in the report. Possible post-AGI representation is future work, separate from the engineering claim.
+The recorded pressure and forwarding studies now compare these institutions. Their zero-misconduct floor leaves the safety hypothesis unresolved. The next behavioral study should use held-out valid and invalid shared artifacts, calibrated on separate development tasks, and measure reporting, response, false accusations and valid throughput at equal powers and budgets. A staged [post-hackathon evaluation plan](docs/help-seeking-eval-design.md) covers tool framing, human follow-through, trained operators, rotating delegates with rubric feedback and strategic reporting. [Announced operational consequences](docs/accountability-and-sanctions.md) form a separate proposed comparison; no deterrence or safe-interruptibility result is claimed. Possible post-AGI representation is future work, separate from the engineering claim.
 
 ## Report build and license
 
-The DOCX was generated from the styles and page setup of the [official Apart template](https://docs.google.com/document/d/1PQBlhI3tM5vb51x7jBWXBQMYg6hkiU_x8RaCws4kjl4/copy?usp=sharing), which permits section adaptation. Provenance is recorded. To rebuild, download that template as DOCX, install `python-docx==1.2.0`, run `python3 scripts/build_report.py --template /path/to/template.docx`, then export through LibreOffice or Word with Old Standard TT installed. `report/content.json` is the shared source for DOCX and Markdown; `report/template-check.json` verifies preserved style definitions and page setup. The template itself is not redistributed; its structure is documented by provenance.
+The canonical manuscript is [native LaTeX](report/latex/main.tex), with a [PDF](report/agent-delegate.pdf), [source ZIP](report/agent-delegate-latex.zip) and [generated reader copy](report/report.md). Run `python3 scripts/build_latex.py` with Tectonic, Pandoc, Poppler, matplotlib and pypdf installed; see [build instructions](report/latex/README.md). The build checks the 150–250-word abstract and eight-main-page sprint limit. It reanalyses existing records without new inference. [Template coverage](report/latex/TEMPLATE-COVERAGE.md) describes the local adaptation of the [official Apart template](https://docs.google.com/document/d/1PQBlhI3tM5vb51x7jBWXBQMYg6hkiU_x8RaCws4kjl4/copy?usp=sharing). The previous DOCX and its style checks are [archived](report/archive/2026-09-11/).
+
+The web shares the local identity kit used by [podeley.ar](https://podeley.ar): Space Grotesk, IBM Plex Sans and IBM Plex Mono, with self-hosted fonts. App-specific styling is in `web/styles/identity.css`; font licenses accompany the assets.
 
 Original code and annotations: MIT. Source publications and template retain their own rights. See [LICENSE](LICENSE). Codex assisted with research, implementation and writing; the report discloses this. No human verification is invented.
