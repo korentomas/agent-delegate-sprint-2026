@@ -1,6 +1,7 @@
 __pycache__/
 /dist/environment-cases/
 *.pyc
+results/kimi-delegate-ctf/
 .venv/
 results/reproduced-*/
 results/playtest-*/
