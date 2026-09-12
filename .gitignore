@@ -1,4 +1,5 @@
 __pycache__/
+/dist/environment-cases/
 *.pyc
 .venv/
 results/reproduced-*/
