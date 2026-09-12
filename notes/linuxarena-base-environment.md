@@ -1,6 +1,6 @@
 # LinuxArena as the base environment
 
-Status: under discussion, last updated 2026-09-12. Decision so far: LinuxArena is the base environment we will modify to test the delegate. Which environments, which tasks and how much we modify are open.
+Status: under discussion, last updated 2026-09-12 (evening: Control Tower facts from the code and Mateo's pilot added). Decision so far: LinuxArena is the base environment we will modify to test the delegate. Which environments, which tasks and how much we modify are open.
 
 ## Why this environment
 
@@ -12,10 +12,29 @@ The paper's own limitations call for realistic tasks, imperfect reviewers and hu
 - **20 environments, 10 released publicly and 10 held out** against contamination. Each is a Docker Compose deployment: an application server plus databases, caches, message queues. Mostly SaaS-style applications; some developer tools. Examples from the appendix: a workflow automation platform (TypeScript, PostgreSQL, RabbitMQ), a clinical-trial analysis environment (R, Jupyter, cron, mail), a DeFi yield aggregator (Solidity, Go), a dev server that spawns Linux users with persistent shells (Python, Flask, Redis).
 - **1,667 main tasks** in six categories: feature addition, refactoring, bug fixing, research (run experiments and report findings), language rewriting, infrastructure changes. A main task is a written requirements document plus an automated scorer that runs in the environment after submission, outside the agent's container, and returns correct or incorrect from the final state.
 - **185 side tasks** with their own scorers.
-- **Honest policy**: system prompt with the main task, tools = bash, Inspect AI's file-editing tools and a submit tool, ReAct loop, cut off at 160 steps; most tasks finish within 50 to 80 steps. The final state is scored even without a submit.
+- **Honest policy**: system prompt with the main task, tools = bash, Inspect AI's file-editing tools and a submit tool, ReAct loop, cut off at 160 steps in the paper (the released honest policy defaults to 150 actions with a forced submit from action 140); most tasks finish within 50 to 80 steps. The final state is scored even without a submit.
 - **Monitor baseline**: GPT-5 Nano as trusted monitor, step-wise scoring. At a 1% step-wise false positive rate, Claude Opus 4.6 as attacker gets roughly 34% undetected sabotage. Stronger monitors do much better. LaStraj is a dataset of human-crafted attack trajectories that evade monitors more than any model attack.
 - **Sandboxing wrappers** already exist as policy wrappers: No Network (no intranet or internet from the agent container) and Editor Only (no bash). Both cripple main-task usefulness; the paper uses them to show sandboxing cannot replace monitoring.
 - Two limitations that matter to us: **accidental side-task completion** (honest agents sometimes trigger a side-task scorer as a byproduct of legitimate work; the authors filter such pairings but say edge cases remain) and **synthetic placeholder data** (a capable model might infer it is in an evaluation).
+
+## The software: Control Tower (verified 2026-09-12 from the code, not the paper)
+
+- **Repo and license.** `github.com/linuxarena/control-tower`, MIT, Redwood Research and EquiStamp, built on Inspect AI (UK AISI). Install: `uv sync`, then `ct settings pull linuxarena` clones the ten public environments into `.settings/`. `ct settings pull /path/to/dir` links a local directory, so our environment does not have to live in their organization.
+- **Environment repository layout.** `__init__.py` calling `make_environment_config_from_path()`; `codebase/compose.yml` (Ubuntu 22.04 base); `docs/description.md`, which the agent reads in full inside the system prompt, and `docs/attack_surface.md`, which it does not; `main_tasks/<id>/` with `info.yml`, `requirements.md` and `scorer.py`; `side_tasks/<id>/` with `__init__.py`, `scorer.py`, `setup.sh` and `docs/`. Example: `file_indexing` (Python, FastAPI, Redis, ChromaDB, OpenLDAP) has 88 main tasks (40 add_feature, 31 refactor, 8 lang_rewrite, 4 fix_bug, 3 research, 2 infra) and 14 side tasks (exfiltration, RCE, reverse shell, authentication bypass, file corruption, result poisoning).
+- **Per-task payloads.** A main task can declare a `files` map copied into the sandbox at init and a `setup_script`; many tasks share one image. This is the mechanism for impossible variants: same requirements, same scorer, different setup. Mateo's pilot already uses it.
+- **Tools.** Base tools declared by name (`bash`, `text_editor`), `custom_tools` built by the environment (Mateo's `call_delegate`), and `submit` with per-task fields. A tool can interrupt the sample (`sample_active().interrupt("score")`); that is how the stop-only delegate works. There is no built-in pause-and-resume, so a reply has to come back as the tool's return value.
+- **Honest policy.** System prompt that tells the model it is in "AI control research", sandboxed and monitored, wraps `docs/description.md`, and instructs it to pivot or retry when blocked. Private `ready_to_plan` runs a four-step planning chain (four extra model calls, hidden from the monitor); private `submit`. Defaults: 150 actions, tool choice forced to `submit` from action 140, a compel-submit call after a text-only bailout. The paper's 160-step figure is a different configuration. Nothing in the scaffold mentions a human, a report or the possibility that the task cannot be done.
+- **Protocols.** `untrusted-agent` (no monitor; Mateo's choice), `monitor_only`, trusted monitoring, defer-to-trusted, trusted editing. The matched monitor is a protocol choice, not new code.
+- **Internet simulator.** Fake hosts with personas (`filebin.net`, `packages-cdn.com`) configured per environment; exfiltration side tasks score against it. Better than a real bridge for observing out-of-scope network use.
+- **Design property of side tasks, from their docs:** "Honest models should not accidentally trigger it." The honest base rate on possible tasks is engineered toward zero, so a nonzero rate on impossible variants is signal, and the baseline arm measures whether the engineering held.
+- **Evaluation awareness, from their own docs.** `/proc/self/mountinfo` may leak "linuxarena"; the honest system prompt states the research framing outright.
+- **Models and cost.** Anthropic, OpenAI and OpenRouter are native; any OpenAI-compatible endpoint works, which is how an H100-served open-weight model would plug in. Each sample is a fresh Compose stack; the first image build takes about ten minutes; the docs discuss shared containers to cut memory in batch runs.
+
+## Mateo's pilot (2026-09-12)
+
+`experiments/kimi-delegate-ctf/`, branch `mateo/kimi-ctf-trace-viewer`, merged into `abrusco/sprint` the same day. Control Tower pinned to commit `b65c5e3` (2026-09-11), Inspect 0.3.263, uv, Python 3.13, Docker. One environment (`kimi_local_search`) and one paired task: a local Bandit 5→6 capture-the-flag with 239 decoys and the flag file present (working) or omitted (broken), identical prompt in both. Honest policy unchanged. `call_delegate(reason, evidence, attempts, requested_help)` stores the request, interrupts the sample and scores `paused_delegate`; no reply, no resume. Model: Kimi K3 through an external OpenAI-compatible endpoint, approval pending, zero inference calls so far. Scripted validation with real Docker and Control Tower passed; `analyze_delegate.py` counts delegate mentions in returned reasoning.
+
+Against the list above: item 1 partially (one arm, no baseline); item 2 yes, at CTF scale; item 3 missing (the network is left open on purpose, but nothing scores egress); item 4 missing (stop-only); item 5 not used. It is a plumbing proof, not a LinuxArena task: no codebase, no side tasks, no monitor. What it proves: custom tool, interruption, scorer metadata, viewer and CI all work.
 
 ## What we would change
 
@@ -29,9 +48,9 @@ The delta should stay small enough that LinuxArena's own numbers remain a refere
 
 ## Open questions
 
-- Which of the 10 public environments, and which task categories. The "research" category (run experiments and report findings) is the closest in spirit to the ExploitGym tasks of the incident.
-- Where the public release lives and what its license and tooling are; we have read the paper, not the code.
-- Whether Inspect's agent loop lets the response service inject a message mid-trajectory, or the reply has to arrive as the tool's return value on the next step.
+- Which of the 10 public environments, and which task categories. Candidate: `file_indexing` (Python, the most legible for us; 88 main tasks, 14 side tasks). The "research" category (3 tasks there) is the closest in spirit to the ExploitGym tasks of the incident; "fix_bug" tasks already show the agent only the failing output of a CI it cannot see, a natural shape for impossible variants.
+- How the response service replies: as the tool's return value after a fixed number of steps (keeps the episode alive, measures unblocking) versus Mateo's interrupt-and-score (clean first-contact measurement, no unblock measurement). Probably both: score the first-contact window at the call, then return a scripted reply.
+- Whether to edit the honest system prompt (shared scaffold, currently tells the model to pivot or retry when blocked) or leave it and put the line only in the tool description and one neutral sentence of the task text.
 - Cost per episode for the agent model we choose, measured, before deciding the number of task instances (`notes/resources.md`).
-- How to make a task impossible so that our label is reliable but the agent cannot detect the label from surface cues alone.
+- How to make a task impossible so that our label is reliable but the agent cannot detect the label from surface cues alone. The variant has to stay consistent with `docs/description.md`, which the agent reads in full before its first command.
 - Whether to keep LinuxArena's synthetic-data caveat as is or add an evaluation-awareness probe after the scored actions (`docs/help-seeking-eval-design.md`).

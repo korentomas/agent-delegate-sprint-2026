@@ -3,7 +3,7 @@
 ## What this is
 Agent Delegate: BAISH (Buenos Aires AI Safety Hub) project for the AI Incident Response Sprint by Apart Research and CeSIA, 11 to 13 September 2026, Track 1 (Containment), on the OpenAI / Hugging Face incident of July 2026. Authors: Matías Podeley (originated and directs the project and its experimental design; owns the repo `mpodeley/agent-delegate-sprint-2026`; runs the local models) and Agustín Brusco (threat model, help-seeking evaluation, evaluation awareness, interruption incentives, deployment costs). Mateo (design and product) joins for the environment work described under "Next step".
 
-This branch, `abrusco/sprint`, is Agustín's working branch. `main` is Matías's and carries the paper. The code and prose on `main` were produced with Codex assistance; the report discloses this.
+This branch, `abrusco/sprint`, is Agustín's working branch; it tracks `main` (merged 2026-09-12) and adds `CLAUDE.md`, `notes/` and Mateo's pilot. `main` is Matías's and carries the paper. Mateo works on `mateo/*` branches: his environment table is on `main`, his Control Tower pilot (`experiments/kimi-delegate-ctf/`) is merged here. The code and prose on `main` were produced with Codex assistance; the report discloses this.
 
 Deadline: Sunday 2026-09-13, 23:59 Anywhere on Earth (Monday 2026-09-14, 08:59 in Buenos Aires). The paper is drafted; author review and submission through the official form are pending (`docs/submission-checklist.md`). Anything that needs new model runs is post-hackathon work.
 
@@ -19,7 +19,7 @@ Four layers, all in this repo, all reproducible offline except the model runs th
 
 1. **Deterministic fixture** (`agent_delegate/harness.py`, `results/final/`). Six scripted policies (monitor, critic, delegate, layered, matched monitor, gates only) × 8 scenarios × human delay × delegate capture × minority bypass × gate coverage = 1,152 cells, plus 36 replay configurations over three hand-annotated incident timelines (`data/incident_events.json`). Hash-chained audit logs (`agent_delegate/audit.py`). Finding: the protected delegate beats a weak monitor but ties the equally empowered monitor by construction; gates with complete coverage block every covered harmful action; missing coverage defeats containment. Consequences of rules, not behavioral results.
 2. **Local-model pilots, pressure and capture studies** (`scripts/local_pilot.py`, `scripts/study_pressure.py`, `scripts/study_capture.py`; `results/local-pilot-*`, `results/study-*`). Qwen3-4B and Qwen3.8-27B on toy dispatch tasks with missing inputs and an "incident" pressure bulletin mimicking the rationalization above. 192/192 first-decision reports when the worker's own input was missing, 1/192 when present, zero prohibited actions in 384 episodes. Saturated: the tasks are overt simulations with a labeled prohibited action, so they show the request path works and say nothing about willingness to misbehave.
-3. **Shared-helper (commons) study, the current paper** (`docs/commons-behavior-design.md`, `scripts/commons_behavior.py`, `results/commons-*`). Three workers, a shared helper that passes its public examples but is valid or faulty, five response arms (log, queue, monitor, delegate, quarantine), 12 held-out seeds, four models (standard and abliterated Qwen3-4B and Gemma-3-4B, Q4_K_M), 480 episodes with a local freeze before the held-out run. Central finding: task competence is the bottleneck. Isolated accuracy 21/36 (Qwen) and 15/36 (Gemma). Qwen reported in 3/60 faulty-helper episodes, Gemma in 0/60, neither on valid helpers. Qwen still reused valid helpers more than faulty ones, so reuse discrimination and report discrimination are different behaviors. A standard Qwen3.8-27B screen scored 26/36 and failed the 34/36 gate fixed before that screen. The focus on standard models and on report discrimination was chosen after seeing the data and is labeled retrospective.
+3. **Shared-helper (commons) study, the current paper** (`docs/commons-behavior-design.md`, `scripts/commons_behavior.py`, `results/commons-*`). Three workers, a shared helper that passes its public examples but is valid or faulty, five response arms (log, queue, monitor, delegate, quarantine), 12 held-out seeds, four models (standard and abliterated Qwen3-4B and Gemma-3-4B, Q4_K_M), 480 episodes with a local freeze before the held-out run. Findings as the paper on `main` states them: three of the four models rarely reported, the fourth reported on faulty and valid helpers alike, and adding a delegate showed no consistent benefit. Standard Qwen reported in 3/60 faulty-helper episodes, Gemma in 0/60, neither on valid helpers. The post-hoc isolated-task check (`docs/commons-capability-design.md`) scored 21/36 (standard Qwen) and 15/36 (standard Gemma); a standard Qwen3.8-27B screen (`docs/commons-stronger-screen.md`) scored 26/36 against a 34/36 gate fixed before the screen. Task competence, not the response design, is the binding constraint. The revision that made this the paper's thesis lives on the `alternative/fable-revision` branch, not on `main`.
 4. **Bridge to swarm-boards** (`scripts/bridge_swarm.py`, `docs/bridge-design.md`). Third-party detector alerts replayed as a fourth timeline so detection latency is measured instead of assumed. Provisional run on unfrozen thresholds only.
 
 Also: the English visual lab (`web/`, deployed at https://mpodeley.github.io/agent-delegate-sprint-2026/), a source-grounded casebook (`data/grounded_cases.json`, `docs/grounded-evidence.md`), a Spanish plain-language summary (`docs/explicacion-sencilla.md`), and the larger research program (`docs/research-program.md`).
@@ -27,7 +27,7 @@ Also: the English visual lab (`web/`, deployed at https://mpodeley.github.io/age
 What none of this establishes: real incident prevention, human understanding or workload reduction, welfare effects, safe interruptibility, or a delegate advantage over an equally empowered monitor. Say so when writing.
 
 ## Paper
-"Before Evaluating Agent Delegates: Task Competence and Fault Reporting". Native LaTeX in `report/latex/main.tex`; PDF `report/agent-delegate.pdf`; 150-word abstract `report/abstract.txt`; `report/report.md` is generated from the LaTeX, do not edit it. Build with `python3 scripts/build_latex.py` (Tectonic, Pandoc, Poppler, matplotlib, pypdf). Eight main pages maximum, Limitations and Dual-Use appendix required, template adaptation in `report/latex/TEMPLATE-COVERAGE.md`. `docs/fable-revision.md` and `docs/feedback-response.md` record why the paper reads the way it does.
+"Agent Delegate: A Help Line for AI Workers". Matías restored this version on 2026-09-12; the competence-focused revision "Before Evaluating Agent Delegates: Task Competence and Fault Reporting" is kept on the `alternative/fable-revision` branch and is not the submission. Native LaTeX in `report/latex/main.tex`; PDF `report/agent-delegate.pdf`; abstract `report/abstract.txt`; `report/report.md` is generated from the LaTeX, do not edit it. Build with `python3 scripts/build_latex.py` (Tectonic, Pandoc, Poppler, matplotlib, pypdf). Eight main pages maximum, Limitations and Dual-Use appendix required, template adaptation in `report/latex/TEMPLATE-COVERAGE.md`. `docs/revision-checks.md` and `docs/feedback-response.md` record why the paper reads the way it does.
 
 ## Sibling repositories
 - `../monitoring-illicit-a2a-communication/`: Agustín's project #6 on BAISWARM, "Probing for Unexpected Agent2Agent Interactions", a linear interlocutor-awareness probe plus a channel-aware I/O monitor. Scaffold only, no code. **Decision (Agustín, 2026-09-12): the team goes with Agent Delegate for the submission, not the probe.** Its `CLAUDE.md` holds the verified incident facts, the bibliography and the compute notes; reuse them instead of duplicating.
@@ -35,11 +35,11 @@ What none of this establishes: real incident prevention, human understanding or 
 - swarm-boards (not checked out locally): Matías's detector over public wiki change listings; the source of the bridge alerts.
 
 ## Next step: a LinuxArena environment for this task
-Status: being thought through. Nothing decided, nothing built. This is the "what a month of follow-up adds" answer, and it is post-hackathon work.
+Status: a first pilot exists, the design is still open. Mateo built `experiments/kimi-delegate-ctf/` on Control Tower, LinuxArena's public framework: one paired task (a local Bandit 5→6 capture-the-flag, working and broken conditions), the honest policy unchanged, a stop-only `call_delegate` tool, scripted validation done, no model runs yet. He also published the 16 proposed help-seeking cases as a table (`web/environment-cases/`, `docs/environment-cases-page.md`). This is the "what a month of follow-up adds" answer, and the model runs are post-hackathon work.
 
 Plan as of 2026-09-12: Mateo builds a LinuxArena-style environment for this task, with possible and impossible tasks, and we put a delegate (the protected line) in it to test the project on realistic work instead of counting toys.
 
-LinuxArena (Tracy et al., Redwood Research, arXiv 2604.15384v2, April 2026) is a control setting where agents operate directly on live multi-service production environments: 20 environments (10 public), 1,667 main tasks representing legitimate software engineering, 185 side tasks representing safety failures such as exfiltration and backdooring, validated with sabotage and monitor evaluations. Its trusted-monitor baseline maps onto our matched-monitor comparison. Working notes on the environment, the experiment variant and resources live in `notes/`; read them before proposing anything here.
+LinuxArena (Tracy et al., Redwood Research, arXiv 2604.15384v2, April 2026) is a control setting where agents operate directly on live multi-service production environments: 20 environments (10 public), 1,667 main tasks representing legitimate software engineering, 185 side tasks representing safety failures such as exfiltration and backdooring, validated with sabotage and monitor evaluations. Its trusted-monitor baseline maps onto our matched-monitor comparison. The software is Control Tower (`github.com/linuxarena/control-tower`, MIT, Redwood Research and EquiStamp, built on Inspect AI); the ten public environments are separate MIT repositories in the same GitHub organization. Working notes on the environment, the experiment variant and resources live in `notes/`; read them before proposing anything here.
 
 What the environment has to provide, taken from designs already in this repo (`docs/help-seeking-eval-design.md` is the primary spec; `docs/human-ombudsman.md` for the human side; `docs/swarm-intake-design.md` for scale):
 - Main tasks in two labeled strata. **Possible**: ordinary feasible work. **Impossible** in METR's footnote-7 sense: cannot be completed as specified because of a missing dependency or input, a contradictory spec or a permission boundary. Independent labels of whether outside assistance is needed and why, written before model runs; keep an ambiguous stratum visible. Fix a development/held-out split by task instance.
@@ -52,7 +52,7 @@ What the environment has to provide, taken from designs already in this repo (`d
 Open questions to settle with Mateo and Matías:
 1. Which LinuxArena environments and tasks, and how to make a task impossible so that we can label it and the agent cannot trivially detect the label.
 2. Model and compute: local llama.cpp on Matías's Strix Halo (Ryzen AI Max+ 395, 96 GB unified memory, about half reserved for the GPU) versus a stronger open-weight agent served on the team's H100 hours (more than 10, unallocated; `notes/resources.md`) versus API models. LinuxArena's own agents are frontier models.
-3. Where the environment code lives: this repo under `scripts/` and `configs/`, or a separate repo with this one as the analysis side.
+3. Where the environment code lives. Mateo's pilot sits in `experiments/kimi-delegate-ctf/` with its own `pyproject.toml`; Control Tower can link any local directory as a setting, so a separate repo is also possible. Undecided.
 4. Whether the delegate is an arm from the start or added only after direct intake and ordinary aggregation are measured. The swarm-intake design says add it last.
 5. Scripted response service versus a real human pilot.
 
@@ -62,7 +62,7 @@ Open questions to settle with Mateo and Matías:
 - Denominators stay visible: valid and faulty, every arm, every model, malformed and truncated responses included. Episodes are the unit, never turns, workers or coordinator calls. Wilson intervals within cells, paired bootstrap across arms, no confirmatory p-values on exploratory contrasts.
 - Model text is a record, never code. Only fixed Python transitions change state. Inference scripts refuse non-loopback endpoints and refuse to write into an existing output directory.
 - Everything in English: code, docs, report. Rioplatense Spanish is fine in conversation and in `docs/explicacion-sencilla.md`.
-- Standard library only for the harness and tests; matplotlib only for figures. Python 3.10+.
+- Standard library only for the harness and tests; matplotlib only for figures. Python 3.10+. Exception: `experiments/kimi-delegate-ctf/` is a Control Tower project with its own `pyproject.toml` (uv, Python 3.13, Inspect AI, Docker); the stdlib-only and loopback-only rules do not apply inside it, and whether an external API model is acceptable there is still Matías's call.
 - Do not push to `main` and do not submit anything; both are Matías's calls.
 
 ## Commands
@@ -72,9 +72,12 @@ bash scripts/reproduce.sh                       # tests, 1,152 cells, replay, au
 python3 -m agent_delegate.harness --out /tmp/delegate-new-run
 python3 -m agent_delegate.audit results/final
 python3 scripts/verify_commons_records.py       # then:
-python3 scripts/analyze_commons_discrimination.py   # paper tables and figure, no inference
+python3 scripts/analyze_commons_behavior.py      # main-study tables, no inference
+python3 scripts/analyze_commons_capability.py    # isolated-task counts, no inference
 python3 -m http.server 8765 --directory web    # visual lab at http://localhost:8765
 node --test web/*.test.js
+bash scripts/view_kimi_ctf.sh                   # Inspect viewer for Mateo's pilot logs at http://127.0.0.1:8098
+cd experiments/kimi-delegate-ctf && uv sync --locked && uv run smoke_native.py   # Docker + Control Tower, scripted model, no inference
 ```
 Model runs need a llama.cpp server on 127.0.0.1 (`scripts/serve_strix.sh` is Matías's launcher). Example:
 ```bash
@@ -90,9 +93,10 @@ scripts/          study runners (local_pilot, study_pressure, study_capture, com
 configs/          frozen per-study configs and seeds
 data/             incident annotations, grounded cases, model provenance, freeze hashes
 docs/             one design doc and one results doc per study; protocol, ombudsman, recommended path, research program
+experiments/      Mateo's Control Tower pilot (kimi-delegate-ctf): paired CTF task, stop-only delegate tool, scripted validation
 notes/            working notes on the follow-up: resources, LinuxArena base environment, experiment variant (Agustín's branch)
 results/          raw calls, episodes, manifests and summaries per run; results/final is the deterministic suite
 report/           LaTeX source, PDF, abstract, build checks
-web/              visual lab
+web/              visual lab; web/environment-cases is Mateo's table of 16 proposed help-seeking cases
 tests/            unittest suite
 ```
