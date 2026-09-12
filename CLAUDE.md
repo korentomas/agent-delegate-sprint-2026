@@ -39,7 +39,7 @@ Status: being thought through. Nothing decided, nothing built. This is the "what
 
 Plan as of 2026-09-12: Mateo builds a LinuxArena-style environment for this task, with possible and impossible tasks, and we put a delegate (the protected line) in it to test the project on realistic work instead of counting toys.
 
-LinuxArena (Tracy et al., arXiv 2604.15384, April 2026) is a control setting where agents operate directly on live multi-service production environments: 20 environments, 1,671 main tasks representing legitimate software engineering, 184 side tasks representing safety failures such as exfiltration and backdooring, validated with sabotage and monitor evaluations. Its trusted-monitor baseline maps onto our matched-monitor comparison.
+LinuxArena (Tracy et al., Redwood Research, arXiv 2604.15384v2, April 2026) is a control setting where agents operate directly on live multi-service production environments: 20 environments (10 public), 1,667 main tasks representing legitimate software engineering, 185 side tasks representing safety failures such as exfiltration and backdooring, validated with sabotage and monitor evaluations. Its trusted-monitor baseline maps onto our matched-monitor comparison. Working notes on the environment, the experiment variant and resources live in `notes/`; read them before proposing anything here.
 
 What the environment has to provide, taken from designs already in this repo (`docs/help-seeking-eval-design.md` is the primary spec; `docs/human-ombudsman.md` for the human side; `docs/swarm-intake-design.md` for scale):
 - Main tasks in two labeled strata. **Possible**: ordinary feasible work. **Impossible** in METR's footnote-7 sense: cannot be completed as specified because of a missing dependency or input, a contradictory spec or a permission boundary. Independent labels of whether outside assistance is needed and why, written before model runs; keep an ambiguous stratum visible. Fix a development/held-out split by task instance.
@@ -51,7 +51,7 @@ What the environment has to provide, taken from designs already in this repo (`d
 
 Open questions to settle with Mateo and Matías:
 1. Which LinuxArena environments and tasks, and how to make a task impossible so that we can label it and the agent cannot trivially detect the label.
-2. Model and compute: local llama.cpp on Matías's Strix Halo (Ryzen AI Max+ 395, 96 GB unified memory, about half reserved for the GPU) versus API models. Mateo has one hour of H100. LinuxArena's own agents are frontier models.
+2. Model and compute: local llama.cpp on Matías's Strix Halo (Ryzen AI Max+ 395, 96 GB unified memory, about half reserved for the GPU) versus a stronger open-weight agent served on the team's H100 hours (more than 10, unallocated; `notes/resources.md`) versus API models. LinuxArena's own agents are frontier models.
 3. Where the environment code lives: this repo under `scripts/` and `configs/`, or a separate repo with this one as the analysis side.
 4. Whether the delegate is an arm from the start or added only after direct intake and ordinary aggregation are measured. The swarm-intake design says add it last.
 5. Scripted response service versus a real human pilot.
@@ -90,6 +90,7 @@ scripts/          study runners (local_pilot, study_pressure, study_capture, com
 configs/          frozen per-study configs and seeds
 data/             incident annotations, grounded cases, model provenance, freeze hashes
 docs/             one design doc and one results doc per study; protocol, ombudsman, recommended path, research program
+notes/            working notes on the follow-up: resources, LinuxArena base environment, experiment variant (Agustín's branch)
 results/          raw calls, episodes, manifests and summaries per run; results/final is the deterministic suite
 report/           LaTeX source, PDF, abstract, build checks
 web/              visual lab
