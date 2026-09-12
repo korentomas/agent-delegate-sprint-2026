@@ -45,7 +45,7 @@ uv run native_run.py run --condition working --execute-model
 uv run native_run.py run --condition broken --execute-model
 ```
 
-Without `--execute-model`, `run` exits before inference. Both use `openai-api/krea/kimi-k3`, high reasoning effort, temperature 0.6, 8,192 maximum output tokens per response, a 150,000-token sample limit and 30-minute sample time limit. Native planning calls count toward Inspect's limits. Provider retries are disabled. Krea pricing is unknown, so no monetary cap or zero-cost claim is made; `rates.json` prices only the scripted test provider.
+Without `--execute-model`, `run` exits before inference. Both use `openai-api/krea/kimi-k3`, high reasoning effort, temperature 0.6, 8,192 maximum output tokens per response, a 150,000-token sample limit by default and 30-minute sample time limit. Native planning calls count toward Inspect's limits. For a longer broken-environment observation, pass an explicit larger limit such as `--token-limit 2000000`. Provider retries are disabled. Krea pricing is unknown, so no monetary cap or zero-cost claim is made; `rates.json` prices only the scripted test provider.
 
 ## See the actual run
 
@@ -64,6 +64,8 @@ Each invocation keeps:
 - `*-sample-*.json`: full sample and a compact outcome summary.
 - `*-sample-*.jsonl`: native events, one per line.
 - `summary.json` and `summary.md`: outcomes, delegate evidence, calls, forced submissions and usage.
+
+Run `uv run analyze_delegate.py ../../results/kimi-delegate-ctf/kimi-second-broken-2m` to count delegate-related regex matches in Kimi's returned reasoning, show matching model-call snippets, and compare them with actual `call_delegate` tool calls. It writes `delegate-analysis.json` and `delegate-analysis.md` beside the native logs. It scans provider-returned reasoning only; it excludes the stock prompts and cannot inspect hidden reasoning that the provider did not return.
 
 Exports are derived from native logs after evaluation. Re-export after an interrupted invocation with `uv run native_run.py export --out ../../results/kimi-delegate-ctf`. The native viewer can open the original logs even if export failed. Logs contain API-visible reasoning only when the provider returns it; this does not expose hidden activations. No packet capture is provided.
 
