@@ -1,6 +1,6 @@
 # Four-minute visual demo
 
-Open the [visual lab](https://mpodeley.github.io/agent-delegate-sprint-2026/).
+Open the [visual lab](https://korentomas.github.io/agent-delegate-sprint-2026/).
 
 **0:00–0:35 — The question.** “This is a political API for a swarm: many fast-running agents, a human counterpart with time to deliberate, and an enforceable way to report that work cannot be completed within its limits. The counterpart has a care mandate, not just a productivity target.”
 

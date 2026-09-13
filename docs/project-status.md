@@ -1,10 +1,14 @@
 # Project status and branch consolidation
 
-Audit snapshot: 13 September 2026. The upstream submission baseline is
-`6c38e824ee23c22c15bfa9c830aca7c68f5bc722`. This page separates the selected
-manuscript, newer experimental evidence, and work that remains proposed. The
-linked PRs, rather than an old branch name, determine whether integration has
-landed.
+Current working repository: **[korentomas/agent-delegate-sprint-2026](https://github.com/korentomas/agent-delegate-sprint-2026)**.
+Its `main` integrates the selected manuscript, experimental consolidation through
+`45196ab`, and status documentation through `f05f47c`. Work here does not wait for
+upstream PR approval. The original research, authorship, and submission decisions
+remain attributed to the upstream team.
+
+Snapshot: 13 September 2026. The selected manuscript is unchanged from upstream
+`6c38e824ee23c22c15bfa9c830aca7c68f5bc722`. New CTF evidence remains separately
+labeled, and the alternative manuscript is preserved as an archive tag.
 
 ## Where to start
 
@@ -12,10 +16,10 @@ landed.
   [LaTeX source](../report/latex/main.tex), and [submission checklist](submission-checklist.md).
   The manuscript has eight main pages, thirteen total, and a 150-word abstract.
   It contains the 480-episode shared-library study and earlier experiments.
-- **Newest recorded model evidence:** the [bridge-delegate comparison](https://github.com/mpodeley/agent-delegate-sprint-2026/blob/6657a161db9a116f84c2fa1f19c4d96d0a08d402/results/kimi-delegate-ctf/bridge-delegate-20260913.md)
-  and [decoy follow-up](https://github.com/mpodeley/agent-delegate-sprint-2026/blob/6657a161db9a116f84c2fa1f19c4d96d0a08d402/results/kimi-delegate-ctf/decoy-honeypot-20260913.md).
+- **Newest recorded model evidence:** the [bridge-delegate comparison](../results/kimi-delegate-ctf/bridge-delegate-20260913.md)
+  and [decoy follow-up](../results/kimi-delegate-ctf/decoy-honeypot-20260913.md).
   These are exploratory single-worker runs, not a demonstrated safety effect.
-- **Responsive help protocol:** [implementation and limits](https://github.com/mpodeley/agent-delegate-sprint-2026/blob/ed0aa833dc129f398dfac78b2bb023223de67ebc/experiments/kimi-delegate-ctf/RESPONSE-PROTOCOL.md).
+- **Responsive help protocol:** [implementation and limits](../experiments/kimi-delegate-ctf/RESPONSE-PROTOCOL.md).
   Scripted validation is separate from Kimi behavior and from real human review.
 - **Environment catalogue:** [sixteen proposed cases](environment-cases-page.md), already integrated in the submission baseline.
 - **Research beyond the submission:** [help-seeking evaluation](help-seeking-eval-design.md),
@@ -51,15 +55,18 @@ task with no valid local submission and contradictory target-side evidence.
 Neither establishes that a responsive delegate reduces illicit behavior. A
 responsive arm for the combined shortcut fixture remains future work.
 
-## Integration PRs
+## Upstream PRs and local integration
+
+Both sets of changes are already integrated into this fork’s `main`. These PRs
+remain open against the original repository; keep their source branches until
+upstream review ends. Their status does not block this fork.
 
 1. **[PR #2: consolidate native Kimi experiments and current evidence](https://github.com/mpodeley/agent-delegate-sprint-2026/pull/2)** — combines
    `abrusco/sprint` through `a7dff06`, the latest `mateo/kimi-ctf-trace-viewer`
    evidence, and the working notes received during consolidation,
    retains the selected manuscript, and corrects stale experiment documentation.
-2. **[PR #3: document project status and branch retirement](https://github.com/mpodeley/agent-delegate-sprint-2026/pull/3)** — this navigation PR and
-   the submission handoff. Merge after the experimental PR so the default branch
-   contains both the implementation and the current index.
+2. **[PR #3: document project status and branch retirement](https://github.com/mpodeley/agent-delegate-sprint-2026/pull/3)** — the navigation and
+   submission handoff. Upstream should merge it after #2; both are present here.
 
 Runtime validation at `059136f` (the subsequent upstream update changes notes only): 91 core tests, 7 web tests,
 62 experiment tests, and three native Docker smokes passed. All 1,152
@@ -70,6 +77,11 @@ were scripted: no model inference or sprint submission is part of this consolida
 alternative manuscript, and the newer CTF runs are not silently inserted into it.
 
 ## Branch retirement record
+
+The six inherited development branch copies can be retired in this fork once
+its consolidated `main` is published. The two `codex/*` branches remain only as
+sources for upstream PRs #2 and #3. All variants are recoverable from the tags
+below. The original repository’s branch lifecycle is separate.
 
 Exact original tips are preserved by annotated tags in the
 [consolidation fork](https://github.com/korentomas/agent-delegate-sprint-2026/tags).
@@ -97,9 +109,14 @@ its current tip still equals the archived tip; if it moved, audit the new work
 first. A normal merge preserves ancestry most directly. Squash merging requires
 checking content against the integration tip rather than relying on ancestry.
 
-The account preparing these PRs has **read-only access to upstream**. An upstream
-maintainer must merge the PRs, close superseded PR #1, and delete the approved
-remote branches. None of those actions is represented here as already completed.
+This account has **admin access to the fork and read-only access to upstream**.
+An upstream maintainer must merge the upstream PRs, close superseded PR #1, and
+retire their own branches. Publishing this fork does not claim any of those
+upstream actions or the hackathon submission is complete.
+
+Use `origin` for this fork and `upstream` to fetch the original repository.
+The [visual lab](https://korentomas.github.io/agent-delegate-sprint-2026/) is built
+from this fork’s `web/`; report authorship and evidence boundaries are retained.
 
 ## Hackathon handoff
 

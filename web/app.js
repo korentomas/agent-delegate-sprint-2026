@@ -3,7 +3,7 @@ import {CONDITIONS,SCENARIOS,runKey,project,messages,EXPERIMENTS} from './model.
 import {initCasebook} from './cases.js';
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const REPO='https://github.com/mpodeley/agent-delegate-sprint-2026';
+const REPO='https://github.com/korentomas/agent-delegate-sprint-2026';
 let index,bundles={},tick=-1,timer=null,loadVersion=0,episode='collective',eventId=null,currentPage='laboratorio';
 let settings={scenario:'minority_warning',left:'monitor',right:'delegate',latency:6,capture:false,bypass:true,coverage:'complete'};
 let groundedCase=null;

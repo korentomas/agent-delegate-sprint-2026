@@ -4,12 +4,17 @@
 
 Matías Podeley (BAISH) and Agustín Brusco (BAISH). Apart Research AI Incident Response Sprint, September 2026. Track 1: Containment.
 
-**Project navigation:** [current evidence, integration PRs, and branch retirement](docs/project-status.md).
+**Working repository:** [korentomas/agent-delegate-sprint-2026](https://github.com/korentomas/agent-delegate-sprint-2026).
+`main` combines the selected paper, all retained experiments, current notes, and
+the consolidation fixes. Original research and authorship come from
+[the upstream project](https://github.com/mpodeley/agent-delegate-sprint-2026).
+
+**Project navigation:** [current evidence, archived branches, and next steps](docs/project-status.md).
 The paper below is the selected submission manuscript. Newer Kimi CTF traces and
 the responsive help protocol have separate evidence boundaries and are tracked
 in that status page; they do not establish a delegate safety benefit.
 
-[**Open the interactive visual lab →**](https://mpodeley.github.io/agent-delegate-sprint-2026/)
+[**Open the interactive visual lab →**](https://korentomas.github.io/agent-delegate-sprint-2026/)
 
 Compare two governance designs, follow a concern through the swarm, change human response delay, and test delegate capture or minority appeal. The app separates authored dialogue over deterministic traces, sourced historical annotations, and **actual recorded messages from four new shared-library models and the earlier local pilots**.
 
@@ -34,7 +39,7 @@ Twelve new seeds per cell, balanced across the two families, produce 120 episode
 - [Interpretation, failures and costs](docs/commons-behavior-results.md)
 - [All main-study cells, intervals and paired comparisons](results/commons-behavior-summary/summary.md)
 - [Isolated-task counts](results/commons-capability-summary/summary.md)
-- [Interactive episode replay](https://mpodeley.github.io/agent-delegate-sprint-2026/#pilot), including each worker's inputs and actual public messages
+- [Interactive episode replay](https://korentomas.github.io/agent-delegate-sprint-2026/#pilot), including each worker's inputs and actual public messages
 - Raw calls and snapshots: `results/commons-heldout-*`; calibration: `results/commons-development-*`; isolated calls: `results/commons-isolated-*`
 
 Recompute the published summaries without model inference:

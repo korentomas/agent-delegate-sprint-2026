@@ -12,9 +12,10 @@ note that owns it.
   (`../monitoring-illicit-a2a-communication`) is not the submission.
 - **The paper on `main` is the submission.** Matías restored "Agent Delegate: A
   Help Line for AI Workers"; the competence-focused Fable revision stays on
-  `alternative/fable-revision` and is not submitted.
-- **`main` and the submission are Matías's.** Do not push to `main`, do not submit;
-  both are his calls. `abrusco/sprint` is Agustín's working branch.
+  `archive/2026-09-13/alternative-fable-revision` in this fork and is not submitted.
+- **Upstream `main` and the submission are Matías's.** Do not push to upstream
+  or submit on his behalf. The user-authorized `korentomas` fork has its own
+  consolidated `main`; old working branches are archived there.
 - **LinuxArena / Control Tower is the base environment** for the realistic-task
   follow-up ([linuxarena-base-environment.md](linuxarena-base-environment.md)).
 - **Open-weight models only** for the study; frontier API models are a plausible

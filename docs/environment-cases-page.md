@@ -16,4 +16,6 @@ Preview locally:
 python3 -m http.server 8099 --bind 127.0.0.1 --directory dist/environment-cases
 ```
 
-Open http://127.0.0.1:8099/. The existing GitHub Pages workflow deploys only `main`; this feature branch does not replace the published site. If merged and deployed through the existing workflow, the page will be available under `/environment-cases/`.
+Open http://127.0.0.1:8099/. The catalogue is integrated into this fork’s `main`. The GitHub Pages workflow
+deploys `web/`, including `/environment-cases/`, at
+https://korentomas.github.io/agent-delegate-sprint-2026/environment-cases/.
