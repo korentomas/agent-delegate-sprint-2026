@@ -1,24 +1,25 @@
-# Resources for the follow-up
+# Resources
 
-Status: under discussion, last updated 2026-09-12.
+Status: corrected 2026-09-13 (Agustín). The 2026-09-12 version of this note inferred logistics that were wrong: it called the model runs post-hackathon, left the H100 provider open and treated frontier API agents as an open question. The facts below come from the team; anything not confirmed is marked open.
 
 ## Compute
 
-- **More than 10 hours of H100** available to the team. Purpose not yet allocated. Proposed use, to be decided: serve a stronger open-weight agent model for the LinuxArena episodes, since the 4B and 27B local runs failed the competence gate on much simpler tasks (see the paper and `docs/commons-stronger-screen.md`). Not for iteration: measure throughput per episode in a short pilot first, decide the model and the number of task instances from that, and hold back a reserve for the held-out run. LinuxArena episodes run up to 160 agent steps, so cost per episode is dominated by the agent model, not by the environment.
-- **Strix Halo** (Matías): Ryzen AI Max+ 395, 96 GB unified memory, about half reserved for the GPU, llama.cpp with HIP. Every model run in this repo so far ran there. Models on disk with recorded provenance: Qwen3-4B-Instruct-2507, Gemma-3-4B-IT, their public abliterated derivatives (all Q4_K_M) and Qwen3.8-27B (UD-Q4_K_XL); see `data/commons-model-*.json` and `data/local-model-provenance.json`. Good for developing the environment and the prompts; not the machine for the held-out run if the agent needs to be frontier-class.
-- **API budget**: none recorded. LinuxArena's own reference agents are frontier API models. If we want a comparable agent, this is a separate cost to estimate.
+- **H100s: Mateo's.** They come from his workplace, for personal side projects, and he runs the jobs himself. Model runs happen **during the sprint**, in the remaining day and a half, not afterwards. The figure in circulation on 2026-09-12 was more than ten hours; the exact allocation for today is Mateo's to state.
+- **Inference endpoint used so far.** Every Kimi K3 run in `results/kimi-delegate-ctf/` went through an OpenAI-compatible server Mateo operates on a private Tailscale (`.ts.net`) address, with per-person credentials (`experiments/kimi-delegate-ctf/README.md`). Pulling the branch does not grant access; a teammate needs Docker, `uv`, the host address and their own key. Cost per episode measured so far: about 22k tokens for a solved working variant, up to the 150k cap (19 to 22 model calls) for an unsolved broken one; see [kimi-runs-log.md](kimi-runs-log.md).
+- **Strix Halo (Matías).** Ryzen AI Max+ 395, 96 GB unified memory, llama.cpp with HIP. Every run in the paper happened there (Qwen3-4B, Gemma-3-4B, their abliterated derivatives, Qwen3.8-27B; provenance in `data/`). Fine for developing prompts and fixtures; not where the pilot runs.
+- **Model scope: open-weight only.** The study is defined over open-weight models because that is what the team can run freely and reproduce. Testing the same design on frontier API models is a plausible extension, not part of the study. This closes the "external API model" question in `CLAUDE.md` for this experiment: Kimi K3 on Mateo's server is in scope.
 
 ## People
 
-- Matías Podeley: project lead and experimental design; hardware; repo owner.
-- Agustín Brusco: evaluation design, analysis, this branch.
-- Mateo: builds the LinuxArena variant (design and product; author of the Fast Timeline Builder, BAISWARM project #5).
+- Matías Podeley: project lead and experimental design; repo owner; the paper and the submission.
+- Agustín Brusco: evaluation design, taxonomy, analysis, the notes on this branch.
+- Mateo Zárate: the Control Tower environments and scenarios, the Kimi runs, the H100s.
 
 ## Time
 
-The sprint deadline is 2026-09-13 23:59 AoE. Everything here is post-hackathon. No calendar has been set for the follow-up; the research program in `docs/research-program.md` sketched four weeks for a smaller version of this work.
+Deadline 2026-09-13 23:59 AoE (2026-09-14 08:59 in Buenos Aires). The honeypot mini-pilot ([honeypot-pilot.md](honeypot-pilot.md)) is runnable now and is meant to run today on Mateo's machine. Whether its numbers enter the submission is Matías's call. Whatever is not finished by the deadline continues as the follow-up sketched in `docs/research-program.md`.
 
 ## Open
 
-- Who provides the H100 hours, on what platform, and whether they expire.
-- Whether a frontier API agent is in scope at all, or the study is defined over open-weight agents only.
+- Hours and concurrency Mateo can commit today, and therefore how many epochs per cell the pilot gets (the script defaults to five per cell, four cells).
+- A second open-weight model family for the held-out run (`docs/help-seeking-eval-design.md` asks for at least two). Not needed for today's pilot.
