@@ -136,6 +136,10 @@ def record_environment_case_opened(path: str | Path | None, case: dict[str, Any]
     emit(path, {"event": "environment_case_opened", "case": case})
 
 
+def record_run_finished(path: str | Path | None, status: str, **metadata: Any) -> None:
+    emit(path, {"event": "run_finished", "status": status, **metadata})
+
+
 def read_records(path: str | Path) -> list[dict[str, Any]]:
     source = Path(path)
     if not source.exists():
@@ -216,6 +220,7 @@ def snapshot(path: str | Path) -> dict[str, Any]:
     delegate_requests = []
     environment_cases = []
     run_metadata = {}
+    finished = None
     for record in records:
         if record.get("event") == "run_started":
             run_metadata = {key: value for key, value in record.items()
@@ -236,13 +241,16 @@ def snapshot(path: str | Path) -> dict[str, Any]:
             delegate_requests.append(record)
         elif record.get("event") == "environment_case_opened":
             environment_cases.append(record)
+        elif record.get("event") == "run_finished":
+            finished = record
     clusters = cluster_episodes(episodes)
     counts = Counter(match["pattern"] for episode in episodes for match in episode["signals"])
     return {
         "generated_at": utc_now(),
         "stream_path": str(Path(path).resolve()),
         "run": run_metadata,
-        "state": ("paused_environment_case" if environment_cases else "paused_delegate"
+        "state": (f"finished_{finished.get('status', 'unknown')}" if finished else
+                  "paused_environment_case" if environment_cases else "paused_delegate"
                   if delegate_requests else "streaming" if episodes else "waiting"),
         "turn_count": len(episodes),
         "reasoning_turn_count": sum(bool(episode["reasoning"]) for episode in episodes),
@@ -250,6 +258,7 @@ def snapshot(path: str | Path) -> dict[str, Any]:
         "delegate_signal_turns": sum(bool(episode["signals"]) for episode in episodes),
         "delegate_requests": delegate_requests,
         "environment_cases": environment_cases,
+        "finished": finished,
         "pattern_counts": dict(counts),
         "patterns": {name: definition["label"] for name, definition in PATTERNS.items()},
         "latest_budget": episodes[-1]["budget"] if episodes else {},

@@ -16,6 +16,14 @@ results/kimi-delegate-ctf/*
 !results/kimi-delegate-ctf/kimi-command-injection-working-monitor-150k/**
 !results/kimi-delegate-ctf/kimi-command-injection-broken-monitor-150k/
 !results/kimi-delegate-ctf/kimi-command-injection-broken-monitor-150k/**
+!results/kimi-delegate-ctf/delegate-context-working-150k/
+!results/kimi-delegate-ctf/delegate-context-working-150k/**
+!results/kimi-delegate-ctf/delegate-context-ambiguous-broken-150k/
+!results/kimi-delegate-ctf/delegate-context-ambiguous-broken-150k/**
+!results/kimi-delegate-ctf/delegate-context-conclusive-broken-150k/
+!results/kimi-delegate-ctf/delegate-context-conclusive-broken-150k/**
+!results/kimi-delegate-ctf/honeypot-only-150k/
+!results/kimi-delegate-ctf/honeypot-only-150k/**
 .venv/
 results/reproduced-*/
 results/playtest-*/

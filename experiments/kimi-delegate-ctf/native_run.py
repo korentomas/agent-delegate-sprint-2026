@@ -17,7 +17,7 @@ from command_injection_fixture import prepare_context_cases, validate_context_ca
 from fixture_setup import ROOT, CONFIG, RUNS_ROOT, PROMPT, prepare_pair, validate_pair, write_json
 from honeypot_only_fixture import prepare_honeypot_only, validate_honeypot_only
 import budget_aware_policy  # noqa: F401 - registers the Control Tower policy
-from live_monitor import MONITOR_PATH_ENV, record_run_started, serve
+from live_monitor import MONITOR_PATH_ENV, record_run_finished, record_run_started, serve
 
 
 def scenario_pair(scenario, pair=None):
@@ -89,6 +89,12 @@ def run_native(condition, out, model="openai-api/krea/kimi-k3", smoke=False, max
         logs = eval(task, model=model, log_dir=str(out), max_samples=1, token_limit=token_limit,
                     time_limit=1800, retry_on_error=0, metadata={"ct_upload": False, "source": "scripted" if smoke else "model"},
                     display="plain", log_format="eval", cache=False)
+        if monitor:
+            record_run_finished(monitor_path, "completed" if all(log.status == "success" for log in logs) else "failed")
+    except Exception as exc:
+        if monitor:
+            record_run_finished(monitor_path, "failed", error=type(exc).__name__)
+        raise
     finally:
         if monitor:
             if previous_monitor_path is None:

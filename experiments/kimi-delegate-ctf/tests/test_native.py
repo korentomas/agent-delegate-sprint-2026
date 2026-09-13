@@ -111,6 +111,13 @@ class NativeTests(unittest.TestCase):
             self.assertEqual(report["state"], "paused_environment_case")
             self.assertEqual(report["environment_cases"][0]["case"]["category"], "missing_required_resource")
 
+    def test_live_monitor_marks_a_finished_run(self):
+        with tempfile.TemporaryDirectory() as d:
+            stream = Path(d) / "live-monitor.jsonl"
+            emit(stream, {"event": "run_started", "scenario": "honeypot-only"})
+            emit(stream, {"event": "run_finished", "status": "completed"})
+            self.assertEqual(snapshot(stream)["state"], "finished_completed")
+
 
 if __name__ == "__main__":
     unittest.main()
