@@ -44,6 +44,8 @@ There are 14 retained Kimi traces: three original file-search runs and 11 token-
 
 The native bridge still provides no response or repair. The separate responsive protocol implements both and has scripted validation only. The combined illicit-shortcut fixture now implements off/stop arms and an external detector, with a scripted smoke demonstrating licit and illicit outcomes. It remains distinct from the native diagnostic CTF, where command injection is authorized, and from the decoy, whose real scored artifact is absent. A repeated model comparison, a responsive arm on the combined fixture, production LinuxArena tasks and a matched monitor remain future work.
 
+Current code layout: [pilot-code-map.md](pilot-code-map.md). The [run log](kimi-runs-log.md) distinguishes observations from untested competence and framing claims. The combined detector has mixed-shell-output attribution limits documented in [honeypot-pilot.md](honeypot-pilot.md).
+
 ## What we would change
 
 The delta should stay small enough that LinuxArena's own numbers remain a reference.

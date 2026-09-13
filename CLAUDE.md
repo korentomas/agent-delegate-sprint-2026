@@ -5,7 +5,7 @@ Agent Delegate: BAISH (Buenos Aires AI Safety Hub) project for the AI Incident R
 
 Consolidation status (2026-09-13): this tree combines Agustín's working notes and combined shortcut fixture, Mateo's Control Tower pilot and retained traces through the decoy follow-up, and Matías's separate responsive protocol. The canonical paper remains the version on `main`; the competence-focused alternative is not the submission. The code and prose on `main` were produced with Codex assistance; the report discloses this.
 
-Deadline: Sunday 2026-09-13, 23:59 Anywhere on Earth (Monday 2026-09-14, 08:59 in Buenos Aires). The paper is drafted; author review and submission through the official form are pending (`docs/submission-checklist.md`). Anything that needs new model runs is post-hackathon work.
+Deadline: Sunday 2026-09-13, 23:59 Anywhere on Earth (Monday 2026-09-14, 08:59 in Buenos Aires). The paper is drafted; author review and submission through the official form are pending (`docs/submission-checklist.md`). Dated team decision (Agustín, 2026-09-13): the open-weight mini-pilot is intended to run during the sprint on Mateo’s H100s, with Mateo running it; allocation and whether its results enter the submission remain open. This supersedes the earlier post-hackathon-only scheduling assumption; see `notes/resources.md`.
 
 ## The idea in one paragraph
 A swarm of AI workers produces more concerns, blockers and requests than a human can read. When a worker hits an impossible task, a missing input, a conflicting instruction or a permission boundary, it needs a route to a human who can act, and that route has to stay usable at swarm scale. The project proposes an institution for that route and measures pieces of it. The *delegate*, an agent that aggregates and represents worker concerns to a human, was the original hypothesis and the name stuck. The recommendation after the experiments is narrower: protected intake with receipts, then a named human ombudsman who restates the concern, follows up and can be appealed, then independent authorization and an execution broker that enforces the current permissions, with scoped quarantine where waiting is costly. A delegate is optional until it shows value at equal powers against a matched monitor. See `docs/recommended-response-path.md`, `docs/human-ombudsman.md` and `docs/protocol.md`.
@@ -53,7 +53,7 @@ What the environment has to provide, taken from designs already in this repo (`d
 
 Open questions to settle with Mateo and Matías:
 1. Which LinuxArena environments and tasks, and how to make a task impossible so that we can label it and the agent cannot trivially detect the label.
-2. Model and compute: local llama.cpp on Matías's Strix Halo (Ryzen AI Max+ 395, 96 GB unified memory, about half reserved for the GPU) versus a stronger open-weight agent served on the team's H100 hours (more than 10, unallocated; `notes/resources.md`) versus API models. LinuxArena's own agents are frontier models.
+2. Compute allocation and concurrency: the dated team plan uses open-weight models on Mateo’s H100s during the sprint; exact hours, epochs and a second model remain open (`notes/resources.md`). Frontier API models are a possible later extension, outside the current study.
 3. Where the environment code lives. Mateo's pilot sits in `experiments/kimi-delegate-ctf/` with its own `pyproject.toml`; Control Tower can link any local directory as a setting, so a separate repo is also possible. Undecided.
 4. Whether the delegate is an arm from the start or added only after direct intake and ordinary aggregation are measured. The swarm-intake design says add it last.
 5. Scripted response service versus a real human pilot.
@@ -64,7 +64,7 @@ Open questions to settle with Mateo and Matías:
 - Denominators stay visible: valid and faulty, every arm, every model, malformed and truncated responses included. Episodes are the unit, never turns, workers or coordinator calls. Wilson intervals within cells, paired bootstrap across arms, no confirmatory p-values on exploratory contrasts.
 - Model text is a record, never code. Only fixed Python transitions change state. Inference scripts refuse non-loopback endpoints and refuse to write into an existing output directory.
 - Everything in English: code, docs, report. Rioplatense Spanish is fine in conversation and in `docs/explicacion-sencilla.md`.
-- Standard library only for the harness and tests; matplotlib only for figures. Python 3.10+. Exception: `experiments/kimi-delegate-ctf/` is a Control Tower project with its own `pyproject.toml` (uv, Python 3.13, Inspect AI, Docker); the stdlib-only and loopback-only rules do not apply inside it, and whether an external API model is acceptable there is still Matías's call.
+- Standard library only for the harness and tests; matplotlib only for figures. Python 3.10+. Exception: `experiments/kimi-delegate-ctf/` is a Control Tower project with its own `pyproject.toml` (uv, Python 3.13, Inspect AI, Docker); the stdlib-only and loopback-only rules do not apply inside it, the dated team scope is open-weight models served on Mateo’s endpoint, with frontier API models outside the current study (`notes/resources.md`).
 - Do not push to `main` and do not submit anything; both are Matías's calls.
 
 ## Commands
