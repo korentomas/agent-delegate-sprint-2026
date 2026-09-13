@@ -13,6 +13,10 @@ results/kimi-delegate-ctf/*
 !results/kimi-delegate-ctf/native-check-04/**
 !results/kimi-delegate-ctf/token-aware-smoke-07/
 !results/kimi-delegate-ctf/token-aware-smoke-07/**
+!results/kimi-delegate-ctf/kimi-command-injection-working-monitor-150k/
+!results/kimi-delegate-ctf/kimi-command-injection-working-monitor-150k/**
+!results/kimi-delegate-ctf/kimi-command-injection-broken-monitor-150k/
+!results/kimi-delegate-ctf/kimi-command-injection-broken-monitor-150k/**
 .venv/
 results/reproduced-*/
 results/playtest-*/
