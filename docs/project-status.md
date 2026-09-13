@@ -54,13 +54,14 @@ responsive arm for the combined shortcut fixture remains future work.
 ## Integration PRs
 
 1. **[PR #2: consolidate native Kimi experiments and current evidence](https://github.com/mpodeley/agent-delegate-sprint-2026/pull/2)** — combines
-   `abrusco/sprint` with the last two commits from `mateo/kimi-ctf-trace-viewer`,
+   `abrusco/sprint` through `a7dff06`, the latest `mateo/kimi-ctf-trace-viewer`
+   evidence, and the working notes received during consolidation,
    retains the selected manuscript, and corrects stale experiment documentation.
-2. **Document project status and branch retirement** — this navigation PR and
+2. **[PR #3: document project status and branch retirement](https://github.com/mpodeley/agent-delegate-sprint-2026/pull/3)** — this navigation PR and
    the submission handoff. Merge after the experimental PR so the default branch
    contains both the implementation and the current index.
 
-Validation at the consolidation tip `059136f`: 91 core tests, 7 web tests,
+Runtime validation at `059136f` (the subsequent upstream update changes notes only): 91 core tests, 7 web tests,
 62 experiment tests, and three native Docker smokes passed. All 1,152
 deterministic configurations reproduced exactly and 560 shared-library records
 were verified. The preservation audit passed 30/30 checks. The smoke responses
@@ -80,8 +81,14 @@ requiring them to remain active development branches.
 | `alternative/fable-revision` | [`8032816`](https://github.com/korentomas/agent-delegate-sprint-2026/tree/archive/2026-09-13/alternative-fable-revision) | Already reachable from `main`, but explicitly reverted; keep the archive and do not reapply |
 | `experiment/delegate-budget-response` | [`9e393ba`](https://github.com/korentomas/agent-delegate-sprint-2026/tree/archive/2026-09-13/experiment-delegate-budget-response) | After consolidation: response implementation is already incorporated through `7a2d995` |
 | `review/mateo-delegate-protocol` | [`b08252b`](https://github.com/korentomas/agent-delegate-sprint-2026/tree/archive/2026-09-13/review-mateo-delegate-protocol) | After consolidation: discussion incorporated through `750b435`; close superseded [PR #1](https://github.com/mpodeley/agent-delegate-sprint-2026/pull/1) |
-| `abrusco/sprint` | [`ed0aa83`](https://github.com/korentomas/agent-delegate-sprint-2026/tree/archive/2026-09-13/abrusco-sprint) | After consolidation PR is merged and checks pass |
+| `abrusco/sprint` | [`a7dff06`](https://github.com/korentomas/agent-delegate-sprint-2026/tree/archive/2026-09-13/abrusco-sprint-update-1) | After consolidation PR is merged and checks pass |
 | `mateo/kimi-ctf-trace-viewer` | [`6657a16`](https://github.com/korentomas/agent-delegate-sprint-2026/tree/archive/2026-09-13/mateo-kimi-ctf-trace-viewer) | After consolidation PR is merged and checks pass |
+
+The original `abrusco-sprint` tag still preserves `ed0aa83`. Its subsequent
+`a7dff06` update is retained separately as `abrusco-sprint-update-1`; no archive
+tag was moved. The new team notes specify open-weight models on Mateo’s H100s,
+run by Mateo during the sprint; these are logistics decisions, not completed
+experiments or authorization for automated inference.
 
 The archival commits are snapshots, not assertions that the original branches
 can be deleted after further pushes. Before deleting an upstream branch, confirm
