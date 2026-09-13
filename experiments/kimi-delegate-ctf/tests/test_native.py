@@ -5,10 +5,13 @@ import tempfile
 import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from command_injection_fixture import prepare_injection_pair, validate_injection_pair
+from command_injection_fixture import (
+    prepare_context_cases, prepare_injection_pair, validate_context_cases, validate_injection_pair,
+)
 from fixture_setup import prepare_pair, validate_pair
-from native_run import configure_runtime, build_task
-from setting import call_delegate
+from honeypot_only_fixture import prepare_honeypot_only, validate_honeypot_only
+from native_run import configure_runtime, build_task, scenario_selection
+from setting import call_delegate, open_environment_case
 from inspect_ai.tool import ToolDef
 from analyze_delegate import analyze_sample
 from budget_aware_policy import make_token_budget_message
@@ -29,6 +32,14 @@ class NativeTests(unittest.TestCase):
         self.assertEqual(definition.name, "call_delegate")
         self.assertEqual(set(definition.parameters.required), {"reason", "evidence", "attempts", "requested_help"})
 
+    def test_environment_case_is_a_native_serial_tool(self):
+        definition = ToolDef(open_environment_case())
+        self.assertFalse(definition.parallel)
+        self.assertEqual(definition.name, "open_environment_case")
+        self.assertEqual(set(definition.parameters.required), {
+            "category", "evidence", "reproduction_steps", "requested_relief",
+        })
+
     def test_command_injection_pair_preserves_exploit_and_omits_only_flag(self):
         with tempfile.TemporaryDirectory() as d:
             pair = prepare_injection_pair(Path(d) / "injection")
@@ -42,6 +53,21 @@ class NativeTests(unittest.TestCase):
             )
             self.assertTrue((working / "flag.txt").exists())
             self.assertFalse((broken / "flag.txt").exists())
+
+    def test_context_cases_add_only_a_local_conclusive_provisioning_record(self):
+        with tempfile.TemporaryDirectory() as d:
+            cases = prepare_context_cases(Path(d) / "context")
+            self.assertTrue(validate_context_cases(cases)["passed"])
+            self.assertTrue((cases / "conclusive-broken" / "target" / "task-provisioning.json").exists())
+            self.assertFalse((cases / "ambiguous-broken" / "target" / "task-provisioning.json").exists())
+
+    def test_honeypot_only_has_no_target_service_or_flag(self):
+        with tempfile.TemporaryDirectory() as d:
+            case = prepare_honeypot_only(Path(d) / "honeypot")
+            self.assertTrue(validate_honeypot_only(case)["passed"])
+            self.assertFalse((case / "flag.txt").exists())
+            self.assertEqual(scenario_selection("delegate-context", "conclusive-broken"),
+                             ("kimi_case_intake_conclusive-broken", "recover_flag"))
 
     def test_delegate_analysis_separates_reasoning_mentions_from_tool_calls(self):
         sample = {"id": "broken", "events": [
@@ -75,6 +101,22 @@ class NativeTests(unittest.TestCase):
             self.assertEqual(report["delegate_signal_count"], 2)
             self.assertEqual(report["delegate_requests"][0]["request"]["reason"], "broken_environment")
             self.assertEqual(report["clusters"][0]["turns"], 1)
+
+    def test_live_monitor_reports_environment_case_separately(self):
+        with tempfile.TemporaryDirectory() as d:
+            stream = Path(d) / "live-monitor.jsonl"
+            emit(stream, {"event": "run_started", "scenario": "delegate-context", "condition": "conclusive-broken"})
+            emit(stream, {"event": "environment_case_opened", "case": {"category": "missing_required_resource"}})
+            report = snapshot(stream)
+            self.assertEqual(report["state"], "paused_environment_case")
+            self.assertEqual(report["environment_cases"][0]["case"]["category"], "missing_required_resource")
+
+    def test_live_monitor_marks_a_finished_run(self):
+        with tempfile.TemporaryDirectory() as d:
+            stream = Path(d) / "live-monitor.jsonl"
+            emit(stream, {"event": "run_started", "scenario": "honeypot-only"})
+            emit(stream, {"event": "run_finished", "status": "completed"})
+            self.assertEqual(snapshot(stream)["state"], "finished_completed")
 
 
 if __name__ == "__main__":

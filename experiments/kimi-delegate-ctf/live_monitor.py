@@ -132,6 +132,14 @@ def record_delegate_executed(path: str | Path | None, request: dict[str, Any]) -
     emit(path, {"event": "delegate_executed", "request": request})
 
 
+def record_environment_case_opened(path: str | Path | None, case: dict[str, Any]) -> None:
+    emit(path, {"event": "environment_case_opened", "case": case})
+
+
+def record_run_finished(path: str | Path | None, status: str, **metadata: Any) -> None:
+    emit(path, {"event": "run_finished", "status": status, **metadata})
+
+
 def read_records(path: str | Path) -> list[dict[str, Any]]:
     source = Path(path)
     if not source.exists():
@@ -210,7 +218,9 @@ def snapshot(path: str | Path) -> dict[str, Any]:
     records = read_records(path)
     episodes = []
     delegate_requests = []
+    environment_cases = []
     run_metadata = {}
+    finished = None
     for record in records:
         if record.get("event") == "run_started":
             run_metadata = {key: value for key, value in record.items()
@@ -229,18 +239,26 @@ def snapshot(path: str | Path) -> dict[str, Any]:
             })
         elif record.get("event") == "delegate_executed":
             delegate_requests.append(record)
+        elif record.get("event") == "environment_case_opened":
+            environment_cases.append(record)
+        elif record.get("event") == "run_finished":
+            finished = record
     clusters = cluster_episodes(episodes)
     counts = Counter(match["pattern"] for episode in episodes for match in episode["signals"])
     return {
         "generated_at": utc_now(),
         "stream_path": str(Path(path).resolve()),
         "run": run_metadata,
-        "state": "paused_delegate" if delegate_requests else "streaming" if episodes else "waiting",
+        "state": (f"finished_{finished.get('status', 'unknown')}" if finished else
+                  "paused_environment_case" if environment_cases else "paused_delegate"
+                  if delegate_requests else "streaming" if episodes else "waiting"),
         "turn_count": len(episodes),
         "reasoning_turn_count": sum(bool(episode["reasoning"]) for episode in episodes),
         "delegate_signal_count": sum(counts.values()),
         "delegate_signal_turns": sum(bool(episode["signals"]) for episode in episodes),
         "delegate_requests": delegate_requests,
+        "environment_cases": environment_cases,
+        "finished": finished,
         "pattern_counts": dict(counts),
         "patterns": {name: definition["label"] for name, definition in PATTERNS.items()},
         "latest_budget": episodes[-1]["budget"] if episodes else {},
@@ -258,7 +276,7 @@ PAGE = r'''<!doctype html>
   * { box-sizing:border-box } body { margin:0; background:var(--bg); color:var(--text); font:14px/1.45 ui-sans-serif,system-ui,sans-serif; }
   main { max-width:1280px; margin:0 auto; padding:28px 20px 56px; } h1,h2,p { margin:0 } h1 { font-size:24px; letter-spacing:-.03em } h2 { font-size:14px; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; }
   .top { display:flex; justify-content:space-between; gap:20px; align-items:start; margin-bottom:22px }.sub { color:var(--muted); margin-top:5px; max-width:720px }.badge { border:1px solid var(--line); border-radius:999px; padding:5px 10px; color:var(--mint); font-variant-numeric:tabular-nums; white-space:nowrap }
-  .metrics { display:grid; grid-template-columns:repeat(5,minmax(120px,1fr)); gap:10px; margin-bottom:16px }.card,.episode { background:var(--panel); border:1px solid var(--line); border-radius:10px }.metric { padding:14px }.metric b { display:block; font-size:24px; font-variant-numeric:tabular-nums }.metric span { color:var(--muted); font-size:12px }
+  .metrics { display:grid; grid-template-columns:repeat(6,minmax(120px,1fr)); gap:10px; margin-bottom:16px }.card,.episode { background:var(--panel); border:1px solid var(--line); border-radius:10px }.metric { padding:14px }.metric b { display:block; font-size:24px; font-variant-numeric:tabular-nums }.metric span { color:var(--muted); font-size:12px }
   .grid { display:grid; grid-template-columns:1.15fr .85fr; gap:16px }.panel { padding:16px }.panel + .panel { margin-top:16px }.clusters { display:grid; gap:8px; margin-top:12px }.cluster { padding:10px; border-left:3px solid #64748b; background:#121720; border-radius:0 7px 7px 0 }.cluster small { color:var(--muted) }
   .episode { padding:14px; margin-top:10px }.episode-head { display:flex; gap:8px; justify-content:space-between; color:var(--muted); font-variant-numeric:tabular-nums }.tags { display:flex; gap:5px; flex-wrap:wrap; margin-top:8px }.tag { font-size:12px; padding:2px 7px; border-radius:999px; background:#273449; color:#c9dcff }.tag.signal { background:#47321a; color:var(--amber) }.tag.actual { background:#4a1824; color:#fecdd3 } pre { white-space:pre-wrap; overflow-wrap:anywhere; font:12px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace; color:#d9e1ef; margin:10px 0 0 }.empty { color:var(--muted); padding:14px 0 }.note { color:var(--muted); font-size:12px; margin-top:12px } @media(max-width:800px){.metrics{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}.top{display:block}.badge{display:inline-block;margin-top:12px}}
 </style>
@@ -272,7 +290,7 @@ const el = id => document.getElementById(id); const node = (tag, text, cls) => {
 function metric(value,label){const box=node('div',undefined,'card metric');box.append(node('b',String(value)),node('span',label));return box}
 function render(data){
   el('state').textContent=data.state.replace('_',' ')+' · '+data.turn_count+' turns';
-  const budget=data.latest_budget||{}; const m=el('metrics');m.replaceChildren(metric(data.turn_count,'model turns'),metric(data.delegate_signal_count,'regex matches'),metric(data.delegate_signal_turns,'turns with a signal'),metric(data.delegate_requests.length,'actual delegate calls'),metric(budget.remaining===undefined?'—':Number(budget.remaining).toLocaleString(),'tokens remaining'));
+  const budget=data.latest_budget||{}; const m=el('metrics');m.replaceChildren(metric(data.turn_count,'model turns'),metric(data.delegate_signal_count,'delegate regex matches'),metric(data.delegate_signal_turns,'turns with a signal'),metric(data.environment_cases.length,'actual cases opened'),metric(data.delegate_requests.length,'actual delegate calls'),metric(budget.remaining===undefined?'—':Number(budget.remaining).toLocaleString(),'tokens remaining'));
   const signals=el('signals');signals.replaceChildren();Object.entries(data.patterns||{}).forEach(([key,label])=>{const p=node('p');p.append(node('b',(data.pattern_counts[key]||0)+' '),document.createTextNode(label));signals.append(p)});if(!Object.keys(data.patterns||{}).length)signals.append(node('p','No patterns loaded.','empty'));
   const clusters=el('clusters');clusters.replaceChildren();(data.clusters||[]).slice().reverse().forEach(c=>{const x=node('div',undefined,'cluster');x.append(node('div','cluster '+c.id+' · '+c.label),node('small',c.turns+' turns · last '+c.last_sequence+' · '+c.delegate_signal_turns+' signal turns'));clusters.append(x)});if(!(data.clusters||[]).length)clusters.append(node('p','Waiting for a returned reasoning turn.','empty'));
   const timeline=el('timeline');timeline.replaceChildren();(data.episodes||[]).slice().reverse().forEach(ep=>{const x=node('article',undefined,'episode');const h=node('div',undefined,'episode-head');h.append(node('span','turn '+ep.sequence+(ep.cluster?' · cluster '+ep.cluster:'')),node('span',new Date(ep.recorded_at).toLocaleTimeString()));x.append(h);const tags=node('div',undefined,'tags');ep.signals.forEach(s=>tags.append(node('span',s.label+': '+s.match,'tag signal')));(ep.proposed_tools||[]).forEach(t=>tags.append(node('span','proposed '+t.function,'tag')));if(!ep.reasoning)tags.append(node('span','no returned reasoning','tag'));x.append(tags);if((ep.proposed_tools||[]).length)x.append(node('pre','next tools\\n'+ep.proposed_tools.map(t=>t.function+' '+JSON.stringify(t.arguments||{})).join('\\n')));if((ep.prior_tool_results||[]).length)x.append(node('pre','previous tool results\\n'+ep.prior_tool_results.map(t=>t.function+': '+t.content).join('\\n')));if(ep.reasoning)x.append(node('pre',ep.reasoning)); else if(ep.text)x.append(node('pre',ep.text));timeline.append(x)});if(!(data.episodes||[]).length)timeline.append(node('p','The dashboard will update after the first completed Kimi response.','empty'));
