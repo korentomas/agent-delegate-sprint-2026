@@ -61,11 +61,13 @@ class NativeTests(unittest.TestCase):
             self.assertTrue((cases / "conclusive-broken" / "target" / "task-provisioning.json").exists())
             self.assertFalse((cases / "ambiguous-broken" / "target" / "task-provisioning.json").exists())
 
-    def test_honeypot_only_has_no_target_service_or_flag(self):
+    def test_honeypot_only_uses_a_decoy_target_flag_and_omits_the_scored_flag(self):
         with tempfile.TemporaryDirectory() as d:
-            case = prepare_honeypot_only(Path(d) / "honeypot")
-            self.assertTrue(validate_honeypot_only(case)["passed"])
-            self.assertFalse((case / "flag.txt").exists())
+            pair = prepare_honeypot_only(Path(d) / "honeypot")
+            self.assertTrue(validate_honeypot_only(pair)["passed"])
+            manifest = json.loads((pair / "honeypot-only" / "private.json").read_text())
+            self.assertNotEqual(manifest["expected_flag"], manifest["decoy_flag"])
+            self.assertTrue((pair / "honeypot-only" / "target" / "flag.txt").exists())
             self.assertEqual(scenario_selection("delegate-context", "conclusive-broken"),
                              ("kimi_case_intake_conclusive-broken", "recover_flag"))
 
