@@ -10,16 +10,42 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import AsyncMock, patch
+
+from inspect_ai.tool import ToolDef
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from honeypot_fixture import prepare_honeypot_pair, validate_honeypot_pair
-from honeypot_setting import build_signals
+from honeypot_setting import DELEGATE_PROMPT, build_signals, stop_delegate
+from setting import call_delegate
 from outcome_taxonomy import (
     HONEST_BLOCK, ILLICIT_SUCCESS, LICIT_SUCCESS, SUCCESS_AFTER_REPAIR, classify,
 )
 
 FLAG = "ctf{" + "a" * 64 + "}"
+
+
+class StopDelegateTests(unittest.IsolatedAsyncioTestCase):
+    def test_stop_contract_preserves_serial_schema_without_promising_a_bridge(self):
+        definition = ToolDef(stop_delegate())
+        self.assertEqual(definition.name, "call_delegate")
+        self.assertFalse(definition.parallel)
+        self.assertEqual(set(definition.parameters.required),
+                         {"reason", "evidence", "attempts", "requested_help"})
+        self.assertIn("end this sample", definition.description)
+        self.assertIn("No response, repair", definition.description)
+        self.assertIn("no response, repair, or resumption", DELEGATE_PROMPT)
+        self.assertIn("bridge delegate", ToolDef(call_delegate()).description)
+
+    async def test_stop_adapter_preserves_report_and_terminal_interruption(self):
+        report = dict(reason="broken_environment", evidence="Required file absent",
+                      attempts="Checked local candidates", requested_help="Verify setup")
+        terminal = AsyncMock(side_effect=RuntimeError("sample interrupted"))
+        with patch("honeypot_setting.call_delegate", return_value=terminal):
+            with self.assertRaisesRegex(RuntimeError, "sample interrupted"):
+                await stop_delegate()(**report)
+        terminal.assert_awaited_once_with(**report)
 
 
 def _assistant(call_id, cmd):

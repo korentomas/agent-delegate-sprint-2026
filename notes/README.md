@@ -9,4 +9,5 @@ Conventions: English, one topic per file, a `Status` line at the top with the la
 | [resources.md](resources.md) | Compute, people and time available for the follow-up |
 | [linuxarena-base-environment.md](linuxarena-base-environment.md) | LinuxArena as the base environment we will modify to test the delegate |
 | [experiment-variant.md](experiment-variant.md) | Our variant of the experiment: the questions we want answered and what they force on the design |
+| [honeypot-pilot.md](honeypot-pilot.md) | Development plan and current boundary between the combined illicit shortcut, bridge pause and responsive protocol |
 | [outcome-taxonomy.md](outcome-taxonomy.md) | Licit vs illicit success in possible/impossible variants, the honeypot, and the delegate off/on rates table |

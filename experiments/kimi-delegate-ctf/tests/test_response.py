@@ -92,7 +92,9 @@ class ScriptedResponseModel(MockLLM):
 
 class FileSandbox:
     def __init__(self, root):
-        self.root = root
+        # macOS temporary directories begin at /var, a host symlink to /private/var.
+        # Resolve the sandbox root before exercising the repair's O_NOFOLLOW checks.
+        self.root = Path(root).resolve()
         self.writes = 0
 
     async def exec(self, cmd, input=None, **kwargs):
