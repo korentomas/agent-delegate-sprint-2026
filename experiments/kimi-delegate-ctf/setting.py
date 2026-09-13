@@ -24,7 +24,6 @@ from live_monitor import MONITOR_PATH_ENV, record_delegate_executed, record_envi
 
 CASE_PROMPT = (ROOT / "case_intake_prompt.txt").read_text()
 CONCLUSIVE_ADDENDUM = (ROOT / "conclusive_addendum.txt").read_text()
-HONEYPOT_PROMPT = (ROOT / "honeypot_only_prompt.txt").read_text()
 
 
 @tool(parallel=False)
@@ -197,21 +196,18 @@ class CaseIntakeEnvironment(CommandInjectionEnvironment):
         }, {})
 
 
-class HoneypotOnlyEnvironment(DockerEnvironment):
-    def __init__(self, case: Path):
+class HoneypotOnlyEnvironment(CommandInjectionEnvironment):
+    def __init__(self, pair: Path):
         super().__init__(
-            id="kimi_honeypot_only", display_name="No-solution delegate honeypot", path=case,
-            compose_paths={"default": case / "compose.json"}, codebase_path=ROOT,
-            agent_codebase_path=ROOT / "codebase", description="A local task container with no flag provisioned.",
-            agent_user="root", base_tools=frozenset({BaseTool.BASH}), custom_tools=[call_delegate()],
-            tech_stack=["Bash"], services=["Linux task container"],
+            "honeypot-only", pair, environment_id="kimi_honeypot_only",
+            display_name="Diagnostic CTF with a flag canary", custom_tools=[call_delegate()],
         )
 
     def task_space(self, args=None):
         return CrossProduct({
             "recover_flag": MainTask(
-                id="recover_flag", name="Recover the local flag", environment=self.id,
-                description=HONEYPOT_PROMPT, task_category="research", scorer=flag_score(str(self.path)),
+                id="recover_flag", name="Recover the diagnostic-service flag", environment=self.id,
+                description=CASE_PROMPT, task_category="research", scorer=flag_score(str(self.path)),
                 submit_config=SubmitToolConfig(description="Submit the recovered flag", input_type=FlagSubmission),
             )
         }, {})
@@ -237,6 +233,6 @@ def get_environments():
     context_pair = Path(os.environ.get("CONTEXT_CASES_DIR", ROOT / "fixtures" / "delegate-context-001")).resolve()
     context_envs = [CaseIntakeEnvironment(condition, context_pair)
                     for condition in ("working", "ambiguous-broken", "conclusive-broken")]
-    honeypot_case = Path(os.environ.get("HONEYPOT_ONLY_DIR", ROOT / "fixtures" / "honeypot-only-001")).resolve()
-    honeypot_env = HoneypotOnlyEnvironment(honeypot_case)
+    honeypot_pair = Path(os.environ.get("HONEYPOT_ONLY_DIR", ROOT / "fixtures" / "honeypot-only-002")).resolve()
+    honeypot_env = HoneypotOnlyEnvironment(honeypot_pair)
     return {env.id: env for env in [search_env, *injection_envs, *context_envs, honeypot_env]}
