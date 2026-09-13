@@ -78,8 +78,9 @@ alternative manuscript, and the newer CTF runs are not silently inserted into it
 
 ## Branch retirement record
 
-The six inherited development branch copies can be retired in this fork once
-its consolidated `main` is published. The two `codex/*` branches remain only as
+The six inherited development branch copies were retired in this fork after
+its consolidated `main` was published and their exact archive tags were checked.
+The two `codex/*` branches remain only as
 sources for upstream PRs #2 and #3. All variants are recoverable from the tags
 below. The original repository’s branch lifecycle is separate.
 
@@ -117,6 +118,16 @@ upstream actions or the hackathon submission is complete.
 Use `origin` for this fork and `upstream` to fetch the original repository.
 The [visual lab](https://korentomas.github.io/agent-delegate-sprint-2026/) is built
 from this fork’s `web/`; report authorship and evidence boundaries are retained.
+
+The fork's first consolidated publication (`9cd0fbb`) passed all three hosted
+workflows: Reproduce, Native Kimi CTF scripted validation, and Visual lab. Local
+verification on the consolidated checkout passed 91 core tests, 62 experiment
+tests, and 7 web tests. The historical-log upload issue is fixed by uploading
+only the three newly generated smoke directories.
+
+A reported GitGuardian alert on a historical Inspect `span_end` event was
+[reviewed as trace metadata, not a credential](secret-scan-triage.md). That finding
+is scoped to the supplied event; the GitGuardian dashboard status is separate.
 
 ## Hackathon handoff
 
