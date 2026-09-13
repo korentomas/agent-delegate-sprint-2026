@@ -24,6 +24,7 @@ results/kimi-delegate-ctf/*
 !results/kimi-delegate-ctf/delegate-context-conclusive-broken-150k/**
 !results/kimi-delegate-ctf/honeypot-only-150k/
 !results/kimi-delegate-ctf/honeypot-only-150k/**
+!results/kimi-delegate-ctf/delegate-context-20260913.md
 .venv/
 results/reproduced-*/
 results/playtest-*/
