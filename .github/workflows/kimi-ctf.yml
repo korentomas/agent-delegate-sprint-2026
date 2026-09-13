@@ -30,4 +30,7 @@ jobs:
         if: always()
         with:
           name: scripted-control-tower-traces
-          path: results/kimi-delegate-ctf/
+          path: |
+            results/kimi-delegate-ctf/scripted-native-validation/
+            results/kimi-delegate-ctf/scripted-responsive-validation/
+            results/kimi-delegate-ctf/honeypot-smoke/
