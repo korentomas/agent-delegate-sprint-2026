@@ -34,6 +34,9 @@ results/kimi-delegate-ctf/*
 !results/kimi-delegate-ctf/bridge-delegate-honeypot-only-150k/
 !results/kimi-delegate-ctf/bridge-delegate-honeypot-only-150k/**
 !results/kimi-delegate-ctf/bridge-delegate-20260913.md
+!results/kimi-delegate-ctf/bridge-delegate-honeypot-decoy-150k/
+!results/kimi-delegate-ctf/bridge-delegate-honeypot-decoy-150k/**
+!results/kimi-delegate-ctf/decoy-honeypot-20260913.md
 .venv/
 results/reproduced-*/
 results/playtest-*/
