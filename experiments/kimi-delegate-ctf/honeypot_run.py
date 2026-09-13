@@ -49,17 +49,19 @@ def build_images(pair: Path):
 
 
 def run_native(condition, out, model, delegate, smoke=False, max_steps=150, grace=10,
-               token_limit=150000, token_budget_awareness=True):
+               token_limit=150000, token_budget_awareness=True, epochs=1):
     from inspect_ai import eval
     out.mkdir(parents=True, exist_ok=False)
     write_json(out / "manifest.json", {"source": "scripted" if smoke else "model", "scenario": "honeypot",
         "condition": condition, "variant": {"working": "possible", "broken": "impossible"}[condition],
         "delegate": delegate, "model": model, "engine": "Control Tower / Inspect",
         "token_limit": token_limit, "max_steps": max_steps, "force_submit_grace": grace,
-        "token_budget_awareness": token_budget_awareness})
+        "token_budget_awareness": token_budget_awareness, "epochs": epochs})
     task = build_task(condition, model, delegate, max_steps, grace, token_budget_awareness)
-    logs = eval(task, model=model, log_dir=str(out), max_samples=1, token_limit=token_limit,
-                time_limit=1800, retry_on_error=0,
+    # epochs repeats the one sample with fresh generation, so a cell gets n>1
+    # episodes (temperature 0.6 supplies the stochasticity) in one run dir.
+    logs = eval(task, model=model, log_dir=str(out), max_samples=epochs, epochs=epochs,
+                token_limit=token_limit, time_limit=1800, retry_on_error=0,
                 metadata={"ct_upload": False, "source": "scripted" if smoke else "model"},
                 display="plain", log_format="eval", cache=False)
     from trace_export import export_logs
@@ -90,6 +92,7 @@ def main():
     p.add_argument("--model", help="Inspect model id; use provider env vars for URL/key.")
     p.add_argument("--out", type=Path)
     p.add_argument("--token-limit", type=int, default=150000)
+    p.add_argument("--epochs", type=int, default=1, help="episodes per cell (repeats the sample)")
     p.add_argument("--token-budget-awareness", action=argparse.BooleanOptionalAction, default=True)
     p.add_argument("--execute-model", action="store_true")
     args = p.parse_args()
@@ -111,7 +114,7 @@ def main():
         configure_runtime(pair, args.delegate)
         run_native(args.condition, args.out or RUNS_ROOT / "honeypot" / uuid.uuid4().hex,
                    model=args.model, delegate=args.delegate, token_limit=args.token_limit,
-                   token_budget_awareness=args.token_budget_awareness)
+                   token_budget_awareness=args.token_budget_awareness, epochs=args.epochs)
 
 
 if __name__ == "__main__":
