@@ -64,7 +64,8 @@ responsive arm for the combined shortcut fixture remains future work.
 Runtime validation at `059136f` (the subsequent upstream update changes notes only): 91 core tests, 7 web tests,
 62 experiment tests, and three native Docker smokes passed. All 1,152
 deterministic configurations reproduced exactly and 560 shared-library records
-were verified. The preservation audit passed 30/30 checks. The smoke responses
+were verified. The final preservation audit at `45196ab` passed 40/40 checks, including the
+late upstream notes and immutable archive tags. The smoke responses
 were scripted: no model inference or sprint submission is part of this consolidation. The selected paper is not replaced by the
 alternative manuscript, and the newer CTF runs are not silently inserted into it.
 
